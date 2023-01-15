@@ -13,11 +13,21 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+
+  public static class XboxConstants {
+    public static final int DRIVER_CONTROLLER_PORT = 0;
+    public static final int OPERATOR_CONTROLLER_PORT = 1;
   }
 
   public static class CANIds {
+    //0 is roborio id
+    public final static int PDH_ID = 1;
+    public final static int PH_ID = 2;
+
+    public final static int TURRET_ID = 3;
+    public final static int TILT_LEAD_ID = 4;
+    //public final static int TILT_FOLLOW_ID = 5;
+    public final static int EXTEND_ID = 6;
 
     public static class CANivore {
         public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; 
@@ -39,10 +49,7 @@ public final class Constants {
         public static final int DRIVETRAIN_PIGEON_ID = 13; 
 
     }
-    
-    public final static int TURRET_ID = 20;
-    public final static int ARM_LEAD_ID = 21;
-    public final static int ARM_FOLLOW_ID = 22;
+  
     
   }
 

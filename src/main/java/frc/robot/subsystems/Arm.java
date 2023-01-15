@@ -12,18 +12,45 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
 
 public class Arm extends SubsystemBase {
-  private final CANSparkMax motorLead = new CANSparkMax(CANIds.ARM_LEAD_ID, MotorType.kBrushless);
-  private final CANSparkMax motorFollow = new CANSparkMax(CANIds.ARM_FOLLOW_ID, MotorType.kBrushless);
+
+  private final CANSparkMax extendMotor = new CANSparkMax(CANIds.EXTEND_ID, MotorType.kBrushless);
+  private final CANSparkMax tiltLead = new CANSparkMax(CANIds.TILT_LEAD_ID, MotorType.kBrushless);
+
+  private final double gearBoxRatio = 300;
+  //private final CANSparkMax tiltFollow = new CANSparkMax(CANIds.TILT_FOLLOW_ID, MotorType.kBrushless);
+
+  private static Arm instance;
+  
   /** Creates a new Arm. */
   public Arm() {
-    motorLead.restoreFactoryDefaults();
-    motorFollow.restoreFactoryDefaults();
+    extendMotor.restoreFactoryDefaults();
+    extendMotor.setInverted(false);
+    extendMotor.setIdleMode(IdleMode.kBrake);
 
-    motorLead.setInverted(false);
-    motorFollow.setInverted(false);
+    tiltLead.restoreFactoryDefaults();
+    //tiltFollow.restoreFactoryDefaults(); 
 
-    motorLead.setIdleMode(IdleMode.kBrake);
-    motorFollow.setIdleMode(IdleMode.kBrake);
+    tiltLead.setInverted(false);
+    //tiltFollow.setInverted(false);
+
+    tiltLead.setIdleMode(IdleMode.kBrake);
+    //tiltFollow.setIdleMode(IdleMode.kBrake);
+  }
+
+  public static Arm getInstance() {
+    if (instance == null) {
+      instance = new Arm();
+    }
+
+    return instance;
+  }
+
+  public void adjustExtension(double speed) {
+    extendMotor.set(speed); //TODO: NOT REAL NUMBER !! WORKING!!!
+  }
+
+  public void adjustTilt(double speed) {
+    tiltLead.set(speed);
   }
 
   @Override
