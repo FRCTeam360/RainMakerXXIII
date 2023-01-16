@@ -4,30 +4,31 @@
 
 package frc.robot.subsystems;
 
+import java.io.PipedInputStream;
+import java.sql.Driver;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
 
 public class Turret extends SubsystemBase {
-  private final CANSparkMax motor;
-  
-  private static Turret instance;
-  //gearBoxRatio through rotataionsPerTick copied from last year for now, need to update
-  public static final double gearBoxRatio = 1;
-  public static final double pulleyRatio = 1;
-  public static final double degreesPerRotation = 1;
-  public static final double rotationsPerTick = 1;
 
-  public static double leftSoftLimit;
-  public static double rightSoftLimit;
-  public static float leftSoftLimitEncoder = (float) (leftSoftLimit / gearBoxRatio / pulleyRatio / degreesPerRotation);
-  public static float rightSoftLimitEncoder = (float) (rightSoftLimit / gearBoxRatio / pulleyRatio / degreesPerRotation);
+  private final CANSparkMax motor;
+  private SparkMaxPIDController PIDControl;
+
+  private static Turret instance;
+
+  //gearBoxRatio through rotataionsPerTick copied from last year for now, need to update
+  public static final double gearBoxRatio = 45.0 / 0.0;
+  public static final double pulleyRatio = 17.5 / 1.0;
+  public static final double degreesPerRotation = 360.0 / 1.0;
+  public static final double rotationsPerTick = 1.0 / 42.0;
 
   public static Turret getInstance() {
     if (instance == null) {
@@ -42,12 +43,12 @@ public class Turret extends SubsystemBase {
     motor.restoreFactoryDefaults();
     motor.setInverted(false);
     motor.setIdleMode(IdleMode.kCoast);
+    
+    PIDControl = motor.getPIDController();
+  }
 
-    motor.setSoftLimit(SoftLimitDirection.kForward, leftSoftLimitEncoder);
-    motor.setSoftLimit(SoftLimitDirection.kReverse, rightSoftLimitEncoder);
-
-    motor.enableSoftLimit(SoftLimitDirection.kForward, false);
-    motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+  public void turn(double speed) {
+    motor.set(speed);
   }
 
   public double getAngle() {
@@ -55,17 +56,12 @@ public class Turret extends SubsystemBase {
     return encoderPosition * gearBoxRatio * pulleyRatio * degreesPerRotation;
   }
 
-  public void angleTurn(double inputAngle) {
-    SparkMaxPIDController PIDControl = motor.getPIDController();
-    PIDControl.setReference(inputAngle, ControlType.kPosition);
-  }
-
-  public void turn(double speed) {
-    motor.set(speed);
-  }
-
   public double getEncoderTick() {
     return motor.getEncoder().getPosition();
+  }
+
+  public void angleTurn(double inputAngle) {
+    PIDControl.setReference(inputAngle, ControlType.kPosition);
   }
 
   public void resetEncoderTicks(){
@@ -76,14 +72,10 @@ public class Turret extends SubsystemBase {
     this.angleTurn(inputReset);
   }
 
-  public boolean atLeftLimit() {
-    return this.getAngle() >= leftSoftLimit && motor.getEncoder().getVelocity() > 0;
+  public void fieldOrientedTurret(double angle) {
+    //double relativeAngle = angle - drivetrainAngle; //TODO UPDATE WITH DRIVETRAIN ANGLE !!!
+    //PIDControl.setReference(relativeAngle, ControlType.kPosition); 
   }
-
-  public boolean atRightLimit() {
-    return this.getAngle() <= rightSoftLimit && motor.getEncoder().getVelocity() < 0;
-  }
-
 
   @Override
   public void periodic() {

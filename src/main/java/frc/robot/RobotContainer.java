@@ -5,13 +5,14 @@
 package frc.robot;
 
 import frc.robot.Constants.*;
-import frc.robot.commands.ArmExtension;
-import frc.robot.commands.ArmTilt;
+import frc.robot.commands.ExtendArmManual;
+import frc.robot.commands.TiltArmManual;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
-import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ArmExtend;
+import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -26,11 +27,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final Arm arm = Arm.getInstance();
+  private final ArmExtend extend = ArmExtend.getInstance();
+  private final ArmTilt tilt = ArmTilt.getInstance();
   private final Turret turret = Turret.getInstance();
 
-  private final ArmExtension armExtension = new ArmExtension();
-  private final ArmTilt armTilt = new ArmTilt();
+  private final TiltArmManual armTilt = new TiltArmManual();
+  private final ExtendArmManual armExtension = new ExtendArmManual();
   private final ManualTurret manualTurret = new ManualTurret();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -46,7 +48,8 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     turret.setDefaultCommand(manualTurret);
-    arm.setDefaultCommand(armTilt);
+    tilt.setDefaultCommand(armTilt);
+    extend.setDefaultCommand(armExtension);
   }
 
 

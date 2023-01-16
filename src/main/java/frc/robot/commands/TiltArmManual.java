@@ -7,18 +7,17 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.XboxConstants;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmTilt;
 
+public class TiltArmManual extends CommandBase {
+  private static ArmTilt tilt = ArmTilt.getInstance();
 
-public class ArmExtension extends CommandBase {
-
-  private static Arm arm = Arm.getInstance();
   private static XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
-
-  /** Creates a new ArmExtension. */
-  public ArmExtension() {
+  
+  /** Creates a new ArmTilt. */
+  public TiltArmManual() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm);
+    addRequirements(tilt);
   }
 
   // Called when the command is initially scheduled.
@@ -28,9 +27,12 @@ public class ArmExtension extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.adjustExtension(operatorCont.getRightY());
+    if(Math.abs(operatorCont.getRightY()) >= 0.1) {
+      tilt.adjustTilt(-operatorCont.getRightY());
+      } else {
+        tilt.adjustTilt(0);
+      }
   }
-
 
   // Called once the command ends or is interrupted.
   @Override
