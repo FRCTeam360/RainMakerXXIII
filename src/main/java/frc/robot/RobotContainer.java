@@ -6,13 +6,17 @@ package frc.robot;
 
 import frc.robot.Constants.*;
 import frc.robot.commands.ExtendArmManual;
+import frc.robot.commands.FieldOrientedDrive;
 import frc.robot.commands.TiltArmManual;
 import frc.robot.commands.Autos;
+import frc.robot.commands.CharacterizeDrivetrainCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
+import frc.robot.commands.RobotOrientedDrive;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,6 +34,12 @@ public class RobotContainer {
   private final ArmExtend extend = ArmExtend.getInstance();
   private final ArmTilt tilt = ArmTilt.getInstance();
   private final Turret turret = Turret.getInstance();
+  private final DriveTrain driveTrain = DriveTrain.getInstance();
+
+  private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive();
+  private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
+  private final CharacterizeDrivetrainCommand characterize = new CharacterizeDrivetrainCommand(driveTrain);
+  
 
   private final TiltArmManual armTilt = new TiltArmManual();
   private final ExtendArmManual armExtension = new ExtendArmManual();
@@ -50,6 +60,7 @@ public class RobotContainer {
     turret.setDefaultCommand(manualTurret);
     tilt.setDefaultCommand(armTilt);
     extend.setDefaultCommand(armExtension);
+    driveTrain.setDefaultCommand(fieldDrive);
   }
 
 
