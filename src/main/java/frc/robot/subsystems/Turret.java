@@ -77,7 +77,8 @@ public class Turret extends SubsystemBase {
   }
 
   public void fieldOrientedTurret(double angle) {
-    double drivetrainAngle = gyro.getAngle();
+    Rotation2d driveRotation = DriveTrain.getInstance().getGyroscopeRotation();
+    double drivetrainAngle = driveRotation.getDegrees();
     double relativeAngle = angle - drivetrainAngle; //TODO UPDATE WITH DRIVETRAIN ANGLE !!!
     PIDControl.setReference(relativeAngle, ControlType.kPosition); 
     getAngle();
