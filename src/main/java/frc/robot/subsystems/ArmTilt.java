@@ -30,8 +30,9 @@ public class ArmTilt extends SubsystemBase {
   private double maxRPM = 5700;
 
   private double maxVel = 2000; //rpm
+  private double minVel = 0;
   private double maxAcc = 1500;
-
+  private double allowedErr = 0;
   /** Creates a new Tilt. */
   public ArmTilt() {
     
@@ -55,7 +56,9 @@ public class ArmTilt extends SubsystemBase {
 
     int smartMotionSlot = 0;
     pidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
-    pidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot)
+    pidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
+    pidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
+    pidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
   }
 
   public static ArmTilt getInstance() {
