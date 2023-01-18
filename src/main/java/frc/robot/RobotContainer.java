@@ -8,7 +8,6 @@ import frc.robot.Constants.*;
 import frc.robot.commands.ExtendArmManual;
 import frc.robot.commands.FieldOrientedDrive;
 import frc.robot.commands.TiltArmManual;
-import frc.robot.commands.Autos;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
@@ -88,8 +87,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+  // public Command getAutonomousCommand() {
+  //   // An example command will be run in autonomous
+  //   return Autos.exampleAuto(m_exampleSubsystem);
+  // }
 }
