@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
 import frc.robot.Constants.CANIds.CANivore;
@@ -47,8 +48,14 @@ public class Turret extends SubsystemBase {
     motor.restoreFactoryDefaults();
     motor.setInverted(false);
     motor.setIdleMode(IdleMode.kCoast);
+    double conversionFactor = (1.0/20.0) * (1.5/17.5) * (360.0/1.0);
+    motor.getEncoder().setPositionConversionFactor(conversionFactor);
     
     PIDControl = motor.getPIDController();
+    PIDControl.setP(0.05,1);
+    PIDControl.setD(0.01, 1);
+    PIDControl.setI(0.0,1);
+    PIDControl.setFF(0.0, 1);
   }
 
   public void turn(double speed) {
@@ -80,7 +87,7 @@ public class Turret extends SubsystemBase {
     Rotation2d driveRotation = DriveTrain.getInstance().getGyroscopeRotation();
     double drivetrainAngle = driveRotation.getDegrees();
     double relativeAngle = angle - drivetrainAngle; //TODO UPDATE WITH DRIVETRAIN ANGLE !!!
-    PIDControl.setReference(relativeAngle, ControlType.kPosition); 
+    PIDControl.setReference(relativeAngle, ControlType.kPosition,1); 
     System.out.println("angle: " + angle);
     System.out.println("relative angle: " + relativeAngle);
 
@@ -88,6 +95,7 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("turretAngle", motor.getEncoder().getPosition());
     // This method will be called once per scheduler run
   }
 }
