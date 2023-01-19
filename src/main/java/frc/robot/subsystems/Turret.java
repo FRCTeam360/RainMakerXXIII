@@ -81,7 +81,9 @@ public class Turret extends SubsystemBase {
     double drivetrainAngle = driveRotation.getDegrees();
     double relativeAngle = angle - drivetrainAngle; //TODO UPDATE WITH DRIVETRAIN ANGLE !!!
     PIDControl.setReference(relativeAngle, ControlType.kPosition); 
-    getAngle();
+    System.out.println("angle: " + angle);
+    System.out.println("relative angle: " + relativeAngle);
+
   }
 
   @Override

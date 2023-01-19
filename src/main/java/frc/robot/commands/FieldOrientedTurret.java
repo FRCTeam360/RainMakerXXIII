@@ -28,6 +28,7 @@ private static XboxController operatorCont = new XboxController(XboxConstants.OP
   public void execute() {
     double angle = operatorCont.getLeftX()*180;
     turret.fieldOrientedTurret(angle);
+    System.out.println ("Left Stick X: " + operatorCont.getLeftX());
   }
 
 
