@@ -29,7 +29,7 @@ public class ManualTurret extends CommandBase {
   @Override
   public void execute() {
     if(Math.abs(operatorCont.getLeftX()) >= 0.1) {
-      turret.turn(operatorCont.getLeftX());
+      turret.turn(-operatorCont.getLeftX());
     } else {
       turret.turn(0);
     }

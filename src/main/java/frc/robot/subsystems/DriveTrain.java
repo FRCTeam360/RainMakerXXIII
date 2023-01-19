@@ -228,13 +228,14 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
-    SmartDashboard.putNumber("roll", m_pigeon.getRoll());
+    // SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
+    // SmartDashboard.putNumber("roll", m_pigeon.getRoll());
 
     pose = odometry.update(getGyroscopeRotation(), getModulePositions());
 
-    SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
+    // SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
+    // SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
     // This method will be called once per scheduler run
+
   }
 }
