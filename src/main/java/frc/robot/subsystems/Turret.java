@@ -28,6 +28,7 @@ public class Turret extends SubsystemBase {
   private WPI_Pigeon2 gyro = new WPI_Pigeon2(CANivore.DRIVETRAIN_PIGEON_ID, "Swerve");
   
   private static Turret instance;
+  private double relativeAngle;
 
   //gearBoxRatio through rotataionsPerTick copied from last year for now, need to update
   public static final double gearBoxRatio = 45.0 / 0.0;
@@ -83,10 +84,14 @@ public class Turret extends SubsystemBase {
     this.angleTurn(inputReset);
   }
 
+  public double getRelativeAngle(double angle) {
+    return relativeAngle;
+  }
+
   public void fieldOrientedTurret(double angle) {
     Rotation2d driveRotation = DriveTrain.getInstance().getGyroscopeRotation();
     double drivetrainAngle = driveRotation.getDegrees();
-    double relativeAngle = angle - drivetrainAngle; //TODO UPDATE WITH DRIVETRAIN ANGLE !!!
+    relativeAngle = angle - drivetrainAngle; 
     PIDControl.setReference(relativeAngle, ControlType.kPosition,1); 
     System.out.println("angle: " + angle);
     System.out.println("relative angle: " + relativeAngle);
