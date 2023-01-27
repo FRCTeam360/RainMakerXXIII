@@ -36,6 +36,9 @@ public class Turret extends SubsystemBase {
   public static final double degreesPerRotation = 360.0 / 1.0;
   public static final double rotationsPerTick = 1.0 / 42.0;
 
+  public static final double conversionFactor = (1.0/20.0) * (1.5/17.5) * (360.0/1.0);
+  public static final double impericalConversionFactor = 360.0/542.0;
+
   public static Turret getInstance() {
     if (instance == null) {
       instance = new Turret();
@@ -49,14 +52,16 @@ public class Turret extends SubsystemBase {
     motor.restoreFactoryDefaults();
     motor.setInverted(false);
     motor.setIdleMode(IdleMode.kCoast);
-    double conversionFactor = (1.0/20.0) * (1.5/17.5) * (360.0/1.0);
-    motor.getEncoder().setPositionConversionFactor(conversionFactor);
+    // System.out.println("conv: " + conversionFactor);
+    // System.out.println("imp conv: " + impericalConversionFactor);
+    motor.getEncoder().setPositionConversionFactor(1/conversionFactor);
     
     PIDControl = motor.getPIDController();
     PIDControl.setP(0.05,1);
     PIDControl.setD(0.01, 1);
     PIDControl.setI(0.0,1);
     PIDControl.setFF(0.0, 1);
+
   }
 
   public void turn(double speed) {
@@ -93,14 +98,15 @@ public class Turret extends SubsystemBase {
     double drivetrainAngle = driveRotation.getDegrees();
     relativeAngle = angle - drivetrainAngle; 
     PIDControl.setReference(relativeAngle, ControlType.kPosition,1); 
-    System.out.println("angle: " + angle);
-    System.out.println("relative angle: " + relativeAngle);
+    // System.out.println("angle: " + angle);
+    // System.out.println("relative angle: " + relativeAngle);
 
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("turretAngle", motor.getEncoder().getPosition());
+    // System.out.println("position: " + motor.getEncoder().getPosition());
     // This method will be called once per scheduler run
   }
 }
