@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -12,15 +14,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
 
 public class ArmExtend extends SubsystemBase {
-  private final CANSparkMax extendMotor = new CANSparkMax(CANIds.EXTEND_ID, MotorType.kBrushless);
   private static ArmExtend instance;
+  private final CANSparkMax motor = new CANSparkMax(CANIds.EXTEND_ID, MotorType.kBrushless);
+  private final SparkMaxPIDController pidController;
+  private final RelativeEncoder encoder;
 
   /** Creates a new Extend. */
   public ArmExtend() {
-    extendMotor.restoreFactoryDefaults();
-    extendMotor.setInverted(false);
-    extendMotor.setIdleMode(IdleMode.kBrake);
+    motor.restoreFactoryDefaults();
+    motor.setInverted(false);
+    motor.setIdleMode(IdleMode.kBrake);
     
+    pidController = motor.getPIDController();
+    encoder = motor.getEncoder();
   }
 
   public static ArmExtend getInstance() {
@@ -31,8 +37,20 @@ public class ArmExtend extends SubsystemBase {
     return instance;
   }
 
+  public SparkMaxPIDController getPIDController(){
+    return pidController;
+  }
+
+  public RelativeEncoder getEncoder() {
+    return encoder;
+  }
+
+  public CANSparkMax getMotor() {
+    return motor;
+  }
+
   public void adjustExtension(double speed) {
-    extendMotor.set(speed); 
+    motor.set(speed); 
   }
 
   @Override

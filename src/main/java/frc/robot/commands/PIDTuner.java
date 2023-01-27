@@ -2,29 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.commands;
 
-import com.revrobotics.RelativeEncoder;
+
+import com.revrobotics.SparkMaxPIDController;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmTilt;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.hal.PowerDistributionFaults;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.CANIds;
-
-public class ArmTilt extends SubsystemBase {
-
-  private final CANSparkMax tiltLead = new CANSparkMax(CANIds.TILT_LEAD_ID, MotorType.kBrushless);
-  private final RelativeEncoder encoder;
-
-  private static ArmTilt instance;
-  private SparkMaxPIDController pidController;
+public class PIDTuner extends CommandBase {
 
   private double kP = 5e-5;
   private double kI = 1e-6;
@@ -40,21 +30,19 @@ public class ArmTilt extends SubsystemBase {
   private double maxAcc = 1500;
   private double allowedErr = 0;
 
-  /** Creates a new Tilt. */
-  public ArmTilt() {
+  private static ArmTilt subsystem = ArmTilt.getInstance();
+
+  private static RelativeEncoder encoder;
+  private static CANSparkMax motor;
+  private static SparkMaxPIDController pidController;
+
+  /** Creates a new PIDTuner. */
+  public PIDTuner() {
+    // Use addRequirements() here to declare subsystem dependencies.
     
-    tiltLead.restoreFactoryDefaults();
-    //tiltFollow.restoreFactoryDefaults(); 
-
-    tiltLead.setInverted(false);
-    //tiltFollow.setInverted(false);
-
-    tiltLead.setIdleMode(IdleMode.kBrake);
-    //tiltFollow.setIdleMode(IdleMode.kBrake);
-
-    encoder = tiltLead.getEncoder();
-
-    pidController = tiltLead.getPIDController();
+    encoder = subsystem.getEncoder();
+    motor = subsystem.getMotor();
+    pidController = subsystem.getPIDController();
 
     pidController.setP(kP);
     pidController.setI(kI);
@@ -87,43 +75,13 @@ public class ArmTilt extends SubsystemBase {
     SmartDashboard.putBoolean("Mode", true);
   }
 
-  public static ArmTilt getInstance() {
-    if (instance == null) {
-      instance = new ArmTilt();
-    }
-
-    return instance;
-  }
-
-  public SparkMaxPIDController getPIDController(){
-    return pidController;
-  }
-
-  public RelativeEncoder getEncoder() {
-    return encoder;
-  }
-
-  public CANSparkMax getMotor() {
-    return tiltLead;
-  }
-  
-  public void adjustTilt(double speed) {
-    tiltLead.set(speed);
-  }
-
-  public void pidTilt(double inputAngle) {
-    SparkMaxPIDController PIDControl = tiltLead.getPIDController();
-    PIDControl.setReference(inputAngle, ControlType.kPosition);
-  }
-
-  public void smartTilt(double inputAngle) {
-    pidController.setReference(inputAngle, ControlType.kSmartMotion);
-
-  }
-
+  // Called when the command is initially scheduled.
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void initialize() {}
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
     double p = SmartDashboard.getNumber("P Gain", 0);
     double i = SmartDashboard.getNumber("I Gain", 0);
     double d = SmartDashboard.getNumber("D Gain", 0);
@@ -152,7 +110,8 @@ public class ArmTilt extends SubsystemBase {
     }
 
     if((maxV != maxVel)) { 
-      pidController.setSmartMotionMaxVelocity(maxV,0); maxVel = maxV; }
+      pidController.setSmartMotionMaxVelocity(maxV,0);
+       maxVel = maxV; }
     if((minV != minVel)) { 
       pidController.setSmartMotionMinOutputVelocity(minV,0); minVel = minV; }
     if((maxA != maxAcc)) { 
@@ -175,7 +134,17 @@ public class ArmTilt extends SubsystemBase {
     
     SmartDashboard.putNumber("SetPoint", setPoint);
     SmartDashboard.putNumber("Process Variable", processVariable);
-    SmartDashboard.putNumber("Output", tiltLead.getAppliedOutput());
+    SmartDashboard.putNumber("Output", motor.getAppliedOutput());
 
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
   }
 }
