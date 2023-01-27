@@ -28,10 +28,10 @@ public class ExtendArmManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(operatorCont.getLeftTriggerAxis()) >= 0.1) {
-      extend.adjustExtension(-operatorCont.getLeftTriggerAxis() * 0.5);
-    } else if(operatorCont.getRightTriggerAxis() >= 0.1){
-      extend.adjustExtension(operatorCont.getRightTriggerAxis() * 0.5);
+    if(Math.abs(operatorCont.getLeftY()) >= 0.1) {
+      extend.adjustExtension(-operatorCont.getLeftY() * 0.5);
+    } else if(operatorCont.getLeftY() >= 0.1){
+      extend.adjustExtension(operatorCont.getLeftY() * 0.5);
     } else {
       extend.adjustExtension(0);
     }

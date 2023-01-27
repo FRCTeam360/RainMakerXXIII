@@ -124,7 +124,7 @@ public class ArmTilt extends SubsystemBase {
     double allE = SmartDashboard.getNumber("Allowed Closed Loop Error", 0);
 
     if((p != kP)) { 
-      pidController.setP(p); kP = p; }
+      pidController.setP(p); kP = p;}
     if((i != kI)) { 
       pidController.setI(i); kI = i; }
     if((d != kD)) { 
@@ -163,5 +163,6 @@ public class ArmTilt extends SubsystemBase {
     SmartDashboard.putNumber("SetPoint", setPoint);
     SmartDashboard.putNumber("Process Variable", processVariable);
     SmartDashboard.putNumber("Output", tiltLead.getAppliedOutput());
+
   }
 }
