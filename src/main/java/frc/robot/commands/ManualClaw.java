@@ -25,15 +25,10 @@ public class ManualClaw extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if(operatorCont.getAButton()){
-    //   claw.adjustsClaw(0.3);
-    // } else if(operatorCont.getBButton()){
-    //   claw.adjustsClaw(-0.3);
-    // } else{
-    //   claw.stopClaw();
-    // }
-    if(Math.abs(operatorCont.getLeftY()) > 0.1){
-      claw.adjustsClaw(operatorCont.getLeftY());
+    if(Math.abs(operatorCont.getLeftTriggerAxis()) > 0.1){ //close
+      claw.adjustsClaw(operatorCont.getLeftTriggerAxis());
+    } else if (Math.abs(operatorCont.getRightTriggerAxis()) > 0.1) { //open
+      claw.adjustsClaw(operatorCont.getRightTriggerAxis() * -1.0);
     } else {
       claw.stopClaw();
     }

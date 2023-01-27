@@ -33,19 +33,19 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  // private final ArmExtend extend = ArmExtend.getInstance();
-  // private final ArmTilt tilt = ArmTilt.getInstance();
-  // private final Turret turret = Turret.getInstance();
-  // private final DriveTrain driveTrain = DriveTrain.getInstance();
+  private final ArmExtend extend = ArmExtend.getInstance();
+  private final ArmTilt tilt = ArmTilt.getInstance();
+  private final Turret turret = Turret.getInstance();
+  private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Claw claw = Claw.getInstance();
 
-  // private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive();
-  // private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
-  // private final CharacterizeDrivetrainCommand characterize = new CharacterizeDrivetrainCommand(driveTrain);
+  private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive();
+  private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
+  private final CharacterizeDrivetrainCommand characterize = new CharacterizeDrivetrainCommand(driveTrain);
 
-  // private final TiltArmManual armTilt = new TiltArmManual();
-  // private final ExtendArmManual armExtension = new ExtendArmManual();
-  // private final ManualTurret manualTurret = new ManualTurret();
+  private final TiltArmManual armTilt = new TiltArmManual();
+  private final ExtendArmManual armExtension = new ExtendArmManual();
+  private final ManualTurret manualTurret = new ManualTurret();
   private final ManualClaw manualClaw = new ManualClaw();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -60,10 +60,10 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    // turret.setDefaultCommand(manualTurret);
-    // tilt.setDefaultCommand(armTilt);
-    // extend.setDefaultCommand(armExtension);
-    // driveTrain.setDefaultCommand(fieldDrive);
+    turret.setDefaultCommand(manualTurret);
+    tilt.setDefaultCommand(armTilt);
+    extend.setDefaultCommand(armExtension);
+    driveTrain.setDefaultCommand(fieldDrive);
     claw.setDefaultCommand(manualClaw);
   }
 
