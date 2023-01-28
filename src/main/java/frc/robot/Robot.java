@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -33,8 +34,11 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    calculator.setRobotPose(new Pose3d(0.0, 0.0, 0.0, new Rotation3d(0, 0, 0)));
-    calculator.setTargetPose(new Pose3d(1.0, 1.0, 1.0, new Rotation3d(0, 0, 0)));
+    // calculator.setRobotPose(new Pose3d(0.0, 0.0, 0.0, new Rotation3d(0, 0, 0)));
+    // calculator.setTargetPose(new Pose3d(1.0, 1.0, 1.0, new Rotation3d(0, 0, 0)));
+
+    calculator.setRobotPose(new Translation3d(0,0,0));
+    calculator.setTargetPose(new Translation3d(1,-1,1));
 
     System.out.println("trans x: " + calculator.getX());
     System.out.println("trans y: " + calculator.getY());

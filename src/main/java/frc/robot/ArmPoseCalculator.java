@@ -8,25 +8,26 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 
 public class ArmPoseCalculator {
 
-  private Pose3d robotPose; 
-  private Pose3d targetPose;
+  private Translation3d robotTrans; 
+  private Translation3d targetTrans;
 
   /** Creates a new ArmPoseCalculator. */
   public ArmPoseCalculator() {}
 
-  public void setRobotPose(Pose3d pose){
-    robotPose = pose;
+  public void setRobotPose(Translation3d trans){
+    robotTrans = trans;
   }
 
-  public void setTargetPose(Pose3d pose){
-    targetPose = pose;
+  public void setTargetPose(Translation3d trans){
+    targetTrans = trans;
   }
 
-  public Transform3d getTransform(){
-    return targetPose.minus(robotPose);
+  public Translation3d getTransform(){
+    return targetTrans.minus(robotTrans);
   }
 
   public double getX(){
@@ -41,13 +42,13 @@ public class ArmPoseCalculator {
     return getTransform().getZ();
   }
 
-  public Rotation3d getRotation3d(){
-    return getTransform().getRotation();
-  }
+  // public Rotation3d getRotation3d(){
+  //   return getTransform().getRotation();
+  // }
 
-  public Rotation2d getRotation2d(){
-    return getRotation3d().toRotation2d();
-  }
+  // public Rotation2d getRotation2d(){
+  //   return getRotation3d().toRotation2d();
+  // }
 
   // public double getYawDegrees(){
   //   return getRotation2d().getDegrees();
