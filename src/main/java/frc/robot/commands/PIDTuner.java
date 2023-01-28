@@ -9,6 +9,7 @@ import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
 
 import com.revrobotics.CANSparkMax;
@@ -30,7 +31,7 @@ public class PIDTuner extends CommandBase {
   private double maxAcc = 1500;
   private double allowedErr = 0;
 
-  private static ArmTilt subsystem = ArmTilt.getInstance();
+  private static ArmExtend subsystem = ArmExtend.getInstance();
 
   private static RelativeEncoder encoder;
   private static CANSparkMax motor;
@@ -40,6 +41,8 @@ public class PIDTuner extends CommandBase {
   public PIDTuner() {
     // Use addRequirements() here to declare subsystem dependencies.
     
+    addRequirements(subsystem);
+
     encoder = subsystem.getEncoder();
     motor = subsystem.getMotor();
     pidController = subsystem.getPIDController();
@@ -49,6 +52,7 @@ public class PIDTuner extends CommandBase {
     pidController.setD(kD);
     pidController.setIZone(kIz);
     pidController.setFF(kFF);
+    // pidController.setFF(kFF * (Math.cos(getAngle()) * extend.getDistanceFromPivot()));
     pidController.setOutputRange(kMinOutput, kMaxOutput);
 
     int smartMotionSlot = 0;
@@ -121,16 +125,20 @@ public class PIDTuner extends CommandBase {
 
     double setPoint, processVariable;
 
-    boolean mode = SmartDashboard.getBoolean("Mode", false);
-    if(mode) {
-      setPoint = SmartDashboard.getNumber("Set Velocity", 0);
-      pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-      processVariable = encoder.getVelocity();
-    } else {
-      setPoint = SmartDashboard.getNumber("Set Position", 0);
-      pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
-      processVariable = encoder.getPosition();
-    }
+    // boolean mode = SmartDashboard.getBoolean("Mode", false);
+    // if(mode) {
+    //   setPoint = SmartDashboard.getNumber("Set Velocity", 0);
+    //   pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+    //   processVariable = encoder.getVelocity();
+    // } else {
+    //   setPoint = SmartDashboard.getNumber("Set Position", 0);
+    //   pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
+    //   processVariable = encoder.getPosition();
+    // }
+
+    setPoint = SmartDashboard.getNumber("Set Position", 0);
+    pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+    processVariable = encoder.getPosition();
     
     SmartDashboard.putNumber("SetPoint", setPoint);
     SmartDashboard.putNumber("Process Variable", processVariable);

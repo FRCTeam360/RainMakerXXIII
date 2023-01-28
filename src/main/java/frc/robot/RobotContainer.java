@@ -12,6 +12,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
+import frc.robot.commands.PIDTuner;
 import frc.robot.commands.RobotOrientedDrive;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ArmExtend;
@@ -45,6 +46,8 @@ public class RobotContainer {
   private final ExtendArmManual armExtension = new ExtendArmManual();
   private final ManualTurret manualTurret = new ManualTurret();
 
+  private final PIDTuner pidTuner = new PIDTuner();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(XboxConstants.DRIVER_CONTROLLER_PORT);
@@ -58,8 +61,8 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     turret.setDefaultCommand(manualTurret);
-    //tilt.setDefaultCommand(armTilt);
-    extend.setDefaultCommand(armExtension);
+    tilt.setDefaultCommand(armTilt); //armTilt
+    extend.setDefaultCommand(pidTuner); //armExtension
     driveTrain.setDefaultCommand(fieldDrive);
   }
 

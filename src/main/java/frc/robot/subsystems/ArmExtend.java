@@ -19,6 +19,17 @@ public class ArmExtend extends SubsystemBase {
   private final SparkMaxPIDController pidController;
   private final RelativeEncoder encoder;
 
+  private double rotationsToMeters = (0.0354*(25.5-4.625))/30.0;
+
+  private double kP = 10;
+  private double kI = 0;
+  private double kD = 0;
+  private double kIz = 0;
+  private double kFF = 0;
+  private double kMaxOutput = 1;
+  private double kMinOutput = -1;
+  private double maxRPM = 5700;
+
   /** Creates a new Extend. */
   public ArmExtend() {
     motor.restoreFactoryDefaults();
@@ -27,6 +38,8 @@ public class ArmExtend extends SubsystemBase {
     
     pidController = motor.getPIDController();
     encoder = motor.getEncoder();
+
+    encoder.setPositionConversionFactor(rotationsToMeters);
   }
 
   public static ArmExtend getInstance() {
@@ -51,6 +64,14 @@ public class ArmExtend extends SubsystemBase {
 
   public void adjustExtension(double speed) {
     motor.set(speed); 
+  }
+
+  public double getExtendDistance(){
+    return encoder.getPosition();
+  }
+
+  public double getDistanceFromPivot(){
+    return getExtendDistance() + 0.0254*16.35;
   }
 
   @Override
