@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,22 +16,23 @@ import com.revrobotics.RelativeEncoder;
 
 public class PIDTuner extends CommandBase {
 
-  private double kP = 5e-5;
-  private double kI = 1e-6;
-  private double kD = 0;
-  private double kIz = 0;
-  private double kFF = 0.000156;
+  private double kP = 0.0;
+  private double kI = 0.0;
+  private double kD = 0.0;
+  private double kIz = 0.0;
+  private double kFF = 0.0;
   private double kMaxOutput = 1;
   private double kMinOutput = -1;
   private double maxRPM = 5700;
 
-  private double maxVel = 2000; //rpm
+  private double maxVel = 2000; // rpm
   private double minVel = 0;
   private double maxAcc = 1500;
   private double allowedErr = 0;
+  private double setPosition = 0.0;
 
-  private static ArmExtend subsystem = ArmExtend.getInstance();
-
+  private static ArmTilt subsystem = ArmTilt.getInstance();
+  private static ArmExtend armExtend = ArmExtend.getInstance();
   private static RelativeEncoder encoder;
   private static CANSparkMax motor;
   private static SparkMaxPIDController pidController;
@@ -40,7 +40,7 @@ public class PIDTuner extends CommandBase {
   /** Creates a new PIDTuner. */
   public PIDTuner() {
     // Use addRequirements() here to declare subsystem dependencies.
-    
+
     addRequirements(subsystem);
 
     encoder = subsystem.getEncoder();
@@ -51,8 +51,8 @@ public class PIDTuner extends CommandBase {
     pidController.setI(kI);
     pidController.setD(kD);
     pidController.setIZone(kIz);
-    pidController.setFF(kFF);
-    // pidController.setFF(kFF * (Math.cos(getAngle()) * extend.getDistanceFromPivot()));
+    // pidController.setFF(kFF);
+    pidController.setFF(kFF * (Math.cos(subsystem.getAngle()) * armExtend.getDistanceFromPivot()));
     pidController.setOutputRange(kMinOutput, kMaxOutput);
 
     int smartMotionSlot = 0;
@@ -81,7 +81,25 @@ public class PIDTuner extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // System.out.println("initializing");
+    SmartDashboard.putNumber("P Gain", kP);
+    SmartDashboard.putNumber("I Gain", kI);
+    SmartDashboard.putNumber("D Gain", kD);
+    SmartDashboard.putNumber("I Zone", kIz);
+    SmartDashboard.putNumber("Feed Forward", kFF);
+    SmartDashboard.putNumber("Max Output", kMaxOutput);
+    SmartDashboard.putNumber("Min Output", kMinOutput);
+
+    SmartDashboard.putNumber("Max Velocity", maxVel);
+    SmartDashboard.putNumber("Min Velocity", minVel);
+    SmartDashboard.putNumber("Max Acceleration", maxAcc);
+    SmartDashboard.putNumber("Allowed Closed Loop Error", allowedErr);
+    SmartDashboard.putNumber("Set Position", setPosition);
+    SmartDashboard.putNumber("Set Velocity", 0);
+
+    SmartDashboard.putBoolean("Mode", true);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -98,57 +116,78 @@ public class PIDTuner extends CommandBase {
     double maxA = SmartDashboard.getNumber("Max Acceleration", 0);
     double allE = SmartDashboard.getNumber("Allowed Closed Loop Error", 0);
 
-    if((p != kP)) { 
-      pidController.setP(p); kP = p;}
-    if((i != kI)) { 
-      pidController.setI(i); kI = i; }
-    if((d != kD)) { 
-      pidController.setD(d); kD = d; }
-    if((iz != kIz)) {
-       pidController.setIZone(iz); kIz = iz; }
-    if((ff != kFF)) { 
-      pidController.setFF(ff); kFF = ff; }
-    if((max != kMaxOutput) || (min != kMinOutput)) { 
-      pidController.setOutputRange(min, max); 
-      kMinOutput = min; kMaxOutput = max; 
+    if ((p != kP)) {
+      pidController.setP(p);
+      kP = p;
+    }
+    if ((i != kI)) {
+      pidController.setI(i);
+      kI = i;
+    }
+    if ((d != kD)) {
+      pidController.setD(d);
+      kD = d;
+    }
+    if ((iz != kIz)) {
+      pidController.setIZone(iz);
+      kIz = iz;
+    }
+    if ((ff != kFF)) {
+      pidController.setFF(kFF * (Math.cos(subsystem.getAngle()) * armExtend.getDistanceFromPivot()));
+      // pidControllar.setFF(ff); kFF = ff; }
+    } 
+    if ((max != kMaxOutput) || (min != kMinOutput)) {
+      pidController.setOutputRange(min, max);
+      kMinOutput = min;
+      kMaxOutput = max;
     }
 
-    if((maxV != maxVel)) { 
-      pidController.setSmartMotionMaxVelocity(maxV,0);
-       maxVel = maxV; }
-    if((minV != minVel)) { 
-      pidController.setSmartMotionMinOutputVelocity(minV,0); minVel = minV; }
-    if((maxA != maxAcc)) { 
-      pidController.setSmartMotionMaxAccel(maxA,0); maxAcc = maxA; }
-    if((allE != allowedErr)) { 
-      pidController.setSmartMotionAllowedClosedLoopError(allE,0); allowedErr = allE; }
-
+    if ((maxV != maxVel)) {
+      pidController.setSmartMotionMaxVelocity(maxV, 0);
+      maxVel = maxV;
+    }
+    if ((minV != minVel)) {
+      pidController.setSmartMotionMinOutputVelocity(minV, 0);
+      minVel = minV;
+    }
+    if ((maxA != maxAcc)) {
+      pidController.setSmartMotionMaxAccel(maxA, 0);
+      maxAcc = maxA;
+    }
+    if ((allE != allowedErr)) {
+      pidController.setSmartMotionAllowedClosedLoopError(allE, 0);
+      allowedErr = allE;
+    }
     double setPoint, processVariable;
 
     // boolean mode = SmartDashboard.getBoolean("Mode", false);
     // if(mode) {
-    //   setPoint = SmartDashboard.getNumber("Set Velocity", 0);
-    //   pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-    //   processVariable = encoder.getVelocity();
+    // setPoint = SmartDashboard.getNumber("Set Velocity", 0);
+    // pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+    // processVariable = encoder.getVelocity();
     // } else {
-    //   setPoint = SmartDashboard.getNumber("Set Position", 0);
-    //   pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
-    //   processVariable = encoder.getPosition();
+    // setPoint = SmartDashboard.getNumber("Set Position", 0);
+    // pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
+    // processVariable = encoder.getPosition();
     // }
 
     setPoint = SmartDashboard.getNumber("Set Position", 0);
-    pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+    if (setPoint != setPosition){
+      pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
+      setPosition = setPoint;
+    }
     processVariable = encoder.getPosition();
-    
-    SmartDashboard.putNumber("SetPoint", setPoint);
+
     SmartDashboard.putNumber("Process Variable", processVariable);
     SmartDashboard.putNumber("Output", motor.getAppliedOutput());
+    SmartDashboard.putNumber("Position", encoder.getPosition());
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

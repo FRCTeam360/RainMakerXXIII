@@ -130,6 +130,9 @@ public class ArmTilt extends SubsystemBase {
   public double getAngle(){
     return encoder.getPosition();
   }
+  public void resetAngle(){
+    encoder.setPosition(0.0);
+  }
 
   @Override
   public void periodic() {
