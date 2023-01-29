@@ -17,7 +17,12 @@ public class ArmPoseCalculator {
   private Translation3d robotTrans; 
   private Translation3d targetTrans;
 
-  private Translation3d[][][] nodeCoordinates = new Translation3d[2][3][9]; //alliances, rows, nodes
+  /**
+   * first index is the alliance (0 is blue, 1 is red),
+   * second index is the row (0 is bottom, 1 is middle, 2 is top),
+   * third index is the node (0 is the field wall, 8 is closest to the loading zone)
+   **/
+  public Translation3d[][][] nodeCoordinates = new Translation3d[2][3][9]; //alliances, rows, nodes
   private double[] yCoordinates = new double[] {0, 1, 2, 3, 4, 5, 6, 7, 8}; //y coordinates for all the nodes, starting at the wall
   private final int blue = 0;
   private final int red = 1;
@@ -57,6 +62,15 @@ public class ArmPoseCalculator {
 
   public void setTargetPose(Translation3d trans){
     targetTrans = trans;
+  }
+
+   /**
+   * first index is the alliance (0 is blue, 1 is red)
+   * second index is the row (0 is bottom, 1 is middle, 2 is top)
+   * third index is the node (0 is the field wall, 8 is closest to the loading zone)
+   **/
+  public void setNode(Translation3d coordinates){
+    setTargetPose(coordinates);
   }
 
   public Translation3d getTransform(){

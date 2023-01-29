@@ -9,6 +9,7 @@ import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
+import frc.robot.utils.ArmPoseCalculator;
 
 public class AutoArmPose extends CommandBase {
 
@@ -16,6 +17,8 @@ public class AutoArmPose extends CommandBase {
   private static ArmTilt armTilt = ArmTilt.getInstance();
   private static Turret turret = Turret.getInstance();
   private static DriveTrain driveTrain = DriveTrain.getInstance();
+
+  private static ArmPoseCalculator calculator = new ArmPoseCalculator();
 
   /** Creates a new AutoArmPose. */
   public AutoArmPose() {
@@ -28,8 +31,11 @@ public class AutoArmPose extends CommandBase {
   public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
+  
   @Override
-  public void execute() {}
+  public void execute() {
+    calculator.setNode(calculator.nodeCoordinates[0][1][2]);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
