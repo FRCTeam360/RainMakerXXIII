@@ -13,7 +13,18 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  
+
+  public enum RobotType {
+    DRAFT, PRACTICE
+  }
+
+  public static final RobotType robotType = RobotType.DRAFT;
+
+  public static RobotType getRobotType() {
+    return robotType;
+  }
+
+
   public static class SwerveConstants {
     public static final String CANBUS = "Swerve";
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.62865; 
@@ -22,6 +33,38 @@ public final class Constants {
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(96.06); //94.48 //96.32 // FIXME Measure and set back left steer offset
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(189.93); //189.49 // FIXME Measure and set front right steer offset
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(271.75); //271.14 //0.97 FIXME Measure and set front left steer offset
+  }
+
+  public static double getBackRightModuleSteerOffset() {
+    if(robotType == RobotType.DRAFT) {
+      return SwerveConstants.BACK_RIGHT_MODULE_STEER_OFFSET;
+    } else {
+      return 0.0;
+    }
+  }
+
+  public static double getBackLeftModuleSteerOffset() {
+    if(robotType == RobotType.DRAFT) {
+      return SwerveConstants.BACK_LEFT_MODULE_STEER_OFFSET;
+    } else {
+      return 0.0;
+    }
+  }
+
+  public static double getFrontRightModuleSteerOffset() {
+    if(robotType == RobotType.DRAFT) {
+      return SwerveConstants.FRONT_RIGHT_MODULE_STEER_OFFSET;
+    } else {
+      return 0.0;
+    }
+  }
+
+  public static double getFrontLeftModuleSteerOffset() {
+    if(robotType == RobotType.DRAFT) {
+      return SwerveConstants.FRONT_LEFT_MODULE_STEER_OFFSET;
+    } else {
+      return 0.0;
+    }
   }
 
   public static class XboxConstants {
