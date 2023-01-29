@@ -23,12 +23,14 @@ import frc.robot.Constants.CANIds.CANivore;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static frc.robot.Constants.*;
 
 public class DriveTrain extends SubsystemBase {
-    private static DriveTrain instance;
+  private final Field2d field = new Field2d();
+  private static DriveTrain instance;
   public static final double MAX_VOLTAGE = 12.0;
 
   private static final double ADJUSTMENT_FACTOR = 0.1;
@@ -117,6 +119,7 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
         SwerveConstants.BACK_RIGHT_MODULE_STEER_OFFSET);
 
         odometry = new SwerveDriveOdometry(m_kinematics, m_pigeon.getRotation2d(), getModulePositions());
+      SmartDashboard.putData("Field", field);
   }
   public void zeroGyroscope() {
     // FIXME Remove if you are using a Pigeon
@@ -232,6 +235,8 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
     SmartDashboard.putNumber("roll", m_pigeon.getRoll());
 
     pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+    field.setRobotPose(pose);
+
 
     SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
