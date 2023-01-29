@@ -8,19 +8,23 @@ import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
+
+import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 public class PIDTuner extends CommandBase {
 
-  private double kP = 0.0;
-  private double kI = 0.0;
-  private double kD = 0.0;
-  private double kIz = 0.0;
-  private double kFF = 0.0;
+  private double kP = 5e-5;
+  private double kI = 1e-6;
+  private double kD = 0;
+  private double kIz = 0;
+  private double kFF = 0.000156;
+  private DoubleSupplier feedForwardMultiplier;
   private double kMaxOutput = 1;
   private double kMinOutput = -1;
   private double maxRPM = 5700;
@@ -31,28 +35,29 @@ public class PIDTuner extends CommandBase {
   private double allowedErr = 0;
   private double setPosition = 0.0;
 
-  private static ArmTilt subsystem = ArmTilt.getInstance();
-  private static ArmExtend armExtend = ArmExtend.getInstance();
   private static RelativeEncoder encoder;
   private static CANSparkMax motor;
   private static SparkMaxPIDController pidController;
 
   /** Creates a new PIDTuner. */
-  public PIDTuner() {
+  public PIDTuner(SubsystemBase subsystem, RelativeEncoder subsystemEncoder, CANSparkMax subsystemMotor,
+      SparkMaxPIDController subsystemPidController, DoubleSupplier feedForwardMultiplier) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     addRequirements(subsystem);
 
-    encoder = subsystem.getEncoder();
-    motor = subsystem.getMotor();
-    pidController = subsystem.getPIDController();
+    encoder = subsystemEncoder;
+    motor = subsystemMotor;
+    pidController = subsystemPidController;
+    this.feedForwardMultiplier = feedForwardMultiplier;
 
     pidController.setP(kP);
     pidController.setI(kI);
     pidController.setD(kD);
     pidController.setIZone(kIz);
-    // pidController.setFF(kFF);
-    pidController.setFF(kFF * (Math.cos(subsystem.getAngle()) * armExtend.getDistanceFromPivot()));
+    pidController.setFF(kFF * this.feedForwardMultiplier.getAsDouble());
+    // pidController.setFF(kFF * (Math.cos(getAngle()) *
+    // extend.getDistanceFromPivot()));
     pidController.setOutputRange(kMinOutput, kMaxOutput);
 
     int smartMotionSlot = 0;
@@ -60,7 +65,11 @@ public class PIDTuner extends CommandBase {
     pidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
     pidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
     pidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+  }
 
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
     SmartDashboard.putNumber("P Gain", kP);
     SmartDashboard.putNumber("I Gain", kI);
     SmartDashboard.putNumber("D Gain", kD);
@@ -75,35 +84,15 @@ public class PIDTuner extends CommandBase {
     SmartDashboard.putNumber("Allowed Closed Loop Error", allowedErr);
     SmartDashboard.putNumber("Set Position", 0);
     SmartDashboard.putNumber("Set Velocity", 0);
-
-    SmartDashboard.putBoolean("Mode", true);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    // System.out.println("initializing");
-    SmartDashboard.putNumber("P Gain", kP);
-    SmartDashboard.putNumber("I Gain", kI);
-    SmartDashboard.putNumber("D Gain", kD);
-    SmartDashboard.putNumber("I Zone", kIz);
-    SmartDashboard.putNumber("Feed Forward", kFF);
-    SmartDashboard.putNumber("Max Output", kMaxOutput);
-    SmartDashboard.putNumber("Min Output", kMinOutput);
-
-    SmartDashboard.putNumber("Max Velocity", maxVel);
-    SmartDashboard.putNumber("Min Velocity", minVel);
-    SmartDashboard.putNumber("Max Acceleration", maxAcc);
-    SmartDashboard.putNumber("Allowed Closed Loop Error", allowedErr);
-    SmartDashboard.putNumber("Set Position", setPosition);
-    SmartDashboard.putNumber("Set Velocity", 0);
-
+    
     SmartDashboard.putBoolean("Mode", true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putNumber("Feed Forward Multiplier", feedForwardMultiplier.getAsDouble());
+
     double p = SmartDashboard.getNumber("P Gain", 0);
     double i = SmartDashboard.getNumber("I Gain", 0);
     double d = SmartDashboard.getNumber("D Gain", 0);
@@ -133,9 +122,9 @@ public class PIDTuner extends CommandBase {
       kIz = iz;
     }
     if ((ff != kFF)) {
-      pidController.setFF(kFF * (Math.cos(subsystem.getAngle()) * armExtend.getDistanceFromPivot()));
-      // pidControllar.setFF(ff); kFF = ff; }
-    } 
+      pidController.setFF(ff);
+      kFF = ff * feedForwardMultiplier.getAsDouble();
+    }
     if ((max != kMaxOutput) || (min != kMinOutput)) {
       pidController.setOutputRange(min, max);
       kMinOutput = min;
@@ -178,6 +167,7 @@ public class PIDTuner extends CommandBase {
     }
     processVariable = encoder.getPosition();
 
+    SmartDashboard.putNumber("SetPoint", setPoint);
     SmartDashboard.putNumber("Process Variable", processVariable);
     SmartDashboard.putNumber("Output", motor.getAppliedOutput());
     SmartDashboard.putNumber("Position", encoder.getPosition());

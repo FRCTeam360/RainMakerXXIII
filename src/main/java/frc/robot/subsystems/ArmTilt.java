@@ -53,7 +53,7 @@ public class ArmTilt extends SubsystemBase {
     tiltLead.setInverted(false);
     //tiltFollow.setInverted(false);
 
-    tiltLead.setIdleMode(IdleMode.kCoast);
+    tiltLead.setIdleMode(IdleMode.kBrake);
     //tiltFollow.setIdleMode(IdleMode.kBrake);
 
     encoder = tiltLead.getEncoder();
