@@ -26,7 +26,7 @@ public final class Constants {
 
 
   public static class SwerveConstants {
-    public static final String CANBUS = "Swerve";
+    public static final String CANBUS = "Default Name";
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.62865; 
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.62865;
     public static final double DRAFT_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(92.72); //93.07 // FIXME Measure and set back right steer offset
@@ -34,10 +34,10 @@ public final class Constants {
     public static final double DRAFT_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(189.93); //189.49 // FIXME Measure and set front right steer offset
     public static final double DRAFT_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(271.75); //271.14 //0.97 FIXME Measure and set front left steer offset
 
-    public static final double PRACTICE_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(92.72); //93.07 // FIXME Measure and set back right steer offset
-    public static final double PRACTICE_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(96.06); //94.48 //96.32 // FIXME Measure and set back left steer offset
-    public static final double PRACTICE_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(189.93); //189.49 // FIXME Measure and set front right steer offset
-    public static final double PRACTICE_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(271.75); //271.14 //0.97 FIXME Measure and set front left steer offset
+    public static final double PRACTICE_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(170.947265625); //170.947265625 // FIXME Measure and set back right steer offset
+    public static final double PRACTICE_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(335.0390625); //335.0390625 // FIXME Measure and set back left steer offset
+    public static final double PRACTICE_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(210.41015625); //210.41015625 // FIXME Measure and set front right steer offset
+    public static final double PRACTICE_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(294.43359375); //294.43359375 // FIXME Measure and set front left steer offset
   }
 
   public static double getBackRightModuleSteerOffset() {
@@ -96,21 +96,21 @@ public final class Constants {
     public final static int EXTEND_ID = 6;
 
     public static class CANivore {
-        public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; 
-        public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2; 
-        public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 3; 
+      public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 12; 
+      public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 10; 
+      public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 11; 
 
-        public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 4; 
-        public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 5; 
-        public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 6; 
+      public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 3; 
+      public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 1; 
+      public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 2; 
 
-        public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; 
-        public static final int BACK_LEFT_MODULE_STEER_MOTOR = 8; 
-        public static final int BACK_LEFT_MODULE_STEER_ENCODER = 9;
+      public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 9; 
+      public static final int BACK_LEFT_MODULE_STEER_MOTOR = 7; 
+      public static final int BACK_LEFT_MODULE_STEER_ENCODER = 8;
 
-        public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10;
-        public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 11; 
-        public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 12; 
+      public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 6;
+      public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 4; 
+      public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 5; 
 
         public static final int DRIVETRAIN_PIGEON_ID = 13; 
 
