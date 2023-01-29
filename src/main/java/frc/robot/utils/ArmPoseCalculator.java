@@ -6,6 +6,8 @@ package frc.robot.utils;
 
 import javax.xml.crypto.dsig.TransformService;
 
+import com.fasterxml.jackson.databind.Module.SetupContext;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -18,7 +20,8 @@ public class ArmPoseCalculator {
   private Translation3d targetTrans;
 
   private Translation3d[][][] nodeCoordinates = new Translation3d[2][3][9]; //alliances, rows, nodes
-  private double[] yCoordinates = new double[] {0, 1, 2, 3, 4, 5, 6, 7, 8}; //y coordinates for all the nodes, starting at the wall
+  private double[] yCoordinates = new double[] {0, 1, 2, 3, 4, 5, 6, 7, 8}; //y coordinates for all the nodes, starting at the edge of the field
+
   private final int blue = 0;
   private final int red = 1;
 
@@ -27,10 +30,16 @@ public class ArmPoseCalculator {
   private final int top = 2;
 
   /** Creates a new ArmPoseCalculator. */
-  public ArmPoseCalculator() {}
+  public ArmPoseCalculator() {
+    setUp();
+  }
 
   public void setUp() {
     for (int node = 0; node < 9; node++) { //sets all of the nodes going across all 3 grids to the same x and z values (all arbitrary)
+      if (node == 1 || node == 4 || node == 7) {
+        continue;
+      }
+      
       nodeCoordinates[blue][top][node] = new Translation3d(1, yCoordinates[node], 3); //moving across the field left to right
       nodeCoordinates[blue][mid][node] = new Translation3d(2, yCoordinates[node], 2);
       nodeCoordinates[blue][bot][node] = new Translation3d(3, yCoordinates[node], 1);
