@@ -18,7 +18,7 @@ public final class Constants {
     DRAFT, PRACTICE
   }
 
-  public static final RobotType robotType = RobotType.DRAFT;
+  public static final RobotType robotType = RobotType.PRACTICE;
 
   public static RobotType getRobotType() {
     return robotType;
@@ -35,7 +35,7 @@ public final class Constants {
     public static final double DRAFT_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(271.75); //271.14 //0.97 FIXME Measure and set front left steer offset
 
     public static final double PRACTICE_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(170.947265625); //170.947265625 // FIXME Measure and set back right steer offset
-    public static final double PRACTICE_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(335.0390625); //335.0390625 // FIXME Measure and set back left steer offset
+    public static final double PRACTICE_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(163.30078125); //335.0390625 // FIXME Measure and set back left steer offset
     public static final double PRACTICE_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(210.41015625); //210.41015625 // FIXME Measure and set front right steer offset
     public static final double PRACTICE_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(294.43359375); //294.43359375 // FIXME Measure and set front left steer offset
   }
