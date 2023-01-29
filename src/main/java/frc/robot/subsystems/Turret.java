@@ -70,7 +70,7 @@ public class Turret extends SubsystemBase {
 
   public double getAngle() {
     double encoderPosition = motor.getEncoder().getPosition();
-    return encoderPosition * gearBoxRatio * pulleyRatio * degreesPerRotation;
+    return encoderPosition;
   }
 
   public double getEncoderTick() {
