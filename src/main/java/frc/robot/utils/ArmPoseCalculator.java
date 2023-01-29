@@ -18,6 +18,7 @@ public class ArmPoseCalculator {
   private Translation3d targetTrans;
 
   private Translation3d[][][] nodeCoordinates = new Translation3d[2][3][9]; //alliances, rows, nodes
+  private double[] yCoordinates = new double[] {0, 1, 2, 3, 4, 5, 6, 7, 8}; //y coordinates for all the nodes, starting at the wall
 
   /** Creates a new ArmPoseCalculator. */
   public ArmPoseCalculator() {
@@ -26,23 +27,23 @@ public class ArmPoseCalculator {
 
   public void setUp() {
     for (int node = 0; node < 9; node++) { //sets all of the nodes going across all 3 grids to the same x and z values (all arbitrary)
-      nodeCoordinates[0][2][node] = new Translation3d(1, 0, 3); //moving across the field left to right
-      nodeCoordinates[0][1][node] = new Translation3d(2, 0, 2);
-      nodeCoordinates[0][0][node] = new Translation3d(3, 0, 1);
+      nodeCoordinates[0][2][node] = new Translation3d(1, yCoordinates[node], 3); //moving across the field left to right
+      nodeCoordinates[0][1][node] = new Translation3d(2, yCoordinates[node], 2);
+      nodeCoordinates[0][0][node] = new Translation3d(3, yCoordinates[node], 1);
 
-      nodeCoordinates[1][0][node] = new Translation3d(4, 0, 1);
-      nodeCoordinates[1][1][node] = new Translation3d(5, 0, 2);
-      nodeCoordinates[1][2][node] = new Translation3d(6, 0, 3);
+      nodeCoordinates[1][0][node] = new Translation3d(4, yCoordinates[node], 1);
+      nodeCoordinates[1][1][node] = new Translation3d(5, yCoordinates[node], 2);
+      nodeCoordinates[1][2][node] = new Translation3d(6, yCoordinates[node], 3);
     }
 
     for (int node = 1; node <= 7; node += 3) { //new translation3d w a diff z value, same x and y values tho (REMEMBER TO UPDATE HERE TOO)
-      nodeCoordinates[0][2][node] = new Translation3d(1, 0, 2.5);
-      nodeCoordinates[0][1][node] = new Translation3d(2, 0, 1.5);
-      nodeCoordinates[0][0][node] = new Translation3d(3, 0, 0.5); 
+      nodeCoordinates[0][2][node] = new Translation3d(1, yCoordinates[node], 2.5);
+      nodeCoordinates[0][1][node] = new Translation3d(2, yCoordinates[node], 1.5);
+      nodeCoordinates[0][0][node] = new Translation3d(3, yCoordinates[node], 0.5); 
       
-      nodeCoordinates[1][0][node] = new Translation3d(4, 0, 0.5);
-      nodeCoordinates[1][1][node] = new Translation3d(5, 0, 1.5);
-      nodeCoordinates[1][2][node] = new Translation3d(6, 0, 2.5);
+      nodeCoordinates[1][0][node] = new Translation3d(4, yCoordinates[node], 0.5);
+      nodeCoordinates[1][1][node] = new Translation3d(5, yCoordinates[node], 1.5);
+      nodeCoordinates[1][2][node] = new Translation3d(6, yCoordinates[node], 2.5);
     }
   }
   
