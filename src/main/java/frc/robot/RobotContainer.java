@@ -11,6 +11,7 @@ import frc.robot.commands.TiltArmManual;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
+import frc.robot.commands.PIDTuner;
 import frc.robot.commands.RobotOrientedDrive;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ArmExtend;
@@ -18,6 +19,7 @@ import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -44,6 +46,8 @@ public class RobotContainer {
   private final ExtendArmManual armExtension = new ExtendArmManual();
   private final ManualTurret manualTurret = new ManualTurret();
 
+  private final PIDTuner pidTuner = new PIDTuner();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
       new CommandXboxController(XboxConstants.DRIVER_CONTROLLER_PORT);
@@ -59,14 +63,14 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     turret.setDefaultCommand(manualTurret);
-    tilt.setDefaultCommand(armTilt);
-    extend.setDefaultCommand(armExtension);
-    driveTrain.setDefaultCommand(fieldDrive);
+    tilt.setDefaultCommand(pidTuner); //armTilt
+    // extend.setDefaultCommand(armExtension); //armExtension
+    driveTrain.setDefaultCommand(robotDrive);
   }
 
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * Use this method to define your trigger->command mappings. Triggers can be created via ]\
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
@@ -78,6 +82,7 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
+    m_driverController.a().whileTrue(new InstantCommand( () -> tilt.resetAngle()));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.

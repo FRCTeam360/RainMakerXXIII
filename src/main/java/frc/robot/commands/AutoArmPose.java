@@ -4,21 +4,23 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.XboxConstants;
 import frc.robot.subsystems.ArmExtend;
+import frc.robot.subsystems.ArmTilt;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Turret;
 
+public class AutoArmPose extends CommandBase {
 
-public class ExtendArmManual extends CommandBase {
+  private static ArmExtend armExtend = ArmExtend.getInstance();
+  private static ArmTilt armTilt = ArmTilt.getInstance();
+  private static Turret turret = Turret.getInstance();
+  private static DriveTrain driveTrain = DriveTrain.getInstance();
 
-  private static ArmExtend extend = ArmExtend.getInstance();
-  private static XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
-
-  /** Creates a new ArmExtension. */
-  public ExtendArmManual() {
+  /** Creates a new AutoArmPose. */
+  public AutoArmPose() {
+    addRequirements(armExtend, armTilt, turret);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(extend);
   }
 
   // Called when the command is initially scheduled.
@@ -27,16 +29,7 @@ public class ExtendArmManual extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    if(Math.abs(operatorCont.getLeftY()) >= 0.1) {
-      extend.adjustExtension(-operatorCont.getLeftY() * 0.5);
-    } else if(operatorCont.getLeftY() >= 0.1){
-      extend.adjustExtension(operatorCont.getLeftY() * 0.5);
-    } else {
-      extend.adjustExtension(0);
-    }
-  }
-
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override

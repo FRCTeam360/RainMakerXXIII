@@ -8,6 +8,7 @@ import java.io.PipedInputStream;
 import java.sql.Driver;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -20,7 +21,8 @@ import frc.robot.Constants.CANIds;
 public class Turret extends SubsystemBase {
 
   private final CANSparkMax motor;
-  private SparkMaxPIDController PIDControl;
+  private SparkMaxPIDController pidController;
+  private RelativeEncoder encoder;
 
   private static Turret instance;
 
@@ -30,13 +32,6 @@ public class Turret extends SubsystemBase {
   public static final double degreesPerRotation = 360.0 / 1.0;
   public static final double rotationsPerTick = 1.0 / 42.0;
 
-  public static Turret getInstance() {
-    if (instance == null) {
-      instance = new Turret();
-    }
-    return instance;
-  }
-
   /** Creates a new Turret. */
   public Turret() {
     motor = new CANSparkMax(CANIds.TURRET_ID, MotorType.kBrushless);
@@ -44,7 +39,27 @@ public class Turret extends SubsystemBase {
     motor.setInverted(false);
     motor.setIdleMode(IdleMode.kCoast);
     
-    PIDControl = motor.getPIDController();
+    pidController = motor.getPIDController();
+    encoder = motor.getEncoder();
+  }
+
+  public static Turret getInstance() {
+    if (instance == null) {
+      instance = new Turret();
+    }
+    return instance;
+  }
+
+  public SparkMaxPIDController getPIDController(){
+    return pidController;
+  }
+
+  public RelativeEncoder getEncoder() {
+    return encoder;
+  }
+
+  public CANSparkMax getMotor() {
+    return motor;
   }
 
   public void turn(double speed) {
@@ -61,7 +76,7 @@ public class Turret extends SubsystemBase {
   }
 
   public void angleTurn(double inputAngle) {
-    PIDControl.setReference(inputAngle, ControlType.kPosition);
+    pidController.setReference(inputAngle, ControlType.kPosition);
   }
 
   public void resetEncoderTicks(){

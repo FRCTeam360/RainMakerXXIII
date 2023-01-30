@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -12,15 +14,32 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
 
 public class ArmExtend extends SubsystemBase {
-  private final CANSparkMax extendMotor = new CANSparkMax(CANIds.EXTEND_ID, MotorType.kBrushless);
   private static ArmExtend instance;
+  private final CANSparkMax motor = new CANSparkMax(CANIds.EXTEND_ID, MotorType.kBrushless);
+  private final SparkMaxPIDController pidController;
+  private final RelativeEncoder encoder;
+
+  private double rotationsToMeters = (0.0354*(25.5-4.625))/30.0;
+
+  private double kP = 10;
+  private double kI = 0;
+  private double kD = 0;
+  private double kIz = 0;
+  private double kFF = 0;
+  private double kMaxOutput = 1;
+  private double kMinOutput = -1;
+  private double maxRPM = 5700;
 
   /** Creates a new Extend. */
   public ArmExtend() {
-    extendMotor.restoreFactoryDefaults();
-    extendMotor.setInverted(false);
-    extendMotor.setIdleMode(IdleMode.kBrake);
+    motor.restoreFactoryDefaults();
+    motor.setInverted(false);
+    motor.setIdleMode(IdleMode.kBrake);
     
+    pidController = motor.getPIDController();
+    encoder = motor.getEncoder();
+
+    encoder.setPositionConversionFactor(rotationsToMeters);
   }
 
   public static ArmExtend getInstance() {
@@ -31,8 +50,28 @@ public class ArmExtend extends SubsystemBase {
     return instance;
   }
 
+  public SparkMaxPIDController getPIDController(){
+    return pidController;
+  }
+
+  public RelativeEncoder getEncoder() {
+    return encoder;
+  }
+
+  public CANSparkMax getMotor() {
+    return motor;
+  }
+
   public void adjustExtension(double speed) {
-    extendMotor.set(speed); 
+    motor.set(speed); 
+  }
+
+  public double getExtendDistance(){
+    return encoder.getPosition();
+  }
+
+  public double getDistanceFromPivot(){
+    return getExtendDistance() + 0.0254*16.35;
   }
 
   @Override
