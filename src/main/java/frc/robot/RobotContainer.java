@@ -8,7 +8,6 @@ import frc.robot.Constants.*;
 import frc.robot.commands.ExtendArmManual;
 import frc.robot.commands.FieldOrientedDrive;
 import frc.robot.commands.TiltArmManual;
-import frc.robot.commands.Autos;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
@@ -50,8 +49,10 @@ public class RobotContainer {
   private final PIDTuner pidTuner = new PIDTuner();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  private final CommandXboxController driverController =
       new CommandXboxController(XboxConstants.DRIVER_CONTROLLER_PORT);
+  private final CommandXboxController operatorController =
+      new CommandXboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -85,7 +86,8 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    driverController.b().whileTrue(driveTrain.xOutCommand());
   }
 
   /**
@@ -93,8 +95,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+  // public Command getAutonomousCommand() {
+  //   // An example command will be run in autonomous
+  //   return Autos.exampleAuto(m_exampleSubsystem);
+  // }
 }
