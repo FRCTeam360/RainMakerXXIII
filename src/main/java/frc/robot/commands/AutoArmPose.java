@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
@@ -20,6 +23,13 @@ public class AutoArmPose extends CommandBase {
 
   private static ArmPoseCalculator calculator = new ArmPoseCalculator();
 
+  private static XboxController driverCont = new XboxController(0);
+  private static XboxController operatorCont = new XboxController(1);
+
+  private int alliance;
+  private int row;
+  private int col;
+
   /** Creates a new AutoArmPose. */
   public AutoArmPose() {
     addRequirements(armExtend, armTilt, turret);
@@ -34,7 +44,41 @@ public class AutoArmPose extends CommandBase {
   
   @Override
   public void execute() {
-    calculator.setNode(calculator.nodeCoordinates[0][1][2]);
+    chooseNode();
+    calculator.setNode(calculator.nodeCoordinates[alliance][row][col]);
+  }
+
+  public void chooseNode() {
+    if (DriverStation.getAlliance() == Alliance.Blue) {
+      alliance = 0;
+    } else if (DriverStation.getAlliance() == Alliance.Red) {
+      alliance = 1;
+    }
+
+    //operator chooses the row
+    if (operatorCont.getYButton()) {
+      row = 2;
+    } else if (operatorCont.getAButton()) {
+      row = 0;
+    } else {
+      row = 1;
+    }
+
+    //operator chooses if its the left, mid, or right column in the grid
+    if (operatorCont.getXButton()) {
+      col = 0;
+    } else if (operatorCont.getBButton()) {
+      col = 2;
+    } else {
+      col = 1;
+    }
+
+    //driver chooses grid
+    if (driverCont.getAButton()){
+      col += 3;
+    } else if (driverCont.getXButton()){
+      col += 6;
+    }
   }
 
   // Called once the command ends or is interrupted.
