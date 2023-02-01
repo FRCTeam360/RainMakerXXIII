@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.hal.PowerDistributionFaults;
@@ -46,15 +47,20 @@ public class ArmTilt extends SubsystemBase {
 
   /** Creates a new Tilt. */
   public ArmTilt() {
-    
+    //-38 degrees as the minimum soft limit
+    //212 for the upper limit
     tiltLead.restoreFactoryDefaults();
     //tiltFollow.restoreFactoryDefaults(); 
 
     tiltLead.setInverted(false);
     //tiltFollow.setInverted(false);
 
-    tiltLead.setIdleMode(IdleMode.kBrake);
+    tiltLead.setIdleMode(IdleMode.kCoast);
     //tiltFollow.setIdleMode(IdleMode.kBrake);
+    tiltLead.setSoftLimit(SoftLimitDirection.kForward, 212.0f);
+    tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -38.0f);
+    tiltLead.enableSoftLimit(SoftLimitDirection.kForward, true);
+    tiltLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     encoder = tiltLead.getEncoder();
 
