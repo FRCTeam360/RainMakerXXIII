@@ -19,8 +19,8 @@ import com.revrobotics.RelativeEncoder;
 
 public class PIDTuner extends CommandBase {
 
-  private double kP = 5e-5;
-  private double kI = 1e-6;
+  private double kP = 5;
+  private double kI = 0;
   private double kD = 0;
   private double kIz = 0;
   private double kFF = 0.000156;

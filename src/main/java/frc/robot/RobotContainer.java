@@ -13,6 +13,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
 import frc.robot.commands.PIDTuner;
 import frc.robot.commands.RobotOrientedDrive;
+import frc.robot.commands.TestSetpoints;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
@@ -47,6 +48,7 @@ public class RobotContainer {
   private final TiltArmManual armTilt = new TiltArmManual();
   private final ExtendArmManual armExtension = new ExtendArmManual();
   private final ManualTurret manualTurret = new ManualTurret();
+  private final TestSetpoints testSetpoints = new TestSetpoints();
 
   // getFFMultiplier.apply(tilt.getAngle(), extend.getDistanceFromPivot())
   private final PIDTuner pidTuner = new PIDTuner(extend, extend.getEncoder(), extend.getMotor(), extend.getPIDController(),

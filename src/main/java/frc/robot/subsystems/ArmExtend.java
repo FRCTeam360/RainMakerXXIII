@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -71,6 +72,10 @@ public class ArmExtend extends SubsystemBase {
 
   public void adjustExtension(double speed) {
     leadMotor.set(speed); 
+  }
+
+  public void setPosition(double meters){
+    pidController.setReference(meters, ControlType.kPosition);
   }
 
   public double getExtendDistance(){
