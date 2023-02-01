@@ -49,8 +49,8 @@ public class RobotContainer {
   private final ManualTurret manualTurret = new ManualTurret();
 
   // getFFMultiplier.apply(tilt.getAngle(), extend.getDistanceFromPivot())
-  private final PIDTuner pidTuner = new PIDTuner(tilt, tilt.getEncoder(), tilt.getMotor(), tilt.getPIDController(),
-      this::calcFFTorqueMultiplier);
+  private final PIDTuner pidTuner = new PIDTuner(extend, extend.getEncoder(), extend.getMotor(), extend.getPIDController(),
+      this::extendFeedForward);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -69,7 +69,7 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     turret.setDefaultCommand(manualTurret);
-    tilt.setDefaultCommand(pidTuner); //armTilt
+    extend.setDefaultCommand(pidTuner); //armTilt
     // extend.setDefaultCommand(armExtension); //armExtension
     driveTrain.setDefaultCommand(fieldDrive);
   }
@@ -113,5 +113,8 @@ public class RobotContainer {
 
   public double calcFFTorqueMultiplier() {
     return Math.cos(Math.toRadians(this.tilt.getAngle())) * this.extend.getDistanceFromPivot();
+  }
+  public double extendFeedForward(){
+    return Math.sin(Math.toRadians(this.tilt.getAngle()));
   }
 }
