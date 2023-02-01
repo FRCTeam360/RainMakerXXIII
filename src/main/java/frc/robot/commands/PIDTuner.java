@@ -84,7 +84,7 @@ public class PIDTuner extends CommandBase {
     SmartDashboard.putNumber("Allowed Closed Loop Error", allowedErr);
     SmartDashboard.putNumber("Set Position", 0);
     SmartDashboard.putNumber("Set Velocity", 0);
-    
+
     SmartDashboard.putBoolean("Mode", true);
   }
 
@@ -161,7 +161,7 @@ public class PIDTuner extends CommandBase {
     // }
 
     setPoint = SmartDashboard.getNumber("Set Position", 0);
-    if (setPoint != setPosition){
+    if (setPoint != setPosition) {
       pidController.setReference(setPoint, CANSparkMax.ControlType.kPosition);
       setPosition = setPoint;
     }
@@ -171,6 +171,7 @@ public class PIDTuner extends CommandBase {
     SmartDashboard.putNumber("Process Variable", processVariable);
     SmartDashboard.putNumber("Output", motor.getAppliedOutput());
     SmartDashboard.putNumber("Position", encoder.getPosition());
+    SmartDashboard.putNumber("Error", setPoint - encoder.getPosition());
 
   }
 
