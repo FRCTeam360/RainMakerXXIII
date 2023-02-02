@@ -123,7 +123,7 @@ public class ArmTilt extends SubsystemBase {
     tiltLead.set(speed);
   }
 
-  public void setPosition(double inputAngle) {
+  public void setAngle(double inputAngle) {
     SparkMaxPIDController PIDControl = tiltLead.getPIDController();
     PIDControl.setReference(inputAngle, ControlType.kPosition);
   }

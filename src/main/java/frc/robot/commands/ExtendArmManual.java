@@ -29,9 +29,9 @@ public class ExtendArmManual extends CommandBase {
   @Override
   public void execute() {
     if(Math.abs(operatorCont.getLeftY()) >= 0.1) {
-      extend.adjustExtension(-operatorCont.getLeftY() * 0.5);
+      extend.adjustExtension(-operatorCont.getLeftY() * 0.3);
     } else if(operatorCont.getLeftY() >= 0.1){
-      extend.adjustExtension(operatorCont.getLeftY() * 0.5);
+      extend.adjustExtension(operatorCont.getLeftY() * 0.3);
     } else {
       extend.adjustExtension(0);
     }

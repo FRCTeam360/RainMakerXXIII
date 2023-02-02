@@ -31,7 +31,7 @@ public class TestSetpoints extends CommandBase {
   @Override
   public void execute() {
     extend.setPosition(SmartDashboard.getNumber("Extend Setpoint", 0));
-    tilt.setPosition(SmartDashboard.getNumber("Tilt Setpoint", 0));
+    tilt.setAngle(SmartDashboard.getNumber("Tilt Setpoint", 0));
     turret.angleTurn(SmartDashboard.getNumber("Turret Setpoint", 0));
   }
 

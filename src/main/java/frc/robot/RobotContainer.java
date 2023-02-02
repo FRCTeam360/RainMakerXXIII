@@ -8,6 +8,7 @@ import frc.robot.Constants.*;
 import frc.robot.commands.ExtendArmManual;
 import frc.robot.commands.FieldOrientedDrive;
 import frc.robot.commands.TiltArmManual;
+import frc.robot.commands.AutoArmPose;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
@@ -49,6 +50,7 @@ public class RobotContainer {
   private final ExtendArmManual armExtension = new ExtendArmManual();
   private final ManualTurret manualTurret = new ManualTurret();
   private final TestSetpoints testSetpoints = new TestSetpoints();
+  private final AutoArmPose autoArmPose = new AutoArmPose(0, 0, 0);
 
   // getFFMultiplier.apply(tilt.getAngle(), extend.getDistanceFromPivot())
   private final PIDTuner pidTuner = new PIDTuner(extend, extend.getEncoder(), extend.getMotor(), extend.getPIDController(),
@@ -70,9 +72,9 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    turret.setDefaultCommand(manualTurret);
-    extend.setDefaultCommand(pidTuner); //armTilt
-    // extend.setDefaultCommand(armExtension); //armExtension
+    turret.setDefaultCommand(autoArmPose);
+    //extend.setDefaultCommand(pidTuner); //armTilt
+    tilt.setDefaultCommand(autoArmPose); //armExtension
     driveTrain.setDefaultCommand(fieldDrive);
   }
 

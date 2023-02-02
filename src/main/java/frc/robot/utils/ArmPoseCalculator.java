@@ -58,10 +58,12 @@ public class ArmPoseCalculator {
       nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], 1.5);
       nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], 2.5);
     }
+
+    nodeCoordinates[0][0][0] = new Translation3d(0.5, 0.5, 0.5);
   }
   
   public void setRobotPose(Translation3d trans){
-    robotTrans = trans;
+    robotTrans = new Translation3d(0, 0, 0);
   }
 
   public void setTargetPose(Translation3d trans){
@@ -78,6 +80,11 @@ public class ArmPoseCalculator {
   }
 
   public Translation3d getTransform(){
+    System.out.println("m_x "+ targetTrans.getX());
+    System.out.println("m_y "+ targetTrans.getY());
+
+    System.out.println("m_z "+ targetTrans.getZ());
+
     return targetTrans.minus(robotTrans);
   }
 
@@ -93,25 +100,9 @@ public class ArmPoseCalculator {
     return getTransform().getZ();
   }
 
-  // public Rotation3d getRotation3d(){
-  //   return getTransform().getRotation();
-  // }
-
-  // public Rotation2d getRotation2d(){
-  //   return getRotation3d().toRotation2d();
-  // }
-
-  // public double getYawDegrees(){
-  //   return getRotation2d().getDegrees();
-  // }
-
-  public double getTurretRotation(){
+  public double getTurretRotation(){ //TODO: gotta subtract from the drivetrain angle
     return Math.toDegrees(Math.atan(getY()/getX()));
   }
-
-  // public double getElevationAngleRadians(){
-  //   return Math.sqrt(Math.pow(getRotation3d().getX(), 2) + Math.pow(getRotation3d().getY(), 2));
-  // }
 
   public double get2dDistance(){
     return Math.sqrt((getX() * getX()) + (getY() * getY()));
@@ -120,14 +111,6 @@ public class ArmPoseCalculator {
   public double getElevationAngleDegrees(){
     return Math.toDegrees(Math.atan(getZ() / get2dDistance()));
   }
-
-  // public double getElevationAngleDegrees(){
-  //   return Math.toDegrees(getElevationAngleRadians());
-  // }
-
-  // public double getExtendDistance(){
-  //   return Math.sqrt(Math.pow(getX(), 2) + Math.pow(getY(), 2) + Math.pow(getZ(), 2));
-  // }
 
   public double getExtendDistance(){
     return Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ()));
