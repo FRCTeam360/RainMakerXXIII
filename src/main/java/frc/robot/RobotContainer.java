@@ -36,7 +36,7 @@ public class RobotContainer {
   private final Turret turret = Turret.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
 
-  private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive();
+  private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive(); //auto
   private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
   private final CharacterizeDrivetrainCommand characterize = new CharacterizeDrivetrainCommand(driveTrain);
   
@@ -83,7 +83,10 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    
     driverController.b().whileTrue(driveTrain.xOutCommand());
+
+    driverController.y().toggleOnTrue(armExtension)
   }
 
   /**

@@ -4,5 +4,16 @@
 
 package frc.robot.utils;
 
+import frc.robot.subsystems.DriveTrain;
+
 /** Add your docs here. */
-public class DynamicPaths {}
+public class DynamicPaths {
+
+    DriveTrain driveTrain = DriveTrain.getInstance();
+
+
+    public static Command dynPaths(){
+        
+    }
+
+}
