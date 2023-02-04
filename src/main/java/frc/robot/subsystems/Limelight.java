@@ -28,7 +28,7 @@ public class Limelight{
   private NetworkTableEntry botpose = lime.getEntry("botpose_wpiblue");
   private NetworkTableEntry snap = lime.getEntry("snapshot");
   private double[] botposeArray = new double[6]; 
-  public Pose3d averagePose = null;
+  private Pose3d averagePose = null;
   /**private double zX;
   private double zY;
   private double zZ;**/
@@ -49,6 +49,10 @@ public class Limelight{
       instance = new Limelight();
     }
     return instance;
+  }
+
+  public Pose3d getAveragePose() {
+    return averagePose;
   }
 
   public double getTX() {
