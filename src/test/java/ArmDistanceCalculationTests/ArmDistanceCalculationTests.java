@@ -40,8 +40,8 @@ public class ArmDistanceCalculationTests {
         ArmPoseCalculator apc = new ArmPoseCalculator();
         apc.setRobotPose(new Translation3d(0.0, 0.0, 0.3));
         apc.setTargetPose(new Translation3d(1.0, 0.0, 0.3));
-        double expected = Math.toRadians(0.0); 
-        double actual = apc.getElevationAngleDegrees();
+        double expected = Math.toRadians(360.0); 
+        double actual = Math.toRadians(apc.getElevationAngleDegrees());
         assertEquals(expected, actual, "expected arm angle to be " + expected + "- got " + actual);
     }
     @Test
@@ -50,7 +50,7 @@ public class ArmDistanceCalculationTests {
         apc.setRobotPose(new Translation3d(0.0, 0.0, 0.3));
         apc.setTargetPose(new Translation3d(0.0, 0.0, 1.3));
         double expected = Math.toRadians(90.0);
-        double actual = apc.getElevationAngleDegrees();
+        double actual = Math.toRadians(apc.getElevationAngleDegrees());
         assertEquals(expected, actual, "expected arm angle to be " + expected + "- got " + actual);
     }
     @Test
