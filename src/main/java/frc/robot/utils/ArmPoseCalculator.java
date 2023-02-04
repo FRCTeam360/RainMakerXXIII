@@ -4,15 +4,18 @@
 
 package frc.robot.utils;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
-public class ArmPoseCalculator {
+public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
 
-  private Translation3d robotTrans; 
+  private static final double pivotHeight = 1.0;
+
+  private Translation3d robotTrans = new Translation3d(); 
   private Translation3d targetTrans;
 
   /**
@@ -22,6 +25,9 @@ public class ArmPoseCalculator {
    **/
   public Translation3d[][][] nodeCoordinates = new Translation3d[2][3][9];
   private double[] yCoordinates = new double[] {0, 1, 2, 3, 4, 5, 6, 7, 8}; //y coordinates for all the nodes, starting at the field edge
+  private double[] zCoordinatesCones = new double[] {1, 2, 3}; //z coordinates for all the cones, bottom -> top
+  private double[] zCoordinatesCubes = new double[] {0.5, 1.5, 2.5}; //z coordinates for all the cubes, bottom -> top
+
   private final int blue = 0;
   private final int red = 1;
 
@@ -40,33 +46,73 @@ public class ArmPoseCalculator {
         continue;
       }
       
-      nodeCoordinates[blue][top][col] = new Translation3d(1, yCoordinates[col], 3); //moving across the field left to right
-      nodeCoordinates[blue][mid][col] = new Translation3d(2, yCoordinates[col], 2);
-      nodeCoordinates[blue][bot][col] = new Translation3d(3, yCoordinates[col], 1);
+      nodeCoordinates[blue][top][col] = new Translation3d(1, yCoordinates[col], zCoordinatesCones[2]); //moving across the field left to right
+      nodeCoordinates[blue][mid][col] = new Translation3d(2, yCoordinates[col], zCoordinatesCones[1]);
+      nodeCoordinates[blue][bot][col] = new Translation3d(3, yCoordinates[col], zCoordinatesCones[0]);
 
-      nodeCoordinates[red][bot][col] = new Translation3d(4, yCoordinates[col], 1);
-      nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], 2);
-      nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], 3);
+      nodeCoordinates[red][bot][col] = new Translation3d(4, yCoordinates[col], zCoordinatesCones[0]);
+      nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], zCoordinatesCones[1]);
+      nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], zCoordinatesCones[2]);
     }
 
     for (int col = 1; col <= 7; col += 3) { //new translation3d w a diff z value, same x and y values tho (REMEMBER TO UPDATE HERE TOO)
-      nodeCoordinates[blue][top][col] = new Translation3d(1, yCoordinates[col], 2.5);
-      nodeCoordinates[blue][mid][col] = new Translation3d(2, yCoordinates[col], 1.5);
-      nodeCoordinates[blue][bot][col] = new Translation3d(3, yCoordinates[col], 0.5); 
+      nodeCoordinates[blue][top][col] = new Translation3d(1, yCoordinates[col], zCoordinatesCubes[2]);
+      nodeCoordinates[blue][mid][col] = new Translation3d(2, yCoordinates[col], zCoordinatesCubes[1]);
+      nodeCoordinates[blue][bot][col] = new Translation3d(3, yCoordinates[col], zCoordinatesCubes[0]); 
       
-      nodeCoordinates[red][bot][col] = new Translation3d(4, yCoordinates[col], 0.5);
-      nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], 1.5);
-      nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], 2.5);
+      nodeCoordinates[red][bot][col] = new Translation3d(4, yCoordinates[col], zCoordinatesCubes[0]);
+      nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], zCoordinatesCubes[1]);
+      nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], zCoordinatesCubes[2]);
     }
-
-    nodeCoordinates[0][0][0] = new Translation3d(0.5, 0.5, 0.5);
   }
+
+  /*
+   * blue bot x: 1.1608
+   * blue mid x: 0.7954
+   * blue top x: 0.3629
+   * 
+   *
+   * red bot x: 15.3613
+   * red mid x: 15.7408
+   * red top x: 16.1661
+   * 
+   * cones mid z: 0.8652
+   * cones top z: 1.17
+   * 
+   * cubes bot z: 0 
+   * cubes mid z: 0.5223
+   * cubes top z: 0.8263
+   * 
+   * y 0 bot: 0.4206
+   * y 2 bot: 1.6306
+   * 
+   * y 3 bot: 2.1891
+   * y 5 bot: 3.3067
+   * 
+   * y 6 bot: 3.8655
+   * y 8 bot: 5.0752
+   * 
+   * y 0: 0.5127
+   * y 1: 1.0705
+   * y 2: 1.6303
+   * y 3: 2.1891
+   * y 4: 2.7479
+   * y 5: 3.3067
+   * y 6: 3.8655
+   * y 7: 4.4243
+   * y 8: 4.9831
+   * 
+   */
   
-  public void setRobotPose(Translation3d trans){
-    robotTrans = new Translation3d(0, 0, 0);
+  public void setRobotTrans(Translation3d trans){
+    robotTrans = trans;
   }
 
-  public void setTargetPose(Translation3d trans){
+  public void setRobotPose(Pose2d pose){
+    setRobotTrans(new Translation3d(pose.getX(), pose.getY(), pivotHeight));
+  }
+
+  public void setTargetTrans(Translation3d trans){
     targetTrans = trans;
   }
 
@@ -76,7 +122,7 @@ public class ArmPoseCalculator {
    * third index is the col (0 is the field wall, 8 is closest to the loading zone)
    **/
   public void setNode(Translation3d coordinates){
-    setTargetPose(coordinates);
+    setTargetTrans(coordinates);
   }
 
   public Translation3d getTransform(){
