@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +22,9 @@ public class Turret extends SubsystemBase {
 
   private final CANSparkMax motor;
   private SparkMaxPIDController PIDControl;
+
+  private DigitalInput limitSwitch = new DigitalInput(0); //TODO set channel
+  private boolean pastLimitSwitchState;
   
   private static Turret instance;
   private double relativeAngle;
@@ -63,6 +67,10 @@ public class Turret extends SubsystemBase {
   }
 
   public void angleTurn(double inputAngle) {
+    setPosition(getNearestTurretAngle(inputAngle));
+  }
+
+  public void setPosition(double inputAngle) {
     PIDControl.setReference(inputAngle, ControlType.kPosition);
   }
 
@@ -85,9 +93,28 @@ public class Turret extends SubsystemBase {
     PIDControl.setReference(relativeAngle, ControlType.kPosition,1); 
   }
 
+  private double getNearestTurretAngle(double angle){
+    double turretFactor = (double) Math.round((getAngleRelativeToRobot() - angle) / 360.0);
+    return angle + (360.0 * turretFactor);
+  }
+
+  private void checkLimitSwitch(){
+    boolean currentMiddleLimitState = limitSwitch.get();
+
+    if (currentMiddleLimitState == false && pastLimitSwitchState == true) {
+        resetAngle(0);
+        System.out.println("lil zero");
+    }
+
+    pastLimitSwitchState = currentMiddleLimitState;
+  }
+
   @Override
   public void periodic() {
-    tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
+    SmartDashboard.putNumber("turret angle", getAngleRelativeToRobot());
+    SmartDashboard.putNumber("relative position", getNearestTurretAngle(40.5));
+    // tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
+    // checkLimitSwitch();
     // This method will be called once per scheduler run
   }
 }
