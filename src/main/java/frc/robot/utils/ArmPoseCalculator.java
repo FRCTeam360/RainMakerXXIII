@@ -65,6 +65,44 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
       nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], zCoordinatesCubes[2]);
     }
   }
+
+  /*
+   * blue bot x: 1.1608
+   * blue mid x: 0.7954
+   * blue top x: 0.3629
+   * 
+   *
+   * red bot x: 15.3613
+   * red mid x: 15.7408
+   * red top x: 16.1661
+   * 
+   * cones mid z: 0.8652
+   * cones top z: 1.17
+   * 
+   * cubes bot z: 0 
+   * cubes mid z: 0.5223
+   * cubes top z: 0.8263
+   * 
+   * y 0 bot: 0.4206
+   * y 2 bot: 1.6306
+   * 
+   * y 3 bot: 2.1891
+   * y 5 bot: 3.3067
+   * 
+   * y 6 bot: 3.8655
+   * y 8 bot: 5.0752
+   * 
+   * y 0: 0.5127
+   * y 1: 1.0705
+   * y 2: 1.6303
+   * y 3: 2.1891
+   * y 4: 2.7479
+   * y 5: 3.3067
+   * y 6: 3.8655
+   * y 7: 4.4243
+   * y 8: 4.9831
+   * 
+   */
   
   public void setRobotTrans(Translation3d trans){
     robotTrans = trans;
