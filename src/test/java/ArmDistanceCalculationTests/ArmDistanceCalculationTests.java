@@ -36,10 +36,20 @@ public class ArmDistanceCalculationTests {
         assertEquals(expected,actual,"expected 2d distance to be " + expected + ", got " + actual);
     }
     @Test
+    public void testTurretAngle_straightX0Y0Z0(){
+        ArmPoseCalculator apc = new ArmPoseCalculator();
+        apc.setRobotPose(new Translation3d(0.0, 0.0, 0.3));
+        apc.setTargetPose(new Translation3d(1.0, 0.0, 0.3));
+        double expected = Math.toRadians(0.0); 
+        double actual = apc.getElevationAngleDegrees();
+        assertEquals(expected, actual, "expected arm angle to be " + expected + "- got " + actual);
+    }
+    @Test
     public void testTurretAngle_straightX0Y0Z1(){
         ArmPoseCalculator apc = new ArmPoseCalculator();
-        apc.setRobotPose(new Translation3d(0.0, 0.0, 0.0));
-        double expected = Math.toRadians(90.0); 
+        apc.setRobotPose(new Translation3d(0.0, 0.0, 0.3));
+        apc.setTargetPose(new Translation3d(0.0, 0.0, 1.3));
+        double expected = Math.toRadians(90.0);
         double actual = apc.getElevationAngleDegrees();
         assertEquals(expected, actual, "expected arm angle to be " + expected + "- got " + actual);
     }
