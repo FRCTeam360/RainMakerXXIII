@@ -5,10 +5,6 @@
 package frc.robot.utils;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
@@ -18,16 +14,6 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   private Translation3d robotTrans = new Translation3d(); 
   private Translation3d targetTrans;
 
-  /**
-   * first index is the alliance (0 is blue, 1 is red),
-   * second index is the row (0 is bottom, 1 is middle, 2 is top), and
-   * third index is the col (0 is the field edge, 8 is closest to the loading zone)
-   **/
-  public Translation3d[][][] nodeCoordinates = new Translation3d[2][3][9];
-  private double[] yCoordinates = new double[] {0, 1, 2, 3, 4, 5, 6, 7, 8}; //y coordinates for all the nodes, starting at the field edge
-  private double[] zCoordinatesCones = new double[] {1, 2, 3}; //z coordinates for all the cones, bottom -> top
-  private double[] zCoordinatesCubes = new double[] {0.5, 1.5, 2.5}; //z coordinates for all the cubes, bottom -> top
-
   private final int blue = 0;
   private final int red = 1;
 
@@ -35,74 +21,97 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   private final int mid = 1;
   private final int top = 2;
 
+  /**
+   * first index is the alliance (0 is blue, 1 is red),
+   * second index is the row (0 is bottom, 1 is middle, 2 is top), and
+   * third index is the column (0 is the field edge, 8 is closest to the loading zone)
+   **/
+  public Translation3d[][][] nodeCoordinates = new Translation3d[2][3][9];
+
+  private double[] xCoordinatesBlue = new double[] {1.1608, 0.7954, 0.3629}; //x coordinates on the blue alliance, bottom -> top
+  private double[] xCoordinatesRed = new double[] {15.3613, 15.7408, 16.1661}; //x coordinates on the red alliance, bottom -> top
+
+  private double[] yCoordinates = new double[] {0.5127, 1.0705, 1.6303, 2.1891, 2.7479, 3.3067, 3.8655, 4.4243, 4.9831}; //y coordinates for all the nodes, starting at the field edge
+  private double[] yCoordinatesHybrid = new double[] {0.4206, 1.6306, 2.1891, 3.3067, 3.8655, 5.0752}; //y coordinates for the bottom nodes in columns 0, 2, 3, 5, 6, and 8 (not centered)
+
+  private double[] zCoordinatesCones = new double[] {0, 0.8652, 1.17}; //z coordinates for all the cones, bottom -> top
+  private double[] zCoordinatesCubes = new double[] {0, 0.5223, 0.8263}; //z coordinates for all the cubes, bottom -> top
+
+  private int[] notCentered = new int[] {0, 2, 3, 5, 6, 8}; //indexes of the noncentered bottom nodes
+
   /** Creates a new ArmPoseCalculator. */
   public ArmPoseCalculator() {
     setUp();
   }
 
   public void setUp() {
-    for (int col = 0; col < 9; col++) { //sets all of the nodes going across all 3 grids to the same x and z values (all arbitrary)
-      if (col == 1 || col == 4 || col == 7) {
+    for (int col = 0; col < 9; col++) { //fills nodeCoordinates with Translation3ds of all the nodes
+
+      if (col == 1 || col == 4 || col == 7) { //skips the cube nodes
         continue;
       }
-      
-      nodeCoordinates[blue][top][col] = new Translation3d(1, yCoordinates[col], zCoordinatesCones[2]); //moving across the field left to right
-      nodeCoordinates[blue][mid][col] = new Translation3d(2, yCoordinates[col], zCoordinatesCones[1]);
-      nodeCoordinates[blue][bot][col] = new Translation3d(3, yCoordinates[col], zCoordinatesCones[0]);
 
-      nodeCoordinates[red][bot][col] = new Translation3d(4, yCoordinates[col], zCoordinatesCones[0]);
-      nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], zCoordinatesCones[1]);
-      nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], zCoordinatesCones[2]);
+      //moving across the field left to right
+      nodeCoordinates[blue][top][col] = new Translation3d (xCoordinatesBlue[top], yCoordinates[col], zCoordinatesCones[top]);
+      nodeCoordinates[blue][mid][col] = new Translation3d (xCoordinatesBlue[mid], yCoordinates[col], zCoordinatesCones[mid]);
+      nodeCoordinates[blue][bot][col] = new Translation3d (xCoordinatesBlue[bot], yCoordinates[col], zCoordinatesCones[bot]);
+
+      nodeCoordinates[red][bot][col] = new Translation3d (xCoordinatesRed[bot], yCoordinates[col], zCoordinatesCones[bot]);
+      nodeCoordinates[red][mid][col] = new Translation3d (xCoordinatesRed[mid], yCoordinates[col], zCoordinatesCones[mid]);
+      nodeCoordinates[red][top][col] = new Translation3d (xCoordinatesRed[top], yCoordinates[col], zCoordinatesCones[top]);
     }
 
-    for (int col = 1; col <= 7; col += 3) { //new translation3d w a diff z value, same x and y values tho (REMEMBER TO UPDATE HERE TOO)
-      nodeCoordinates[blue][top][col] = new Translation3d(1, yCoordinates[col], zCoordinatesCubes[2]);
-      nodeCoordinates[blue][mid][col] = new Translation3d(2, yCoordinates[col], zCoordinatesCubes[1]);
-      nodeCoordinates[blue][bot][col] = new Translation3d(3, yCoordinates[col], zCoordinatesCubes[0]); 
+    for (int col = 1; col <= 7; col += 3) { //updates the cube nodes that were excluded earlier
+      nodeCoordinates[blue][top][col] = new Translation3d (xCoordinatesBlue[top], yCoordinates[col], zCoordinatesCubes[top]);
+      nodeCoordinates[blue][mid][col] = new Translation3d (xCoordinatesBlue[mid], yCoordinates[col], zCoordinatesCubes[mid]);
+      nodeCoordinates[blue][bot][col] = new Translation3d (xCoordinatesBlue[bot], yCoordinates[col], zCoordinatesCubes[bot]); 
       
-      nodeCoordinates[red][bot][col] = new Translation3d(4, yCoordinates[col], zCoordinatesCubes[0]);
-      nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], zCoordinatesCubes[1]);
-      nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], zCoordinatesCubes[2]);
+      nodeCoordinates[red][bot][col] = new Translation3d (xCoordinatesRed[bot], yCoordinates[col], zCoordinatesCubes[bot]);
+      nodeCoordinates[red][mid][col] = new Translation3d (xCoordinatesRed[mid], yCoordinates[col], zCoordinatesCubes[mid]);
+      nodeCoordinates[red][top][col] = new Translation3d (xCoordinatesRed[top], yCoordinates[col], zCoordinatesCubes[top]);
     }
+
+    for (int i : notCentered) { //updates the noncentered bottom nodes
+      int index = notCentered[i];
+      nodeCoordinates[blue][bot][index] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[index], zCoordinatesCubes[bot]);
+      nodeCoordinates[red][bot][index] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[index], zCoordinatesCubes[bot]);
+    }
+
   }
 
-  /*
-   * blue bot x: 1.1608
-   * blue mid x: 0.7954
-   * blue top x: 0.3629
-   * 
-   *
-   * red bot x: 15.3613
-   * red mid x: 15.7408
-   * red top x: 16.1661
-   * 
-   * cones mid z: 0.8652
-   * cones top z: 1.17
-   * 
-   * cubes bot z: 0 
-   * cubes mid z: 0.5223
-   * cubes top z: 0.8263
-   * 
-   * y 0 bot: 0.4206
-   * y 2 bot: 1.6306
-   * 
-   * y 3 bot: 2.1891
-   * y 5 bot: 3.3067
-   * 
-   * y 6 bot: 3.8655
-   * y 8 bot: 5.0752
-   * 
-   * y 0: 0.5127
-   * y 1: 1.0705
-   * y 2: 1.6303
-   * y 3: 2.1891
-   * y 4: 2.7479
-   * y 5: 3.3067
-   * y 6: 3.8655
-   * y 7: 4.4243
-   * y 8: 4.9831
-   * 
-   */
+  public void alteriorMethod() { //TODO: COPY PASTE AT SOME POINT
+
+    for (int col = 0; col < 9; col++) { //starts at field edge, moving towards the loading zone
+      if (col == 1 || col == 4 || col == 7) { //skips the cube nodes
+        continue;
+      }
+
+      for (int row = 0; row < 3; row++) { //bottom to top
+        if ((col == 0 || col == 2 || col == 3 || col == 5 || col == 6 || col == 8) && row == 0) { //skips noncentered bottom nodes 
+          continue;
+        }
+
+        nodeCoordinates[blue][row][col] = new Translation3d (xCoordinatesBlue[row], yCoordinates[col], zCoordinatesCones[row]);
+        nodeCoordinates[red][row][col] = new Translation3d (xCoordinatesRed[row], yCoordinates[col], zCoordinatesCones[row]);
+      }
+    }
+
+
+    for (int col = 1; col <= 7; col += 3) { //updates the cube nodes
+      for (int row = 0; row < 3; row++) {
+        nodeCoordinates[blue][row][col] = new Translation3d (xCoordinatesBlue[row], yCoordinates[col], zCoordinatesCubes[row]);
+        nodeCoordinates[red][row][col] = new Translation3d (xCoordinatesRed[row], yCoordinates[col], zCoordinatesCubes[row]);
+      }
+    }
+
+
+    for (int i : notCentered) { //updates the noncentered bottom nodes (which are never cubes)
+      int index = notCentered[i];
+      nodeCoordinates[blue][bot][index] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[index], zCoordinatesCubes[bot]);
+      nodeCoordinates[red][bot][index] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[index], zCoordinatesCubes[bot]);
+    }
+
+  }
   
   public void setRobotTrans(Translation3d trans){
     robotTrans = trans;
@@ -117,9 +126,9 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   }
 
    /**
-   * first index is the alliance (0 is blue, 1 is red)
-   * second index is the row (0 is bottom, 1 is middle, 2 is top)
-   * third index is the col (0 is the field wall, 8 is closest to the loading zone)
+   * first index is the alliance (0 is blue, 1 is red),
+   * second index is the row (0 is bottom, 1 is middle, 2 is top), and
+   * third index is the column (0 is the field wall, 8 is closest to the loading zone)
    **/
   public void setNode(Translation3d coordinates){
     setTargetTrans(coordinates);
@@ -162,3 +171,54 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
     return Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ()));
   }
 }
+
+  /*
+   * blue bot x: 1.1608
+   * blue mid x: 0.7954
+   * blue top x: 0.3629
+   *
+   * red bot x: 15.3613
+   * red mid x: 15.7408
+   * red top x: 16.1661
+   * 
+   * cones mid z: 0.8652
+   * cones top z: 1.17
+   * 
+   * cubes bot z: 0 
+   * cubes mid z: 0.5223
+   * cubes top z: 0.8263
+   * 
+   * y 0 bot: 0.4206
+   * y 2 bot: 1.6306
+   * 
+   * y 3 bot: 2.1891
+   * y 5 bot: 3.3067
+   * 
+   * y 6 bot: 3.8655
+   * y 8 bot: 5.0752
+   * 
+   * y 0: 0.5127
+   * y 1: 1.0705
+   * y 2: 1.6303
+   * y 3: 2.1891
+   * y 4: 2.7479
+   * y 5: 3.3067
+   * y 6: 3.8655
+   * y 7: 4.4243
+   * y 8: 4.9831
+   * 
+   * 
+    nodeCoordinates[blue][bot][0] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[0], zCoordinatesCubes[bot]);
+    nodeCoordinates[blue][bot][2] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[2], zCoordinatesCubes[bot]);
+    nodeCoordinates[blue][bot][3] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[3], zCoordinatesCubes[bot]);
+    nodeCoordinates[blue][bot][5] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[5], zCoordinatesCubes[bot]);
+    nodeCoordinates[blue][bot][6] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[6], zCoordinatesCubes[bot]);
+    nodeCoordinates[blue][bot][8] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[8], zCoordinatesCubes[bot]);
+
+    nodeCoordinates[red][bot][2] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[2], zCoordinatesCubes[bot]);
+    nodeCoordinates[red][bot][3] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[3], zCoordinatesCubes[bot]);
+    nodeCoordinates[red][bot][5] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[5], zCoordinatesCubes[bot]);
+    nodeCoordinates[red][bot][0] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[0], zCoordinatesCubes[bot]);
+    nodeCoordinates[red][bot][6] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[6], zCoordinatesCubes[bot]);
+    nodeCoordinates[red][bot][8] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[8], zCoordinatesCubes[bot]);
+   */
