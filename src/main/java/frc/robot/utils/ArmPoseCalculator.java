@@ -25,6 +25,9 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
    **/
   public Translation3d[][][] nodeCoordinates = new Translation3d[2][3][9];
   private double[] yCoordinates = new double[] {0, 1, 2, 3, 4, 5, 6, 7, 8}; //y coordinates for all the nodes, starting at the field edge
+  private double[] zCoordinatesCones = new double[] {1, 2, 3}; //z coordinates for all the cones, bottom -> top
+  private double[] zCoordinatesCubes = new double[] {0.5, 1.5, 2.5}; //z coordinates for all the cubes, bottom -> top
+
   private final int blue = 0;
   private final int red = 1;
 
@@ -43,25 +46,24 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
         continue;
       }
       
-      nodeCoordinates[blue][top][col] = new Translation3d(1, yCoordinates[col], 3); //moving across the field left to right
-      nodeCoordinates[blue][mid][col] = new Translation3d(2, yCoordinates[col], 2);
-      nodeCoordinates[blue][bot][col] = new Translation3d(3, yCoordinates[col], 1);
+      nodeCoordinates[blue][top][col] = new Translation3d(1, yCoordinates[col], zCoordinatesCones[2]); //moving across the field left to right
+      nodeCoordinates[blue][mid][col] = new Translation3d(2, yCoordinates[col], zCoordinatesCones[1]);
+      nodeCoordinates[blue][bot][col] = new Translation3d(3, yCoordinates[col], zCoordinatesCones[0]);
 
-      nodeCoordinates[red][bot][col] = new Translation3d(4, yCoordinates[col], 1);
-      nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], 2);
-      nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], 3);
+      nodeCoordinates[red][bot][col] = new Translation3d(4, yCoordinates[col], zCoordinatesCones[0]);
+      nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], zCoordinatesCones[1]);
+      nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], zCoordinatesCones[2]);
     }
 
     for (int col = 1; col <= 7; col += 3) { //new translation3d w a diff z value, same x and y values tho (REMEMBER TO UPDATE HERE TOO)
-      nodeCoordinates[blue][top][col] = new Translation3d(1, yCoordinates[col], 2.5);
-      nodeCoordinates[blue][mid][col] = new Translation3d(2, yCoordinates[col], 1.5);
-      nodeCoordinates[blue][bot][col] = new Translation3d(3, yCoordinates[col], 0.5); 
+      nodeCoordinates[blue][top][col] = new Translation3d(1, yCoordinates[col], zCoordinatesCubes[2]);
+      nodeCoordinates[blue][mid][col] = new Translation3d(2, yCoordinates[col], zCoordinatesCubes[1]);
+      nodeCoordinates[blue][bot][col] = new Translation3d(3, yCoordinates[col], zCoordinatesCubes[0]); 
       
-      nodeCoordinates[red][bot][col] = new Translation3d(4, yCoordinates[col], 0.5);
-      nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], 1.5);
-      nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], 2.5);
+      nodeCoordinates[red][bot][col] = new Translation3d(4, yCoordinates[col], zCoordinatesCubes[0]);
+      nodeCoordinates[red][mid][col] = new Translation3d(5, yCoordinates[col], zCoordinatesCubes[1]);
+      nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], zCoordinatesCubes[2]);
     }
-
   }
   
   public void setRobotTrans(Translation3d trans){
