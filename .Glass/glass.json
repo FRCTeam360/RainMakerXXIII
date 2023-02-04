@@ -1,10 +1,9 @@
 {
   "NetworkTables": {
-    "SmartDashboard": {
-      "open": true
-    },
-    "limelight": {
-      "open": true
+    "LiveWindow": {
+      "DriveTrain": {
+        "open": true
+      }
     },
     "types": {
       "/FMSInfo": "FMSInfo",

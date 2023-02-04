@@ -13,6 +13,10 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+//LL practice bot up: .477
+//LL practice bot forward: .045
+//LL practice bot right: -.235 
+
 public class Limelight extends SubsystemBase {
   private static Limelight instance;
   private NetworkTable lime = NetworkTableInstance.getDefault().getTable("limelight");
@@ -24,9 +28,10 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry botpose = lime.getEntry("botpose_wpiblue");
   private NetworkTableEntry snap = lime.getEntry("snapshot");
   private double[] botposeArray = new double[6]; 
-  private double zX;
+  public Pose3d averagePose = null;
+  /**private double zX;
   private double zY;
-  private double zZ;
+  private double zZ;**/
   private int periodicCycles = 0;
 
   private LinkedList<Pose3d> poses = new LinkedList<>();
@@ -66,6 +71,8 @@ public class Limelight extends SubsystemBase {
   public boolean isOnTarget() {
     return Math.abs(getTX()) <=1 && hasValidTarget();
   }
+
+
 
   public void updateLimelightPose() {
     double turretAngle = Math.abs(turret.getAngle()) > 360 ? Math.signum(turret.getAngle())*(Math.abs(turret.getAngle()-360)) : turret.getAngle(); //for reference, this is "on god"
@@ -148,23 +155,30 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Smartdashboard.
     if(getTV() == 1) {
       periodicCycles = 5;
+      Rotation3d r = new Rotation3d(botposeArray[3], botposeArray[4], botposeArray[5]);
+      Pose3d tempPose = new Pose3d(botposeArray[0], botposeArray[1], botposeArray[2], r);
+      poses.addFirst(tempPose);
       if(poses.size()>8) {
         poses.removeLast();
       }
+      if(poses.size()==8) {
+        averagePose = averagePositions(poses);
+      }
+      else{
+        averagePose = null;
+      }
     } else {
-      periodicCycles --;
+      periodicCycles--;
     }
     if(periodicCycles == 0) {
       poses.clear();
+      averagePose = null;
     }
     botposeArray = botpose.getDoubleArray(botposeArray);
-    Rotation3d r = new Rotation3d(botposeArray[3], botposeArray[4], botposeArray[5]);
-    Pose3d tempPose = new Pose3d(botposeArray[0], botposeArray[1], botposeArray[2], r);
-    poses.addFirst(tempPose);
     
-
     // This method will be called once per scheduler run
   }
 }

@@ -11,6 +11,7 @@ import com.swervedrivespecialties.swervelib.SwerveModule;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -28,10 +29,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static frc.robot.Constants.*;
 
+import java.util.Objects;
+
 public class DriveTrain extends SubsystemBase {
   private final Field2d field = new Field2d();
   private static DriveTrain instance;
   public static final double MAX_VOLTAGE = 12.0;
+
+  private Limelight lime = Limelight.getInstance();
 
   private static final double ADJUSTMENT_FACTOR = 0.1;
 
@@ -214,6 +219,16 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
     odometry.resetPosition(getGyroscopeRotation(), getModulePositions(), pose);
   }
 
+  public Pose2d setPose(Pose3d pose) {
+    double x = pose.getX();
+    double y = pose.getY();
+    double a = pose.getRotation().getZ();
+    Rotation2d r = new Rotation2d(a);
+    Pose2d p = new Pose2d(x, y, r);
+    odometry.resetPosition(r, getModulePositions(), p);
+    return p;
+  }
+
   public void resetPose(){
     odometry.resetPosition(getGyroscopeRotation(), getModulePositions(), new Pose2d());
   }
@@ -233,11 +248,13 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
   public void periodic() {
     SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
     SmartDashboard.putNumber("roll", m_pigeon.getRoll());
-
-    pose = odometry.update(getGyroscopeRotation(), getModulePositions());
-    field.setRobotPose(pose);
-
-
+    if(!Objects.isNull(lime.averagePose)){
+      pose = setPose(lime.averagePose);
+    } else {
+      pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+  }
+  field.setRobotPose(pose);
+  
     SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
     // This method will be called once per scheduler run
