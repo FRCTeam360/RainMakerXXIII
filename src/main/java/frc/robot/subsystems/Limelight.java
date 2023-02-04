@@ -179,6 +179,5 @@ public class Limelight{
       averagePose = null;
     }
     botposeArray = botpose.getDoubleArray(botposeArray);
-    // This method will be called once per scheduler run
   }
 }
