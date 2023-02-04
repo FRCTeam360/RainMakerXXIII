@@ -11,13 +11,13 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.*;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //LL practice bot up: .477
 //LL practice bot forward: .045
 //LL practice bot right: -.235 
 
-public class Limelight extends SubsystemBase {
+public class Limelight{
   private static Limelight instance;
   private NetworkTable lime = NetworkTableInstance.getDefault().getTable("limelight");
   private NetworkTableEntry tv = lime.getEntry("tv");
@@ -37,7 +37,6 @@ public class Limelight extends SubsystemBase {
   private LinkedList<Pose3d> poses = new LinkedList<>();
 
   private Turret turret = Turret.getInstance();
-  private DriveTrain driveTrain = DriveTrain.getInstance();
 
   /** Creates a new Limelight. */
   public Limelight() {
@@ -82,7 +81,7 @@ public class Limelight extends SubsystemBase {
     double y = botposeArray[1]-4.01;
     Pose2d p = new Pose2d(x, y, r); //TODO dunno if we have to account for the limelight offset in code or just in the pipeline. thx brandon for the docs T_T
     if(x>0 && y>0 && x<16.54 && y<8.02) {
-      driveTrain.setPose(p);
+      //driveTrain.setPose(p);
     }
   }
 
@@ -153,9 +152,7 @@ public class Limelight extends SubsystemBase {
     }
   }
 
-  @Override
-  public void periodic() {
-    Smartdashboard.
+  public void runVision() {
     if(getTV() == 1) {
       periodicCycles = 5;
       Rotation3d r = new Rotation3d(botposeArray[3], botposeArray[4], botposeArray[5]);
@@ -178,7 +175,6 @@ public class Limelight extends SubsystemBase {
       averagePose = null;
     }
     botposeArray = botpose.getDoubleArray(botposeArray);
-    
     // This method will be called once per scheduler run
   }
 }
