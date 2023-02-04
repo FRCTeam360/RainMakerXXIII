@@ -21,7 +21,7 @@ public class TeleopArmPose extends CommandBase {
   private static Turret turret = Turret.getInstance();
   private static DriveTrain driveTrain = DriveTrain.getInstance();
 
-  private static ArmPoseCalculator calculator = new ArmPoseCalculator();
+  private static ArmPoseCalculator calculator;
 
   private static XboxController driverCont = new XboxController(0);
   private static XboxController operatorCont = new XboxController(1);
@@ -38,12 +38,15 @@ public class TeleopArmPose extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    calculator = new ArmPoseCalculator();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   
   @Override
   public void execute() {
+    calculator.setRobotPose(driveTrain.getPose());
     chooseNode();
     calculator.setNode(calculator.nodeCoordinates[alliance][row][col]);
   }

@@ -4,15 +4,18 @@
 
 package frc.robot.utils;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 
-public class ArmPoseCalculator {
+public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
 
-  private Translation3d robotTrans; 
+  private static final double pivotHeight = 1.0;
+
+  private Translation3d robotTrans = new Translation3d(); 
   private Translation3d targetTrans;
 
   /**
@@ -59,14 +62,17 @@ public class ArmPoseCalculator {
       nodeCoordinates[red][top][col] = new Translation3d(6, yCoordinates[col], 2.5);
     }
 
-    nodeCoordinates[0][0][0] = new Translation3d(0.5, 0.5, 0.5);
   }
   
-  public void setRobotPose(Translation3d trans){
-    robotTrans = new Translation3d(0, 0, 0);
+  public void setRobotTrans(Translation3d trans){
+    robotTrans = trans;
   }
 
-  public void setTargetPose(Translation3d trans){
+  public void setRobotPose(Pose2d pose){
+    setRobotTrans(new Translation3d(pose.getX(), pose.getY(), pivotHeight));
+  }
+
+  public void setTargetTrans(Translation3d trans){
     targetTrans = trans;
   }
 
@@ -76,7 +82,7 @@ public class ArmPoseCalculator {
    * third index is the col (0 is the field wall, 8 is closest to the loading zone)
    **/
   public void setNode(Translation3d coordinates){
-    setTargetPose(coordinates);
+    setTargetTrans(coordinates);
   }
 
   public Translation3d getTransform(){
