@@ -37,7 +37,7 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   private double[] zCoordinatesCones = new double[] {0, 0.8652, 1.17}; //z coordinates for all the cones, bottom -> top
   private double[] zCoordinatesCubes = new double[] {0, 0.5223, 0.8263}; //z coordinates for all the cubes, bottom -> top
 
-  private int[] notCentered = new int[] {0, 2, 3, 5, 6, 8}; //indexes of the noncentered bottom nodes
+  private int[] notCentered = new int[] {0, 8}; //indexes of the noncentered bottom nodes
 
   /** Creates a new ArmPoseCalculator. */
   public ArmPoseCalculator() {
@@ -45,49 +45,13 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   }
 
   public void setUp() {
-    for (int col = 0; col < 9; col++) { //fills nodeCoordinates with Translation3ds of all the nodes
-
-      if (col == 1 || col == 4 || col == 7) { //skips the cube nodes
-        continue;
-      }
-
-      //moving across the field left to right
-      nodeCoordinates[blue][top][col] = new Translation3d (xCoordinatesBlue[top], yCoordinates[col], zCoordinatesCones[top]);
-      nodeCoordinates[blue][mid][col] = new Translation3d (xCoordinatesBlue[mid], yCoordinates[col], zCoordinatesCones[mid]);
-      nodeCoordinates[blue][bot][col] = new Translation3d (xCoordinatesBlue[bot], yCoordinates[col], zCoordinatesCones[bot]);
-
-      nodeCoordinates[red][bot][col] = new Translation3d (xCoordinatesRed[bot], yCoordinates[col], zCoordinatesCones[bot]);
-      nodeCoordinates[red][mid][col] = new Translation3d (xCoordinatesRed[mid], yCoordinates[col], zCoordinatesCones[mid]);
-      nodeCoordinates[red][top][col] = new Translation3d (xCoordinatesRed[top], yCoordinates[col], zCoordinatesCones[top]);
-    }
-
-    for (int col = 1; col <= 7; col += 3) { //updates the cube nodes that were excluded earlier
-      nodeCoordinates[blue][top][col] = new Translation3d (xCoordinatesBlue[top], yCoordinates[col], zCoordinatesCubes[top]);
-      nodeCoordinates[blue][mid][col] = new Translation3d (xCoordinatesBlue[mid], yCoordinates[col], zCoordinatesCubes[mid]);
-      nodeCoordinates[blue][bot][col] = new Translation3d (xCoordinatesBlue[bot], yCoordinates[col], zCoordinatesCubes[bot]); 
-      
-      nodeCoordinates[red][bot][col] = new Translation3d (xCoordinatesRed[bot], yCoordinates[col], zCoordinatesCubes[bot]);
-      nodeCoordinates[red][mid][col] = new Translation3d (xCoordinatesRed[mid], yCoordinates[col], zCoordinatesCubes[mid]);
-      nodeCoordinates[red][top][col] = new Translation3d (xCoordinatesRed[top], yCoordinates[col], zCoordinatesCubes[top]);
-    }
-
-    for (int i : notCentered) { //updates the noncentered bottom nodes
-      int index = notCentered[i];
-      nodeCoordinates[blue][bot][index] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[index], zCoordinatesCubes[bot]);
-      nodeCoordinates[red][bot][index] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[index], zCoordinatesCubes[bot]);
-    }
-
-  }
-
-  public void alteriorMethod() { //TODO: COPY PASTE AT SOME POINT
-
     for (int col = 0; col < 9; col++) { //starts at field edge, moving towards the loading zone
       if (col == 1 || col == 4 || col == 7) { //skips the cube nodes
         continue;
       }
 
       for (int row = 0; row < 3; row++) { //bottom to top
-        if ((col == 0 || col == 2 || col == 3 || col == 5 || col == 6 || col == 8) && row == 0) { //skips noncentered bottom nodes 
+        if ((col == 0 || col == 8) && row == 0) { //skips noncentered bottom nodes 
           continue;
         }
 
@@ -96,7 +60,6 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
       }
     }
 
-
     for (int col = 1; col <= 7; col += 3) { //updates the cube nodes
       for (int row = 0; row < 3; row++) {
         nodeCoordinates[blue][row][col] = new Translation3d (xCoordinatesBlue[row], yCoordinates[col], zCoordinatesCubes[row]);
@@ -104,15 +67,13 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
       }
     }
 
-
     for (int i : notCentered) { //updates the noncentered bottom nodes (which are never cubes)
       int index = notCentered[i];
       nodeCoordinates[blue][bot][index] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[index], zCoordinatesCubes[bot]);
       nodeCoordinates[red][bot][index] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[index], zCoordinatesCubes[bot]);
     }
-
   }
-  
+
   public void setRobotTrans(Translation3d trans){
     robotTrans = trans;
   }
