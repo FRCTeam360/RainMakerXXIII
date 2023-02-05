@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -28,13 +29,13 @@ public class Limelight{
   private NetworkTableEntry botpose = lime.getEntry("botpose_wpiblue");
   private NetworkTableEntry snap = lime.getEntry("snapshot");
   private double[] botposeArray = new double[6]; 
-  private Pose3d averagePose = null;
+  private Translation3d averagePose = null;
   /**private double zX;
   private double zY;
   private double zZ;**/
   private int periodicCycles = 0;
 
-  private LinkedList<Pose3d> poses = new LinkedList<>();
+  private LinkedList<Translation3d> poses = new LinkedList<>();
 
   private Turret turret = Turret.getInstance();
 
@@ -51,7 +52,7 @@ public class Limelight{
     return instance;
   }
 
-  public Pose3d getAveragePose() {
+  public Translation3d getAveragePose() {
     return averagePose;
   }
 
@@ -122,29 +123,29 @@ public class Limelight{
     }
   }**/
 
-  public Pose3d averagePositions(LinkedList<Pose3d> lastPoses) {
+  public Translation3d averagePositions(LinkedList<Translation3d> lastPoses) {
     double xSum = 0.0;
     double ySum = 0.0;
     double zSum = 0.0;
-    double rollSum = 0.0;
-    double pitchSum = 0.0;
-    double yawSum = 0.0;
-    for(int i = 0; i>8; i++) {
+    // double rollSum = 0.0;
+    // double pitchSum = 0.0;
+    // double yawSum = 0.0;
+    for(int i = 0; i<8; i++) {
       xSum += lastPoses.get(i).getX();
       ySum += lastPoses.get(i).getY();
       zSum += lastPoses.get(i).getZ();
-      rollSum += lastPoses.get(i).getRotation().getX();
-      pitchSum += lastPoses.get(i).getRotation().getY();
-      yawSum += lastPoses.get(i).getRotation().getZ();
+      // rollSum += lastPoses.get(i).getRotation().getX();
+      // pitchSum += lastPoses.get(i).getRotation().getY();
+      // yawSum += lastPoses.get(i).getRotation().getZ();
     }
     double xAvg = xSum/8.0;
     double yAvg = ySum/8.0;
     double zAvg = zSum/8.0;
-    double rollAvg = rollSum/8.0;
-    double pitchAvg = pitchSum/8.0;
-    double yawAvg = yawSum/8.0;
-    Rotation3d r = new Rotation3d(rollAvg, pitchAvg, yawAvg);
-    Pose3d p = new Pose3d(xAvg, yAvg, zAvg, r);
+    // double rollAvg = rollSum/8.0;
+    // double pitchAvg = pitchSum/8.0;
+    // double yawAvg = yawSum/8.0;
+    // Rotation3d r = new Rotation3d(rollAvg, pitchAvg, yawAvg);
+    Translation3d p = new Translation3d(xAvg, yAvg, zAvg);
     return p;
   }
 
@@ -160,7 +161,7 @@ public class Limelight{
     if(getTV() == 1) {
       periodicCycles = 10;
       Rotation3d r = new Rotation3d(botposeArray[3], botposeArray[4], botposeArray[5]);
-      Pose3d tempPose = new Pose3d(botposeArray[0], botposeArray[1], botposeArray[2], r);
+      Translation3d tempPose = new Translation3d(botposeArray[0], botposeArray[1], botposeArray[2]);
       System.out.println(tempPose);
       if(poses.isEmpty() || !tempPose.equals(poses.getFirst())) {
         poses.addFirst(tempPose);

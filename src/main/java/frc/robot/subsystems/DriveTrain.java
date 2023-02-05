@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -234,13 +235,11 @@ public class DriveTrain extends SubsystemBase {
     odometry.resetPosition(getGyroscopeRotation(), getModulePositions(), pose);
   }
 
-  public Pose2d setPose(Pose3d pose) {
+  public Pose2d setPose(Translation3d pose) {
     double x = pose.getX();
     double y = pose.getY();
-    double a = pose.getRotation().getZ();
-    Rotation2d r = new Rotation2d(a);
-    Pose2d p = new Pose2d(x, y, r);
-    odometry.resetPosition(r, getModulePositions(), p);
+    Pose2d p = new Pose2d(x, y, getGyroscopeRotation());
+    odometry.resetPosition(getGyroscopeRotation(), getModulePositions(), p);
     return p;
   }
 
