@@ -278,7 +278,12 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
     SmartDashboard.putNumber("roll", m_pigeon.getRoll());
-    pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+    ll.runVision();
+    if(Objects.isNull(ll.getAveragePose())) {
+      pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+    } else {
+      pose = this.setPose(ll.getAveragePose());
+    }
     field.setRobotPose(pose);
     
     SmartDashboard.putData("field", field);

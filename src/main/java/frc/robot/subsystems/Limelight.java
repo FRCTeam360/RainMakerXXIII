@@ -78,7 +78,7 @@ public class Limelight{
 
 
   public void updateLimelightPose() {
-    double turretAngle = Math.abs(turret.getAngle()) > 360 ? Math.signum(turret.getAngle())*(Math.abs(turret.getAngle()-360)) : turret.getAngle(); //for reference, this is "on god"
+    double turretAngle = Math.abs(turret.getAngleRelativeToRobot()) > 360 ? Math.signum(turret.getAngleRelativeToRobot())*(Math.abs(turret.getAngleRelativeToRobot()-360)) : turret.getAngleRelativeToRobot(); //for reference, this is "on god"
     double botAngle = botposeArray[4] - turretAngle; 
     Rotation2d r = new Rotation2d(Math.toRadians(botAngle));
     double x = botposeArray[0]-8.27;
@@ -161,9 +161,11 @@ public class Limelight{
       periodicCycles = 10;
       Rotation3d r = new Rotation3d(botposeArray[3], botposeArray[4], botposeArray[5]);
       Pose3d tempPose = new Pose3d(botposeArray[0], botposeArray[1], botposeArray[2], r);
+      System.out.println(tempPose);
       if(poses.isEmpty() || !tempPose.equals(poses.getFirst())) {
         poses.addFirst(tempPose);
       }
+      System.out.println("pose.size: " + poses.size());
       if(poses.size()>8) {
         poses.removeLast();
       }

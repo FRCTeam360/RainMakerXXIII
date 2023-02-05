@@ -59,7 +59,7 @@ public class Turret extends SubsystemBase {
 
   public double getAngleRelativeToRobot() {
     double encoderPosition = motor.getEncoder().getPosition();
-    return encoderPosition * gearBoxRatio * pulleyRatio * degreesPerRotation;
+    return encoderPosition;
   }
 
   public double getEncoderTick() {
@@ -91,7 +91,7 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
-    tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
+    // tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
     // This method will be called once per scheduler run
   }
 }
