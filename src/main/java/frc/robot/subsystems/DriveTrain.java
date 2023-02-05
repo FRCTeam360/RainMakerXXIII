@@ -19,6 +19,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds.CANivore;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -255,6 +257,21 @@ public class DriveTrain extends SubsystemBase {
     m_frontRightModule.resetSteerEncoder();
     m_backLeftModule.resetSteerEncoder();
     m_backRightModule.resetSteerEncoder();
+  }
+
+  public CommandBase xOutCommand(){
+    return run( () -> {
+      m_frontLeftModule.set(0, Math.toRadians(45));
+      m_frontRightModule.set(0, Math.toRadians(135));
+      m_backLeftModule.set(0, Math.toRadians(135));
+      m_backRightModule.set(0, Math.toRadians(45));});
+    }
+
+  public void xOut(){
+    m_frontLeftModule.set(0, Math.toRadians(45));
+    m_frontRightModule.set(0, Math.toRadians(135));
+    m_backLeftModule.set(0, Math.toRadians(135));
+    m_backRightModule.set(0, Math.toRadians(45));
   }
 
   @Override
