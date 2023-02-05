@@ -18,6 +18,7 @@ import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
+import frc.robot.utils.DynamicPaths;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -86,7 +87,7 @@ public class RobotContainer {
     
     driverController.b().whileTrue(driveTrain.xOutCommand());
 
-    driverController.y().toggleOnTrue(armExtension)
+    driverController.y().toggleOnTrue(DynamicPaths.dynPaths());
   }
 
   /**
