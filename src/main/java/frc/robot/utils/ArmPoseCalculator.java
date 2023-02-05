@@ -6,13 +6,19 @@ package frc.robot.utils;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import frc.robot.subsystems.ArmExtend;
 
 public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
+
+  private ArmExtend extend = ArmExtend.getInstance();
 
   private static final double pivotHeight = 1.0;
 
   private Translation3d robotTrans = new Translation3d(); 
-  private Translation3d targetTrans;
+  private Translation3d targetTrans = new Translation3d();
+
+  private final int cube = 0;
+  private final int cone = 1;
 
   private final int blue = 0;
   private final int red = 1;
@@ -32,10 +38,16 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   private double[] xCoordinatesRed = new double[] {15.3613, 15.7408, 16.1661}; //x coordinates on the red alliance, bottom -> top
 
   private double[] yCoordinates = new double[] {0.5127, 1.0705, 1.6303, 2.1891, 2.7479, 3.3067, 3.8655, 4.4243, 4.9831}; //y coordinates for all the nodes, starting at the field edge
-  private double[] yCoordinatesHybrid = new double[] {0.4206, 1.6306, 2.1891, 3.3067, 3.8655, 5.0752}; //y coordinates for the bottom nodes in columns 0, 2, 3, 5, 6, and 8 (not centered)
+  private double[] yCoordinatesHybrid = new double[] {0.4206, 5.0752}; //y coordinates for the bottom nodes in columns 0, 2, 3, 5, 6, and 8 (not centered)
 
   private double[] zCoordinatesCones = new double[] {0, 0.8652, 1.17}; //z coordinates for all the cones, bottom -> top
   private double[] zCoordinatesCubes = new double[] {0, 0.5223, 0.8263}; //z coordinates for all the cubes, bottom -> top
+
+
+ private Translation3d[][] pieceCoordinates = new Translation3d[2][4]; //two alliances, four pieces each
+ private double[] pieceCoordinatesX = new double[] {7.0615, 8.8163}; //blue, red
+ private double[] pieceCoordinatesY = new double[] {0.9097, 2.1383, 3.3575, 4.5468}; //field edge -> loading zone
+ private double[] pieceCoordinatesZ = new double[] {0, 1}; //TODO: NOT BE 0 AND 1 ! cube, cone
 
   private int[] notCentered = new int[] {0, 8}; //indexes of the noncentered bottom nodes
 
@@ -45,6 +57,13 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   }
 
   public void setUp() {
+    
+    for(int all = 0; all < 2; all++) { //updates pieceCoordinates !
+      for (int piece = 0; piece < 4; piece++) {
+        pieceCoordinates[all][piece] = new Translation3d( pieceCoordinatesX[all], pieceCoordinatesY[piece], pieceCoordinatesZ[cube]);
+      }
+    }
+    
     for (int col = 0; col < 9; col++) { //starts at field edge, moving towards the loading zone
       if (col == 1 || col == 4 || col == 7) { //skips the cube nodes
         continue;
@@ -67,10 +86,10 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
       }
     }
 
-    for (int i : notCentered) { //updates the noncentered bottom nodes (which are never cubes)
+    for (int i = 0; i < 2; i++) { //updates the noncentered bottom nodes (which are never cubes)
       int index = notCentered[i];
-      nodeCoordinates[blue][bot][index] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[index], zCoordinatesCubes[bot]);
-      nodeCoordinates[red][bot][index] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[index], zCoordinatesCubes[bot]);
+      nodeCoordinates[blue][bot][index] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[i], zCoordinatesCubes[bot]);
+      nodeCoordinates[red][bot][index] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[i], zCoordinatesCubes[bot]);
     }
   }
 
@@ -96,10 +115,10 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   }
 
   public Translation3d getTransform(){
-    System.out.println("m_x "+ targetTrans.getX());
-    System.out.println("m_y "+ targetTrans.getY());
+    // System.out.println("m_x "+ targetTrans.getX());
+    // System.out.println("m_y "+ targetTrans.getY());
 
-    System.out.println("m_z "+ targetTrans.getZ());
+    // System.out.println("m_z "+ targetTrans.getZ());
 
     return targetTrans.minus(robotTrans);
   }
@@ -124,14 +143,28 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
     return Math.sqrt((getX() * getX()) + (getY() * getY()));
   }
 
-  public double getElevationAngleDegrees(){
+  public double getTheoreticalElevationAngleDegrees(){
     return Math.toDegrees(Math.atan(getZ() / get2dDistance()));
   }
 
   public double getExtendDistance(){
     return Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ()));
   }
+
+  public double getActualElevationAngleDegrees(){
+    return Math.toDegrees(Math.asin(getZ() / extend.getDistanceFromPivot()));
+  }
 }
+
+/*
+ * blue x: 7.0615
+ * red x: 8.8163
+ * 
+ * y one: 0.9097
+ * y two: 2.1383
+ * y three: 3.3575
+ * y four: 4.5468
+ */
 
   /*
    * blue bot x: 1.1608
@@ -150,12 +183,6 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
    * cubes top z: 0.8263
    * 
    * y 0 bot: 0.4206
-   * y 2 bot: 1.6306
-   * 
-   * y 3 bot: 2.1891
-   * y 5 bot: 3.3067
-   * 
-   * y 6 bot: 3.8655
    * y 8 bot: 5.0752
    * 
    * y 0: 0.5127

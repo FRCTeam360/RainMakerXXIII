@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -83,8 +84,9 @@ public class TeleopArmPose extends CommandBase {
       col += 6;
     }
 
-    calculator.setNode(calculator.nodeCoordinates[alliance][row][col]);
-    armTilt.setAngle(calculator.getElevationAngleDegrees());
+    // calculator.setNode(calculator.nodeCoordinates[alliance][row][col]);
+    calculator.setTargetTrans(new Translation3d(1, 1, 2));
+    armTilt.setAngle(calculator.getActualElevationAngleDegrees());
     armExtend.setPosition(calculator.getExtendDistance());
     turret.angleTurn(calculator.getTurretRotation());
   }

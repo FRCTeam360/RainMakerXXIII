@@ -52,7 +52,7 @@ public class AutoArmPose extends CommandBase {
     System.out.println("in autoarmpose");
     calculator.setRobotPose(driveTrain.getPose());
     calculator.setNode(calculator.nodeCoordinates[alliance][row][col]);
-    armTilt.smartTilt(calculator.getElevationAngleDegrees());
+    armTilt.smartTilt(calculator.getActualElevationAngleDegrees());
     //armExtend.setPosition(calculator.getExtendDistance());
     turret.angleTurn(calculator.getTurretRotation());
   }
