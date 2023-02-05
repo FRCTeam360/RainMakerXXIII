@@ -29,7 +29,8 @@ public class Turret extends SubsystemBase {
   private static Turret instance;
   private double relativeAngle;
 
-  public static final double conversionFactor = (1.0/20.0) * (1.5/17.5) * (360.0/1.0);
+  public static final double woodConversionFactor = 1 / ((1.0/20.0) * (1.5/17.5) * (360.0/1.0));
+  public static final double practiceConversionFactor = (1.0 / 16.0) * (300.0 / 24.0) * 360.0;
   public static final double empericalConversionFactor = 360.0/542.0;
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
@@ -47,7 +48,7 @@ public class Turret extends SubsystemBase {
     motor.restoreFactoryDefaults();
     motor.setInverted(false);
     motor.setIdleMode(IdleMode.kCoast);
-    motor.getEncoder().setPositionConversionFactor(1/conversionFactor);
+    motor.getEncoder().setPositionConversionFactor(woodConversionFactor);
     
     PIDControl = motor.getPIDController();
     PIDControl.setP(0.05,1);
