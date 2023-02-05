@@ -201,6 +201,17 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
     return positions;
   }
 
+  public SwerveModuleState[] getModuleStates(){
+    SwerveModuleState frontLeftState = new SwerveModuleState(m_frontLeftModule.getDriveVelocity(), new Rotation2d(m_frontLeftModule.getSteerAngle()));
+    SwerveModuleState frontRightState = new SwerveModuleState(m_frontRightModule.getDriveVelocity(), new Rotation2d(m_frontLeftModule.getSteerAngle()));
+    SwerveModuleState backLeftState = new SwerveModuleState(m_backLeftModule.getDriveVelocity(), new Rotation2d(m_frontLeftModule.getSteerAngle()));
+    SwerveModuleState backRightState = new SwerveModuleState(m_backRightModule.getDriveVelocity(), new Rotation2d(m_frontLeftModule.getSteerAngle()));
+
+    SwerveModuleState[] states = {frontLeftState, frontRightState, backLeftState, backRightState};
+
+    return states;
+  }
+
   public Pose2d getPose() {
     return pose;
   }
@@ -217,8 +228,24 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
     odometry.resetPosition(getGyroscopeRotation(), getModulePositions(), new Pose2d());
   }
 
-  public ChassisSpeeds getCurrentVelocity() {
+  public ChassisSpeeds getChassisSpeeds() {
+    currentVelocity = m_kinematics.toChassisSpeeds(getModuleStates());
     return currentVelocity;
+  }
+
+  public double getCurrentVelocity(){
+    return Math.sqrt(Math.pow(getChassisSpeeds().vxMetersPerSecond, 2) + Math.pow(getChassisSpeeds().vyMetersPerSecond, 2));
+  }
+
+  public double getHeading(){
+    double angle = Math.toDegrees(Math.atan(getChassisSpeeds().vxMetersPerSecond / getChassisSpeeds().vyMetersPerSecond));
+    if(getChassisSpeeds().vyMetersPerSecond >= 0 && getChassisSpeeds().vxMetersPerSecond >= 0){
+      return angle - 90.0;
+    } else if(getChassisSpeeds().vyMetersPerSecond >= 0){
+      return angle + 270.0;
+    } else {
+      return angle + 90.0;
+    }
   }
 
   public void resetSteerEncoders() {
@@ -252,6 +279,9 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 
     SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
+
+    SmartDashboard.putNumber("heading", getHeading());
+    SmartDashboard.putNumber("velocity", getCurrentVelocity());
     // This method will be called once per scheduler run
   }
 }
