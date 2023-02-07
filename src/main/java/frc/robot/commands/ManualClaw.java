@@ -6,18 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.XboxConstants;
-import frc.robot.subsystems.ArmTilt;
+import frc.robot.subsystems.Claw;
 
-public class TiltArmManual extends CommandBase {
-  private static ArmTilt tilt = ArmTilt.getInstance();
+public class ManualClaw extends CommandBase {
+  private Claw claw = Claw.getInstance();
 
-  private static XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
-  
-  /** Creates a new ArmTilt. */
-  public TiltArmManual() {
+  private XboxController operatorCont = new XboxController(1);
+  /** Creates a new ManualClaw. */
+  public ManualClaw() {
+    addRequirements(claw);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(tilt);
   }
 
   // Called when the command is initially scheduled.
@@ -27,16 +25,20 @@ public class TiltArmManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(operatorCont.getRightY()) >= 0.1) {
-      tilt.adjustTilt(operatorCont.getRightY());
-      } else {
-        tilt.adjustTilt(0);
-      }
+    if(Math.abs(operatorCont.getLeftTriggerAxis()) > 0.1){ //close
+      claw.adjustsClaw(operatorCont.getLeftTriggerAxis());
+    } else if (Math.abs(operatorCont.getRightTriggerAxis()) > 0.1) { //open
+      claw.adjustsClaw(operatorCont.getRightTriggerAxis() * -1.0);
+    } else {
+      claw.stopClaw();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    claw.stopClaw();
+  }
 
   // Returns true when the command should end.
   @Override

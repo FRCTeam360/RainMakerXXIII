@@ -39,6 +39,7 @@ public final class Constants {
     //public final static int TILT_FOLLOW_ID = 5;
     public final static int EXTEND_ID = 6;
     public final static int EXTEND_FOLLOW_ID = 7;
+    public final static int CLAW_ID = 7;
 
     public static class CANivore {
         public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 12; 

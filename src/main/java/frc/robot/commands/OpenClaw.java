@@ -4,43 +4,41 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.XboxConstants;
-import frc.robot.subsystems.ArmTilt;
+import frc.robot.subsystems.Claw;
 
-public class TiltArmManual extends CommandBase {
-  private static ArmTilt tilt = ArmTilt.getInstance();
+public class OpenClaw extends CommandBase {
+  private final Claw claw = Claw.getInstance();
+  private final Timer timer = new Timer();
 
-  private static XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
-  
-  /** Creates a new ArmTilt. */
-  public TiltArmManual() {
+  /** Creates a new OpenClaw. */
+  public OpenClaw() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(tilt);
+    addRequirements(claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(operatorCont.getRightY()) >= 0.1) {
-      tilt.adjustTilt(operatorCont.getRightY());
-      } else {
-        tilt.adjustTilt(0);
-      }
+    claw.adjustsClaw(-0.3);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+      claw.stopClaw();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.get() > 0.5;
   }
 }

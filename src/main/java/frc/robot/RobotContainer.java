@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.Constants.*;
 import frc.robot.commands.ExtendArmManual;
 import frc.robot.commands.FieldOrientedDrive;
+import frc.robot.commands.ManualClaw;
+import frc.robot.commands.FieldOrientedTurret;
 import frc.robot.commands.TiltArmManual;
 import frc.robot.commands.AutoArmPose;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
@@ -19,6 +21,7 @@ import frc.robot.commands.TestSetpoints;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,6 +45,7 @@ public class RobotContainer {
   private final ArmTilt tilt = ArmTilt.getInstance();
   private final Turret turret = Turret.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
+  private final Claw claw = Claw.getInstance();
 
   private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive();
   private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
@@ -50,15 +54,9 @@ public class RobotContainer {
   private final TiltArmManual armTilt = new TiltArmManual();
   private final ExtendArmManual armExtension = new ExtendArmManual();
   private final ManualTurret manualTurret = new ManualTurret();
-  private final TestSetpoints testSetpoints = new TestSetpoints();
-  private final AutoArmPose autoArmPose = new AutoArmPose(0, 0);
-  private final TeleopArmPose teleopArmPose = new TeleopArmPose();
+  private final ManualClaw manualClaw = new ManualClaw();
 
-
-  // getFFMultiplier.apply(tilt.getAngle(), extend.getDistanceFromPivot())
-  private final PIDTuner pidTuner = new PIDTuner(extend, extend.getEncoder(), extend.getMotor(), extend.getPIDController(),
-      this::extendFeedForward);
-
+  private final FieldOrientedTurret fieldOrientedTurret = new FieldOrientedTurret();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
       new CommandXboxController(XboxConstants.DRIVER_CONTROLLER_PORT);
@@ -79,6 +77,7 @@ public class RobotContainer {
     extend.setDefaultCommand(armExtension); //armTilt
     tilt.setDefaultCommand(armTilt); //armExtension
     driveTrain.setDefaultCommand(fieldDrive);
+    claw.setDefaultCommand(manualClaw);
   }
 
   /**
