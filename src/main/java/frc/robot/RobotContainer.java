@@ -8,6 +8,7 @@ import frc.robot.Constants.*;
 import frc.robot.commands.ExtendArmManual;
 import frc.robot.commands.FieldOrientedDrive;
 import frc.robot.commands.ManualClaw;
+import frc.robot.commands.FieldOrientedTurret;
 import frc.robot.commands.TiltArmManual;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
 import frc.robot.commands.ExampleCommand;
@@ -47,6 +48,7 @@ public class RobotContainer {
   private final ManualTurret manualTurret = new ManualTurret();
   private final ManualClaw manualClaw = new ManualClaw();
 
+  private final FieldOrientedTurret fieldOrientedTurret = new FieldOrientedTurret();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
       new CommandXboxController(XboxConstants.DRIVER_CONTROLLER_PORT);
@@ -61,7 +63,7 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    turret.setDefaultCommand(manualTurret);
+    turret.setDefaultCommand(fieldOrientedTurret);
     tilt.setDefaultCommand(armTilt);
     extend.setDefaultCommand(armExtension);
     driveTrain.setDefaultCommand(fieldDrive);
