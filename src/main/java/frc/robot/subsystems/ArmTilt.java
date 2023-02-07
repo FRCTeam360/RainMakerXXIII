@@ -68,12 +68,12 @@ public class ArmTilt extends SubsystemBase {
 
     encoder.setPositionConversionFactor(motorRotationsToArmDegrees);
 
-    // pidController.setP(kP);
-    // pidController.setI(kI);
-    // pidController.setD(kD);
-    // pidController.setIZone(kIz);
-    // pidController.setFF(kFF * (Math.cos(getAngle()) * extend.getDistanceFromPivot()));
-    // pidController.setOutputRange(kMinOutput, kMaxOutput);
+    pidController.setP(kP);
+    pidController.setI(kI);
+    pidController.setD(kD);
+    pidController.setIZone(kIz);
+    pidController.setFF(kFF * (Math.cos(getAngle()) * extend.getDistanceFromPivot()));
+    pidController.setOutputRange(kMinOutput, kMaxOutput);
 
     // int smartMotionSlot = 0;
     // pidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
@@ -124,13 +124,11 @@ public class ArmTilt extends SubsystemBase {
   }
 
   public void setAngle(double inputAngle) {
-    SparkMaxPIDController PIDControl = tiltLead.getPIDController();
-    PIDControl.setReference(inputAngle, ControlType.kPosition);
+    pidController.setReference(inputAngle, ControlType.kPosition);
   }
 
   public void smartTilt(double inputAngle) {
     pidController.setReference(inputAngle, ControlType.kSmartMotion);
-
   }
 
   public double getAngle(){
