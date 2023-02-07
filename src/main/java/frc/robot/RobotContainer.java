@@ -44,12 +44,12 @@ public class RobotContainer {
   private final ArmExtend extend = ArmExtend.getInstance();
   private final ArmTilt tilt = ArmTilt.getInstance();
   private final Turret turret = Turret.getInstance();
-  private final DriveTrain driveTrain = DriveTrain.getInstance();
+  //private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Claw claw = Claw.getInstance();
 
-  private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive();
-  private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
-  private final CharacterizeDrivetrainCommand characterize = new CharacterizeDrivetrainCommand(driveTrain);
+  // private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive();
+  // private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
+  // private final CharacterizeDrivetrainCommand characterize = new CharacterizeDrivetrainCommand(driveTrain);
 
   private final TiltArmManual armTilt = new TiltArmManual();
   private final ExtendArmManual armExtension = new ExtendArmManual();
@@ -76,7 +76,7 @@ public class RobotContainer {
     turret.setDefaultCommand(manualTurret);
     extend.setDefaultCommand(armExtension); //armTilt
     tilt.setDefaultCommand(armTilt); //armExtension
-    driveTrain.setDefaultCommand(fieldDrive);
+    //driveTrain.setDefaultCommand(fieldDrive);
     claw.setDefaultCommand(manualClaw);
   }
 
@@ -104,7 +104,7 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    driverController.b().whileTrue(driveTrain.xOutCommand());
+    //driverController.b().whileTrue(driveTrain.xOutCommand());
   }
 
   /**

@@ -42,6 +42,10 @@ public class Turret extends SubsystemBase {
     
     pidController = motor.getPIDController();
     encoder = motor.getEncoder();
+    pidController.setP(0.05,1);
+    pidController.setD(0.01, 1);
+    pidController.setI(0.0,1);
+    pidController.setFF(0.0, 1);
   }
 
   public static Turret getInstance() {
@@ -61,12 +65,6 @@ public class Turret extends SubsystemBase {
 
   public CANSparkMax getMotor() {
     return motor;
-    PIDControl = motor.getPIDController();
-    PIDControl.setP(0.05,1);
-    PIDControl.setD(0.01, 1);
-    PIDControl.setI(0.0,1);
-    PIDControl.setFF(0.0, 1);
-
   }
 
   public void turn(double speed) {
@@ -98,12 +96,12 @@ public class Turret extends SubsystemBase {
     Rotation2d driveRotation = DriveTrain.getInstance().getGyroscopeRotation();
     double drivetrainAngle = driveRotation.getDegrees();
     relativeAngle = angle - drivetrainAngle; 
-    PIDControl.setReference(relativeAngle, ControlType.kPosition,1); 
+    pidController.setReference(relativeAngle, ControlType.kPosition,1); 
   }
 
   @Override
   public void periodic() {
-    tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
+    //tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
     // This method will be called once per scheduler run
   }
 }

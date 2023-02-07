@@ -24,15 +24,13 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   private final int red = 1;
 
   private final int bot = 0;
-  private final int mid = 1;
-  private final int top = 2;
 
   /**
    * first index is the alliance (0 is blue, 1 is red),
    * second index is the row (0 is bottom, 1 is middle, 2 is top), and
    * third index is the column (0 is the field edge, 8 is closest to the loading zone)
    **/
-  public Translation3d[][][] nodeCoordinates = new Translation3d[2][3][9];
+  public final Translation3d[][][] nodeCoordinates = new Translation3d[2][3][9];
 
   private double[] xCoordinatesBlue = new double[] {1.1608, 0.7954, 0.3629}; //x coordinates on the blue alliance, bottom -> top
   private double[] xCoordinatesRed = new double[] {15.3613, 15.7408, 16.1661}; //x coordinates on the red alliance, bottom -> top
@@ -44,7 +42,7 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   private double[] zCoordinatesCubes = new double[] {0, 0.5223, 0.8263}; //z coordinates for all the cubes, bottom -> top
 
 
- private Translation3d[][] pieceCoordinates = new Translation3d[2][4]; //two alliances, four pieces each
+ private Translation3d[][] pieceCoordinates = new Translation3d[2][4]; //two alliances, four pieces each, field edge -> loading zone
  private double[] pieceCoordinatesX = new double[] {7.0615, 8.8163}; //blue, red
  private double[] pieceCoordinatesY = new double[] {0.9097, 2.1383, 3.3575, 4.5468}; //field edge -> loading zone
  private double[] pieceCoordinatesZ = new double[] {0, 1}; //TODO: NOT BE 0 AND 1 ! cube, cone
@@ -54,7 +52,9 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   /** Creates a new ArmPoseCalculator. */
   public ArmPoseCalculator() {
     setUp();
+
   }
+
 
   public void setUp() {
     
@@ -91,6 +91,14 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
       nodeCoordinates[blue][bot][index] = new Translation3d (xCoordinatesBlue[bot], yCoordinatesHybrid[i], zCoordinatesCubes[bot]);
       nodeCoordinates[red][bot][index] = new Translation3d (xCoordinatesRed[bot], yCoordinatesHybrid[i], zCoordinatesCubes[bot]);
     }
+  }
+
+  public Translation3d getNode(int all, int row, int col) {
+    return nodeCoordinates[all][row][col];
+  }
+
+  public Translation3d getPiece(int all, int piece) {
+    return pieceCoordinates[all][piece];
   }
 
   public void setRobotTrans(Translation3d trans){
