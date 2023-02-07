@@ -4,46 +4,41 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Claw;
 
-public class ManualTurret extends CommandBase {
-  private Turret turret = Turret.getInstance();
+public class OpenClaw extends CommandBase {
+  private final Claw claw = Claw.getInstance();
+  private final Timer timer = new Timer();
 
-  private XboxController operatorCont = new XboxController(1);
-
-  /** Creates a new ManualTurret. */
-  public ManualTurret() {
-    addRequirements(turret);
+  /** Creates a new OpenClaw. */
+  public OpenClaw() {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(operatorCont.getRightX()) >= 0.1) {
-      turret.turn(operatorCont.getRightX());
-    } else {
-      turret.turn(0);
-    }
-    
+    claw.adjustsClaw(-0.3);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+      claw.stopClaw();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.get() > 0.5;
   }
 }
-
