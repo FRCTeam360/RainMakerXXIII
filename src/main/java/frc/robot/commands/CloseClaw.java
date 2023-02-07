@@ -4,21 +4,16 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.XboxConstants;
-import frc.robot.subsystems.ArmExtend;
+import frc.robot.subsystems.Claw;
 
-
-public class ExtendArmManual extends CommandBase {
-
-  private static ArmExtend extend = ArmExtend.getInstance();
-  private static XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
-
-  /** Creates a new ArmExtension. */
-  public ExtendArmManual() {
+public class CloseClaw extends CommandBase {
+  private Claw claw = Claw.getInstance();
+  
+  /** Creates a new CloseClaw. */
+  public CloseClaw() {
+    addRequirements(claw);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(extend);
   }
 
   // Called when the command is initially scheduled.
@@ -28,19 +23,18 @@ public class ExtendArmManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(operatorCont.getLeftY()) >= 0.1) {
-      extend.adjustExtension(-operatorCont.getLeftY() * 0.5);
-    } else if(operatorCont.getLeftY() >= 0.1){
-      extend.adjustExtension(operatorCont.getLeftY() * 0.5);
+    if(claw.getCurrent() < 5){
+      claw.adjustsClaw(0.3);
     } else {
-      extend.adjustExtension(0);
+      claw.adjustsClaw(0.1);
     }
   }
 
-
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    claw.stopClaw();
+  }
 
   // Returns true when the command should end.
   @Override
