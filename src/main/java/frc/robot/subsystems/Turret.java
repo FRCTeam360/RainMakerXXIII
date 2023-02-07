@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -41,6 +42,10 @@ public class Turret extends SubsystemBase {
     motor.getEncoder().setPositionConversionFactor(1/conversionFactor);
     
     pidController = motor.getPIDController();
+    pidController.setP(0.05,1);
+    pidController.setD(0.01, 1);
+    pidController.setI(0.0,1);
+    pidController.setFF(0.0, 1);
     encoder = motor.getEncoder();
   }
 
@@ -61,12 +66,6 @@ public class Turret extends SubsystemBase {
 
   public CANSparkMax getMotor() {
     return motor;
-    PIDControl = motor.getPIDController();
-    PIDControl.setP(0.05,1);
-    PIDControl.setD(0.01, 1);
-    PIDControl.setI(0.0,1);
-    PIDControl.setFF(0.0, 1);
-
   }
 
   public void turn(double speed) {
@@ -98,6 +97,7 @@ public class Turret extends SubsystemBase {
     Rotation2d driveRotation = DriveTrain.getInstance().getGyroscopeRotation();
     double drivetrainAngle = driveRotation.getDegrees();
     relativeAngle = angle - drivetrainAngle; 
+    SparkMaxPIDController PIDControl = motor.getPIDController();
     PIDControl.setReference(relativeAngle, ControlType.kPosition,1); 
   }
 
