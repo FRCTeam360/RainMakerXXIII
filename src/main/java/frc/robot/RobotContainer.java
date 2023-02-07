@@ -13,6 +13,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
 import frc.robot.commands.PIDTuner;
 import frc.robot.commands.RobotOrientedDrive;
+import frc.robot.commands.SetPointArmExtension;
 import frc.robot.commands.TestSetpoints;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ArmExtend;
@@ -72,7 +73,7 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     turret.setDefaultCommand(testSetpoints); //manualTurret
     tilt.setDefaultCommand(testSetpoints); //armTilt
-    extend.setDefaultCommand(testSetpoints); //armExtension
+    extend.setDefaultCommand(new SetPointArmExtension()); //armExtension
     driveTrain.setDefaultCommand(fieldDrive);
   }
 
