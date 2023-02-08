@@ -25,9 +25,6 @@ public class AutoDrive extends SwerveControllerCommand{
      */
     public AutoDrive(Trajectory trajectory, double degrees){
 
-        //this constructor is a hellhole of functional interfaces
-        //i dont know how i got it to work
-        //so good luck repurposing or reimplementing it
         super(
             trajectory,
             driveTrain::getPose, //get from drivetrain
@@ -35,18 +32,16 @@ public class AutoDrive extends SwerveControllerCommand{
             new PIDController(1, 0, 0), //FIXME might wanna tune this
             new PIDController(1, 0, 0), //FIXME might wanna tune this
             new ProfiledPIDController(0, 0, 0, new Constraints(0, 0)), //FIXME add profiling for constraints, also tune
-            AutoDrive::getAngle, 
+            AutoDrive::getAngle,
             driveTrain::setStates,
             driveTrain
+
         );
     }
 
 
     public AutoDrive(Trajectory trajectory, double degrees, Pose2d fieldRelPose) {
         
-        //this constructor is a hellhole of functional interfaces
-        //i dont know how i got it to work
-        //so good luck repurposing or reimplementing it
         super(
             trajectory.relativeTo(fieldRelPose),
             driveTrain::getPose, //get from drivetrain
