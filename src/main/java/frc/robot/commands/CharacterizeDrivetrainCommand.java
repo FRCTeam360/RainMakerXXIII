@@ -19,7 +19,6 @@ public class CharacterizeDrivetrainCommand extends CommandBase {
     @Override
     public void initialize() {
         // drivetrain.setPose(new Pose2d()); // Reset the drivetrain position
-
         logger.initLogging();
     }
 
