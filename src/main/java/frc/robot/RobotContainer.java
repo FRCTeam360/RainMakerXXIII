@@ -98,7 +98,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    System.out.println("get auto cmds");
     return characterize;
   }
 }
