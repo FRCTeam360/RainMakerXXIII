@@ -28,7 +28,7 @@ public class CharacterizeDrivetrainCommand extends CommandBase {
         // Update the data
         double position = drivetrain.getPose().getX();
         System.out.println("position: " + position);
-        double velocity = drivetrain.getCurrentVelocity().vxMetersPerSecond;
+        double velocity = drivetrain.getChassisSpeeds().vxMetersPerSecond;
         logger.log(position, velocity);
 
         // Get the voltage
