@@ -44,7 +44,7 @@ public class SysIdLogger {
       }
       
       public void sendData() {
-        System.out.format("Collected: {} data points.\n", m_data.size());
+        System.out.format("Collected: %d data points.\n", m_data.size());
       
         SmartDashboard.putBoolean("SysIdOverflow", false); // can't overflow a java ArrayList
         String ss = m_data.toString();
