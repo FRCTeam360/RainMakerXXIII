@@ -16,6 +16,7 @@ public class SetPointArmExtension extends CommandBase {
   public SetPointArmExtension() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(extend);
+    SmartDashboard.putNumber("ArmExtendSetPoint", 0.5);
     
   }
 
