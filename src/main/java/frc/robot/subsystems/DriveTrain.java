@@ -60,7 +60,7 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 
   private final SwerveDriveOdometry odometry;
 
-  private Pose2d pose; 
+  private Pose2d pose = new Pose2d();
 
   private ChassisSpeeds currentVelocity = new ChassisSpeeds();
 

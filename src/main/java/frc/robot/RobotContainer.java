@@ -38,7 +38,7 @@ public class RobotContainer {
   private final ArmTilt tilt = ArmTilt.getInstance();
   private final Turret turret = Turret.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
-  private final Claw claw = Claw.getInstance();
+  //private final Claw claw = Claw.getInstance();
 
   private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive(); //auto
   private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
@@ -48,6 +48,8 @@ public class RobotContainer {
   private final ExtendArmManual armExtension = new ExtendArmManual();
   private final ManualTurret manualTurret = new ManualTurret();
   private final ManualClaw manualClaw = new ManualClaw();
+
+  private final Autos autos = new Autos();
 
   private final FieldOrientedTurret fieldOrientedTurret = new FieldOrientedTurret();
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -64,11 +66,11 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    turret.setDefaultCommand(fieldOrientedTurret);
+    turret.setDefaultCommand(manualTurret);
     tilt.setDefaultCommand(armTilt);
     extend.setDefaultCommand(armExtension);
     driveTrain.setDefaultCommand(fieldDrive);
-    claw.setDefaultCommand(manualClaw);
+    //claw.setDefaultCommand(manualClaw);
   }
 
 
@@ -102,6 +104,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return characterize;
+    return autos.getAuto();
   }
 }

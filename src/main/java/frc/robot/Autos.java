@@ -31,7 +31,7 @@ public final class Autos {
   private static SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   //define autos here
-  private static List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("example", new PathConstraints(4, 3));
+  private static List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("New New Path", new PathConstraints(4, 3));
 
   //create events of commands here
   private static HashMap<String, Command> eventMap = new HashMap<>() {{
@@ -41,23 +41,24 @@ public final class Autos {
   //instantiate autos here
   private final Command example = autoBuilder.fullAuto(pathGroup);
 
-  private Autos() {
+  public Autos() {
     //add auto options to chooser here
-    autoChooser.addOption("example", example);
+    autoChooser.addOption("New New Path", example);
   }
 
   private static SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
     driveTrain::getPose, 
     driveTrain::setPose, 
     driveTrain.m_kinematics,
-    new PIDConstants(0, 0, 0),
-    new PIDConstants(0, 0, 0),
+    new PIDConstants(3.1465, 0, 0),
+    new PIDConstants(0.5, 0, 0),
     driveTrain::setStates,
     eventMap,
     driveTrain
   );
 
-  public static Command getAuto(){
-    return autoChooser.getSelected();
+  public Command getAuto(){
+    // return autoChooser.getSelected();
+    return example;
   }
  }
