@@ -9,30 +9,30 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
 
 public class SetPointTurret extends CommandBase {
-  Turret myturret = Turret.getInstance();
+  Turret turret = Turret.getInstance();
   /** Creates a new SetPointTurret. */
   public SetPointTurret() {
-    addRequirements(myturret);
+    addRequirements(turret);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    SmartDashboard.putNumber("Turret SetPoint", 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double setPoint = SmartDashboard.getNumber("Turret SetPoint", 0);
-    myturret.angleTurn(setPoint);
+    turret.angleTurn(setPoint);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    myturret.turn(0);
+    turret.turn(0);
   }
 
   // Returns true when the command should end.
