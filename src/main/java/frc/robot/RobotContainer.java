@@ -17,6 +17,7 @@ import frc.robot.commands.ManualTurret;
 import frc.robot.commands.PIDTuner;
 import frc.robot.commands.RobotOrientedDrive;
 import frc.robot.commands.TeleopArmPose;
+import frc.robot.commands.SetPointArmExtension;
 import frc.robot.commands.TestSetpoints;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ArmExtend;
