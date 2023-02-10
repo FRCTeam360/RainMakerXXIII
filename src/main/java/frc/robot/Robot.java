@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
     System.out.println("trans y: " + calculator.getY());
     System.out.println("trans z: " + calculator.getZ());
     System.out.println("2d distance: " + calculator.get2dDistance());
-    System.out.println("elevation: "+ calculator.getActualElevationAngleDegrees());
+    // System.out.println("elevation: "+ calculator.getElevationAngleDegrees());
     System.out.println("turret rotation: " + calculator.getTurretRotation());
     System.out.println("extension: " + calculator.getExtendDistance());
   }
