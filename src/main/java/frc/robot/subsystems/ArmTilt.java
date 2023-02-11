@@ -74,32 +74,9 @@ public class ArmTilt extends SubsystemBase {
     pidController.setIZone(kIz);
     pidController.setFF(kFF * (Math.cos(getAngle()) * extend.getDistanceFromPivot()));
     pidController.setOutputRange(kMinOutput, kMaxOutput);
-
-    // int smartMotionSlot = 0;
-    // pidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
-    // pidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
-    // pidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
-    // pidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
-
-    // SmartDashboard.putNumber("P Gain", kP);
-    // SmartDashboard.putNumber("I Gain", kI);
-    // SmartDashboard.putNumber("D Gain", kD);
-    // SmartDashboard.putNumber("I Zone", kIz);
-    // SmartDashboard.putNumber("Feed Forward", kFF);
-    // SmartDashboard.putNumber("Max Output", kMaxOutput);
-    // SmartDashboard.putNumber("Min Output", kMinOutput);
-
-    // SmartDashboard.putNumber("Max Velocity", maxVel);
-    // SmartDashboard.putNumber("Min Velocity", minVel);
-    // SmartDashboard.putNumber("Max Acceleration", maxAcc);
-    // SmartDashboard.putNumber("Allowed Closed Loop Error", allowedErr);
-    // SmartDashboard.putNumber("Set Position", 0);
-    // SmartDashboard.putNumber("Set Velocity", 0);
-
-    // SmartDashboard.putBoolean("Mode", true);
   }
 
-  public static ArmTilt getInstance() {
+    public static ArmTilt getInstance() {
     if (instance == null) {
       instance = new ArmTilt();
     }
@@ -142,59 +119,5 @@ public class ArmTilt extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("arm position", encoder.getPosition());
-    // // This method will be called once per scheduler run
-    // double p = SmartDashboard.getNumber("P Gain", 0);
-    // double i = SmartDashboard.getNumber("I Gain", 0);
-    // double d = SmartDashboard.getNumber("D Gain", 0);
-    // double iz = SmartDashboard.getNumber("I Zone", 0);
-    // double ff = SmartDashboard.getNumber("Feed Forward", 0);
-    // double max = SmartDashboard.getNumber("Max Output", 0);
-    // double min = SmartDashboard.getNumber("Min Output", 0);
-    // double maxV = SmartDashboard.getNumber("Max Velocity", 0);
-    // double minV = SmartDashboard.getNumber("Min Velocity", 0);
-    // double maxA = SmartDashboard.getNumber("Max Acceleration", 0);
-    // double allE = SmartDashboard.getNumber("Allowed Closed Loop Error", 0);
-
-    // if((p != kP)) { 
-    //   pidController.setP(p); kP = p;}
-    // if((i != kI)) { 
-    //   pidController.setI(i); kI = i; }
-    // if((d != kD)) { 
-    //   pidController.setD(d); kD = d; }
-    // if((iz != kIz)) {
-    //    pidController.setIZone(iz); kIz = iz; }
-    // if((ff != kFF)) { 
-    //   pidController.setFF(ff); kFF = ff; }
-    // if((max != kMaxOutput) || (min != kMinOutput)) { 
-    //   pidController.setOutputRange(min, max); 
-    //   kMinOutput = min; kMaxOutput = max; 
-    // }
-
-    // if((maxV != maxVel)) { 
-    //   pidController.setSmartMotionMaxVelocity(maxV,0); maxVel = maxV; }
-    // if((minV != minVel)) { 
-    //   pidController.setSmartMotionMinOutputVelocity(minV,0); minVel = minV; }
-    // if((maxA != maxAcc)) { 
-    //   pidController.setSmartMotionMaxAccel(maxA,0); maxAcc = maxA; }
-    // if((allE != allowedErr)) { 
-    //   pidController.setSmartMotionAllowedClosedLoopError(allE,0); allowedErr = allE; }
-
-    // double setPoint, processVariable;
-
-    // boolean mode = SmartDashboard.getBoolean("Mode", false);
-    // if(mode) {
-    //   setPoint = SmartDashboard.getNumber("Set Velocity", 0);
-    //   pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-    //   processVariable = encoder.getVelocity();
-    // } else {
-    //   setPoint = SmartDashboard.getNumber("Set Position", 0);
-    //   pidController.setReference(setPoint, CANSparkMax.ControlType.kSmartMotion);
-    //   processVariable = encoder.getPosition();
-    // }
-    
-    // SmartDashboard.putNumber("SetPoint", setPoint);
-    // SmartDashboard.putNumber("Process Variable", processVariable);
-    // SmartDashboard.putNumber("Output", tiltLead.getAppliedOutput());
-
-  }
+ }
 }

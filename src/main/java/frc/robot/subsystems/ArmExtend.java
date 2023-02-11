@@ -98,7 +98,7 @@ public class ArmExtend extends SubsystemBase {
   }
 
   public double getDistanceFromPivot(){
-    return getExtendDistance() + 0.0254 * 16.35;
+    return getExtendDistance() + 0.0254 * 16.35; //conv factor * inches
   }
 
   @Override

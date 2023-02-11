@@ -85,7 +85,7 @@ public class TeleopArmPose extends CommandBase {
     }
 
     // calculator.setNode(calculator.nodeCoordinates[alliance][row][col]);
-    calculator.setTargetTrans(new Translation3d(1, 1, 2));
+    calculator.setTargetTrans(new Translation3d(1, 1, 1));
     armTilt.setAngle(calculator.getActualElevationAngleDegrees());
     armExtend.setPosition(calculator.getExtendDistance());
     turret.angleTurn(calculator.getTurretRotation());
