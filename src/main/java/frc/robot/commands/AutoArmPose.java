@@ -49,11 +49,10 @@ public class AutoArmPose extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("in autoarmpose");
     calculator.setRobotPose(driveTrain.getPose());
     calculator.setNode(calculator.nodeCoordinates[alliance][row][col]);
-    armTilt.smartTilt(calculator.getActualElevationAngleDegrees());
-    //armExtend.setPosition(calculator.getExtendDistance());
+    armTilt.setAngle(calculator.getActualElevationAngleDegrees());
+    armExtend.setPosition(calculator.getExtendDistance());
     turret.angleTurn(calculator.getTurretRotation());
   }
 

@@ -26,7 +26,6 @@ public class SetPointArmTilt extends CommandBase {
   @Override
   public void execute() {
    double setPoint = SmartDashboard.getNumber("ArmTilt SetPoint", 0);
-   System.out.println("setPoint: " + setPoint);
    tilt.setAngle(setPoint);
   }
 

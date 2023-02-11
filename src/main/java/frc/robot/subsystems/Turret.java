@@ -42,15 +42,11 @@ public class Turret extends SubsystemBase {
     motor.getEncoder().setPositionConversionFactor(1/conversionFactor);
     
     pidController = motor.getPIDController();
-    pidController.setP(0.05,1);
-    pidController.setD(0.01, 1);
-    pidController.setI(0.0,1);
-    pidController.setFF(0.0, 1);
+    pidController.setP(0.05);
+    pidController.setD(0.01);
+    pidController.setI(0.0);
+    pidController.setFF(0.0);
     encoder = motor.getEncoder();
-    pidController.setP(0.05,1);
-    pidController.setD(0.01, 1);
-    pidController.setI(0.0,1);
-    pidController.setFF(0.0, 1);
   }
 
   public static Turret getInstance() {

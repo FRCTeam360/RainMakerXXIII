@@ -17,6 +17,7 @@ import frc.robot.commands.ManualTurret;
 import frc.robot.commands.PIDTuner;
 import frc.robot.commands.RobotOrientedDrive;
 import frc.robot.commands.SetPointArmTilt;
+import frc.robot.commands.SetPointTurret;
 import frc.robot.commands.TeleopArmPose;
 import frc.robot.commands.SetPointArmExtension;
 import frc.robot.commands.TestSetpoints;
@@ -58,6 +59,12 @@ public class RobotContainer {
   private final ManualTurret manualTurret = new ManualTurret();
   private final ManualClaw manualClaw = new ManualClaw();
 
+  private final SetPointArmExtension pidExtend = new SetPointArmExtension();
+  private final SetPointArmTilt pidTilt = new SetPointArmTilt();
+  private final SetPointTurret pidTurret = new SetPointTurret();
+
+  private final TeleopArmPose move = new TeleopArmPose();
+
   private final FieldOrientedTurret fieldOrientedTurret = new FieldOrientedTurret();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -75,9 +82,9 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    turret.setDefaultCommand(manualTurret);
-    extend.setDefaultCommand(armExtension); //armTilt
-    tilt.setDefaultCommand(armTilt); //armExtension
+    turret.setDefaultCommand(pidTurret);
+    extend.setDefaultCommand(pidExtend); //armTilt
+    tilt.setDefaultCommand(pidTilt); //armExtension\[]
     //driveTrain.setDefaultCommand(fieldDrive);
     claw.setDefaultCommand(manualClaw);
   }
@@ -101,7 +108,7 @@ public class RobotContainer {
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
     driverController.a().whileTrue(new InstantCommand( () -> tilt.resetAngle()));
-
+    operatorController.b().whileTrue(move);
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.

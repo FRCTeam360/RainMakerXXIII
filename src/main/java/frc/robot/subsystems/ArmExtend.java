@@ -9,8 +9,10 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
 
@@ -33,6 +35,8 @@ public class ArmExtend extends SubsystemBase {
   private double kMinOutput = -1;
   private double maxRPM = 5700;
 
+  private float extensionLimit = (float)0.8;
+
   /** Creates a new Extend. */
   public ArmExtend() {
     leadMotor.restoreFactoryDefaults();
@@ -45,6 +49,17 @@ public class ArmExtend extends SubsystemBase {
     // followMotor.follow(leadMotor);
     
     pidController = leadMotor.getPIDController();
+
+
+    pidController.setP(kP);
+    pidController.setI(kI);
+    pidController.setD(kD);
+    pidController.setFF(kFF);
+    pidController.setIZone(kIz);
+    
+    leadMotor.setSoftLimit(SoftLimitDirection.kForward, extensionLimit);
+    leadMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+
     encoder = leadMotor.getEncoder();
 
     encoder.setPositionConversionFactor(rotationsToMeters);
@@ -70,7 +85,7 @@ public class ArmExtend extends SubsystemBase {
     return leadMotor;
   }
 
-  public void adjustExtension(double speed) {
+  public void adjustExtensionSpeed(double speed) {
     leadMotor.set(speed); 
   }
 
@@ -88,6 +103,8 @@ public class ArmExtend extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("extend position", getExtendDistance());
     // This method will be called once per scheduler run
+    
     }
 }

@@ -31,7 +31,7 @@ public class ArmTilt extends SubsystemBase {
 
   private double motorRotationsToArmDegrees = 360.0/(5.0*5.0*4.0*3.0);
 
-  private double kP = 5;
+  private double kP = 3;
   private double kI = 0;
   private double kD = 0;
   private double kIz = 0;
@@ -57,8 +57,8 @@ public class ArmTilt extends SubsystemBase {
 
     tiltLead.setIdleMode(IdleMode.kCoast);
     //tiltFollow.setIdleMode(IdleMode.kBrake);
-    tiltLead.setSoftLimit(SoftLimitDirection.kForward, 212.0f);
-    tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -38.0f);
+    tiltLead.setSoftLimit(SoftLimitDirection.kForward,90.0f);
+    tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -30.0f);
     tiltLead.enableSoftLimit(SoftLimitDirection.kForward, true);
     tiltLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
@@ -124,6 +124,7 @@ public class ArmTilt extends SubsystemBase {
   }
 
   public void setAngle(double inputAngle) {
+    System.out.println("set angleing " + inputAngle);
     pidController.setReference(inputAngle, ControlType.kPosition);
   }
 

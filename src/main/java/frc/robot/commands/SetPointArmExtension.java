@@ -17,7 +17,6 @@ public class SetPointArmExtension extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(extend);
     SmartDashboard.putNumber("ArmExtendSetPoint", 0.5);
-    
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +27,7 @@ public class SetPointArmExtension extends CommandBase {
   @Override
   public void execute() {
     double setPosition = SmartDashboard.getNumber("ArmExtendSetPoint", 0.5);
-    extend.adjustExtension(setPosition);
+    extend.setPosition(setPosition);
   }
 
   // Called once the command ends or is interrupted.

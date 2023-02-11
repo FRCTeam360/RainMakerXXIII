@@ -12,7 +12,7 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
 
   private ArmExtend extend = ArmExtend.getInstance();
 
-  private static final double pivotHeight = 1.0;
+  private static final double pivotHeight = 0.57;
 
   private Translation3d robotTrans = new Translation3d(); 
   private Translation3d targetTrans = new Translation3d();
