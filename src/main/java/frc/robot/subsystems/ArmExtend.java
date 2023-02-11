@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
 
 public class ArmExtend extends SubsystemBase {
-  private final CANSparkMax extendMotor = new CANSparkMax(CANIds.EXTEND_ID, MotorType.kBrushless);
+  private final CANSparkMax extendMotor = new CANSparkMax(CANIds.EXTEND_LEAD_ID, MotorType.kBrushless);
   private static ArmExtend instance;
 
   /** Creates a new Extend. */
