@@ -94,7 +94,7 @@ public class RobotContainer {
     
     driverController.b().whileTrue(driveTrain.xOutCommand());
 
-    driverController.y().toggleOnTrue(DynamicPaths.dynPaths());
+    // driverController.y().toggleOnTrue(DynamicPaths.dynPaths());
   }
 
   /**
