@@ -87,13 +87,14 @@ public final class Constants {
   public static class CANIds {
     //0 is roborio id
     public final static int PDH_ID = 1;
-    public final static int PH_ID = 2;
 
-    public final static int TURRET_ID = 3;
+    public final static int TURRET_ID = 2;
+    public final static int TILT_FOLLOW_ID = 3;
     public final static int TILT_LEAD_ID = 4;
-    //public final static int TILT_FOLLOW_ID = 5;
-    public final static int EXTEND_ID = 6;
-    public final static int CLAW_ID = 7;
+    public final static int EXTEND_LEAD_ID = 5;
+    public final static int EXTEND_FOLLOW_ID = 6;
+    public final static int CLAW_GRIP_ID = 7;
+    public final static int CLAW_ROLLER_ID = 8;
 
     public static class CANivore {
         public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 12; 

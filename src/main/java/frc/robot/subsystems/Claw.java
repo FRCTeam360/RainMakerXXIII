@@ -13,7 +13,7 @@ import frc.robot.Constants.CANIds;
 
 public class Claw extends SubsystemBase {
 
-  private final CANSparkMax motor = new CANSparkMax(CANIds.CLAW_ID, MotorType.kBrushless);
+  private final CANSparkMax motor = new CANSparkMax(CANIds.CLAW_GRIP_ID, MotorType.kBrushless);
   private static Claw instance;
   /** Creates a new Claw. */
   public Claw() {
