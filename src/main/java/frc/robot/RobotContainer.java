@@ -56,6 +56,7 @@ public class RobotContainer {
 
   private final TiltArmManual armTilt = new TiltArmManual();
   private final ExtendArmManual armExtension = new ExtendArmManual();
+  // Controls inverted for ExtendArmManual, down is extend and up is retract
   private final ManualTurret manualTurret = new ManualTurret();
   private final ManualClaw manualClaw = new ManualClaw();
 

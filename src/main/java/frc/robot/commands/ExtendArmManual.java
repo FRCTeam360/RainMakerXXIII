@@ -29,9 +29,8 @@ public class ExtendArmManual extends CommandBase {
   @Override
   public void execute() {
     if(Math.abs(operatorCont.getLeftY()) >= 0.1) {
-      extend.adjustExtensionSpeed(-operatorCont.getLeftY() * 0.8);
-    } else if(operatorCont.getLeftY() >= 0.1){
-      extend.adjustExtensionSpeed(operatorCont.getLeftY() * 0.8);
+      // Controls inverted, down is extend and up is retract
+      extend.adjustExtensionSpeed(-operatorCont.getLeftY() * 0.1);
     } else {
       extend.adjustExtensionSpeed(0);
     }
