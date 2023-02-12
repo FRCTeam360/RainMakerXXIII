@@ -5,13 +5,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
-
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.hal.PowerDistributionFaults;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -25,6 +27,8 @@ public class ArmTilt extends SubsystemBase {
 
   private final CANSparkMax tiltLead = new CANSparkMax(CANIds.TILT_LEAD_ID, MotorType.kBrushless);
   private final RelativeEncoder encoder;
+  
+  private final AbsoluteEncoder absoluteEncoder = tiltLead.getAbsoluteEncoder(Type.kDutyCycle);
 
   private static ArmTilt instance;
   private SparkMaxPIDController pidController;
@@ -74,6 +78,8 @@ public class ArmTilt extends SubsystemBase {
     pidController.setIZone(kIz);
     pidController.setFF(kFF * (Math.cos(getAngle()) * extend.getDistanceFromPivot()));
     pidController.setOutputRange(kMinOutput, kMaxOutput);
+
+    pidController.setFeedbackDevice(absoluteEncoder);
   }
 
     public static ArmTilt getInstance() {
