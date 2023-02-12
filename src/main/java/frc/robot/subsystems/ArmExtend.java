@@ -12,6 +12,8 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
@@ -37,6 +39,8 @@ public class ArmExtend extends SubsystemBase {
 
   private float extensionLimit = (float)0.8;
 
+  ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
+
   /** Creates a new Extend. */
   public ArmExtend() {
     leadMotor.restoreFactoryDefaults();
@@ -46,7 +50,6 @@ public class ArmExtend extends SubsystemBase {
     followMotor.restoreFactoryDefaults();
     followMotor.setInverted(false);
     followMotor.setIdleMode(IdleMode.kBrake);
-
     followMotor.follow(leadMotor);
     
     pidController = leadMotor.getPIDController();
@@ -64,6 +67,8 @@ public class ArmExtend extends SubsystemBase {
     encoder = leadMotor.getEncoder();
 
     encoder.setPositionConversionFactor(rotationsToMeters);
+    
+    tab.addDouble("Arm Extension", () -> encoder.getPosition());
   }
 
   public static ArmExtend getInstance() {
@@ -104,8 +109,6 @@ public class ArmExtend extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("extend position", getExtendDistance());
     // This method will be called once per scheduler run
-    
     }
 }
