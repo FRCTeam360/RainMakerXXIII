@@ -18,8 +18,8 @@ import frc.robot.Constants.CANIds;
 
 public class ArmExtend extends SubsystemBase {
   private static ArmExtend instance;
-  private final CANSparkMax leadMotor = new CANSparkMax(CANIds.EXTEND_ID, MotorType.kBrushless);
-  //private final CANSparkMax followMotor = new CANSparkMax(CANIds.EXTEND_FOLLOW_ID, MotorType.kBrushless);
+  private final CANSparkMax leadMotor = new CANSparkMax(CANIds.EXTEND_LEAD_ID, MotorType.kBrushless);
+  private final CANSparkMax followMotor = new CANSparkMax(CANIds.EXTEND_FOLLOW_ID, MotorType.kBrushless);
 
   private final SparkMaxPIDController pidController;
   private final RelativeEncoder encoder;

@@ -102,7 +102,7 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
+    // tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("turret angle", encoder.getPosition());
   }
