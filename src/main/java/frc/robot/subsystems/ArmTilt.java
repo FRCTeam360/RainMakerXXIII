@@ -23,9 +23,12 @@ import frc.robot.Constants.CANIds;
 
 public class ArmTilt extends SubsystemBase {
 
+
+
   private ArmExtend extend = ArmExtend.getInstance();
 
   private final CANSparkMax tiltLead = new CANSparkMax(CANIds.TILT_LEAD_ID, MotorType.kBrushless);
+  private final CANSparkMax tiltFollow = new CANSparkMax(CANIds.TILT_FOLLOW_ID, MotorType.kBrushless); 
   private final RelativeEncoder encoder;
   
   private final AbsoluteEncoder absoluteEncoder = tiltLead.getAbsoluteEncoder(Type.kDutyCycle);
@@ -53,14 +56,17 @@ public class ArmTilt extends SubsystemBase {
   public ArmTilt() {
     //-38 degrees as the minimum soft limit
     //212 for the upper limit
+
     tiltLead.restoreFactoryDefaults();
-    //tiltFollow.restoreFactoryDefaults(); 
-
     tiltLead.setInverted(false);
-    //tiltFollow.setInverted(false);
+    tiltLead.setIdleMode(IdleMode.kBrake);
 
-    tiltLead.setIdleMode(IdleMode.kCoast);
-    //tiltFollow.setIdleMode(IdleMode.kBrake);
+    tiltFollow.restoreFactoryDefaults(); 
+    tiltFollow.setInverted(false);
+    tiltFollow.setIdleMode(IdleMode.kBrake);
+    tiltFollow.follow(tiltLead);
+
+
     tiltLead.setSoftLimit(SoftLimitDirection.kForward,90.0f);
     tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -30.0f);
     tiltLead.enableSoftLimit(SoftLimitDirection.kForward, true);

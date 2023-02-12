@@ -43,10 +43,11 @@ public class ArmExtend extends SubsystemBase {
     leadMotor.setInverted(false);
     leadMotor.setIdleMode(IdleMode.kBrake);
 
-    // followMotor.restoreFactoryDefaults();
-    // followMotor.setInverted(false);
-    // followMotor.setIdleMode(IdleMode.kBrake);
-    // followMotor.follow(leadMotor);
+    followMotor.restoreFactoryDefaults();
+    followMotor.setInverted(false);
+    followMotor.setIdleMode(IdleMode.kBrake);
+
+    followMotor.follow(leadMotor);
     
     pidController = leadMotor.getPIDController();
 

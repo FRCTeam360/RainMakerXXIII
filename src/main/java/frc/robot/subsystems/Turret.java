@@ -9,15 +9,18 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
+import frc.robot.Constants.DigitalIOIds;
 
 public class Turret extends SubsystemBase {
 
@@ -25,11 +28,17 @@ public class Turret extends SubsystemBase {
   private SparkMaxPIDController pidController;
   private RelativeEncoder encoder;
 
+  private final DigitalInput limitSwitch = new DigitalInput(DigitalIOIds.TURRET_LIMIT_SWITCH_ID);
+  private boolean prevLimitSwitchStatus = false;
+
   private static Turret instance;
   private double relativeAngle;
 
-  public static final double conversionFactor = (1.0/20.0) * (1.5/17.5) * (360.0/1.0);
-  public static final double empericalConversionFactor = 360.0/542.0;
+  public static final double conversionFactorWoodBot = 1 / ((1.0 / 20.0) * (1.5 / 17.5) * (360.0 / 1.0));
+  public static final double conversionFactorPractice = (1.0 / 16.0) * (24.0 / 300.0) * (360.0 / 1.0);
+
+  public static final float softLimitForwardPractice = 90.0f;
+  public static final float softLimitReversePractice = -90.0f;
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
 
@@ -39,14 +48,20 @@ public class Turret extends SubsystemBase {
     motor.restoreFactoryDefaults();
     motor.setInverted(false);
     motor.setIdleMode(IdleMode.kCoast);
-    motor.getEncoder().setPositionConversionFactor(1/conversionFactor);
-    
+    motor.getEncoder().setPositionConversionFactor(conversionFactorPractice);
+    motor.setSoftLimit(SoftLimitDirection.kForward, softLimitForwardPractice);
+    motor.setSoftLimit(SoftLimitDirection.kReverse, softLimitReversePractice);
+    motor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
     pidController = motor.getPIDController();
     pidController.setP(0.05);
     pidController.setD(0.01);
     pidController.setI(0.0);
     pidController.setFF(0.0);
     encoder = motor.getEncoder();
+
+    tab.addDouble("Turret Angle", () -> encoder.getPosition());
   }
 
   public static Turret getInstance() {
@@ -56,7 +71,7 @@ public class Turret extends SubsystemBase {
     return instance;
   }
 
-  public SparkMaxPIDController getPIDController(){
+  public SparkMaxPIDController getPIDController() {
     return pidController;
   }
 
@@ -81,7 +96,7 @@ public class Turret extends SubsystemBase {
     pidController.setReference(inputAngle, ControlType.kPosition);
   }
 
-  public void resetEncoderTicks(){
+  public void resetEncoderTicks() {
     motor.getEncoder().setPosition(0);
   }
 
@@ -96,14 +111,23 @@ public class Turret extends SubsystemBase {
   public void fieldOrientedTurret(double angle) {
     Rotation2d driveRotation = DriveTrain.getInstance().getGyroscopeRotation();
     double drivetrainAngle = driveRotation.getDegrees();
-    relativeAngle = angle - drivetrainAngle; 
-    pidController.setReference(relativeAngle, ControlType.kPosition,1); 
+    relativeAngle = angle - drivetrainAngle;
+    pidController.setReference(relativeAngle, ControlType.kPosition, 1);
   }
 
   @Override
   public void periodic() {
-    // tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("turret angle", encoder.getPosition());
+    setAngleLimitSwitch();
+  }
+
+  private void setAngleLimitSwitch() {
+    boolean currLimitSwitchStatus = limitSwitch.get();
+    if (!currLimitSwitchStatus && prevLimitSwitchStatus) {
+      double angle = encoder.getPosition();
+      double newAngle = Math.round(angle / 180.0) * 180;
+      motor.getEncoder().setPosition(newAngle);
+    }
+    prevLimitSwitchStatus = currLimitSwitchStatus;
   }
 }

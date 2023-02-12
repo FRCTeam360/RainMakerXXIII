@@ -116,8 +116,9 @@ public final class Constants {
         public static final int DRIVETRAIN_PIGEON_ID = 13; 
 
     }
-  
-    
   }
 
+  public static class DigitalIOIds {
+    public static final int TURRET_LIMIT_SWITCH_ID = 0;
+  }
 }
