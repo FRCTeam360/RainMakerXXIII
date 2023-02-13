@@ -54,11 +54,11 @@ public class RobotContainer {
   // private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
   // private final CharacterizeDrivetrainCommand characterize = new CharacterizeDrivetrainCommand(driveTrain);
 
-  private final TiltArmManual armTilt = new TiltArmManual();
-  private final ExtendArmManual armExtension = new ExtendArmManual();
+  private final TiltArmManual manualTilt = new TiltArmManual();
   // Controls inverted for ExtendArmManual, down is extend and up is retract
+  private final ExtendArmManual manualExtend = new ExtendArmManual();
   private final ManualTurret manualTurret = new ManualTurret();
-  private final ManualClaw manualClaw = new ManualClaw();
+  //private final ManualClaw manualClaw = new ManualClaw();
 
   private final SetPointArmExtension pidExtend = new SetPointArmExtension();
   private final SetPointArmTilt pidTilt = new SetPointArmTilt();
@@ -83,11 +83,11 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    turret.setDefaultCommand(pidTurret);
-    extend.setDefaultCommand(pidExtend); //armTilt
-    tilt.setDefaultCommand(pidTilt); //armExtension\[]
+    turret.setDefaultCommand(manualTurret);
+    extend.setDefaultCommand(manualExtend); //armTilt       //back
+    //tilt.setDefaultCommand(manualTilt); //armExtension\[]       //back
     //driveTrain.setDefaultCommand(fieldDrive);
-    claw.setDefaultCommand(manualClaw);
+    //claw.setDefaultCommand(manualClaw);
   }
 
   /**
@@ -106,10 +106,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-    driverController.a().whileTrue(new InstantCommand( () -> tilt.resetAngle()));
-    operatorController.b().whileTrue(move);
+    // driverController.a().whileTrue(new InstantCommand( () -> tilt.resetAngle()));
+    // operatorController.b().whileTrue(move);
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
