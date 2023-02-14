@@ -7,17 +7,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.XboxConstants;
-import frc.robot.subsystems.ArmTilt;
+import frc.robot.subsystems.Intake;
 
-public class TiltArmManual extends CommandBase {
-  private static ArmTilt tilt = ArmTilt.getInstance();
-
-  private static XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
-  
-  /** Creates a new ArmTilt. */
-  public TiltArmManual() {
+public class ManualIntake extends CommandBase {
+  Intake intake = Intake.getInstance();
+  XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
+  /** Creates a new ManualIntake. */
+  public ManualIntake() {
+    addRequirements(intake);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(tilt);
   }
 
   // Called when the command is initially scheduled.
@@ -27,16 +25,20 @@ public class TiltArmManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(operatorCont.getRightY()) >= 0.1) {
-      tilt.adjustTilt(operatorCont.getRightY() * 0.2);
-      } else {
-        tilt.adjustTilt(0);
-      }
+    if(operatorCont.getLeftBumper()){
+      intake.run(0.3);
+    } else if(operatorCont.getRightBumper()){
+      intake.run(-0.2);
+    } else {
+      intake.stop();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.stop();
+  }
 
   // Returns true when the command should end.
   @Override

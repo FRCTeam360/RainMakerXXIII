@@ -8,6 +8,7 @@ import frc.robot.Constants.*;
 import frc.robot.commands.ExtendArmManual;
 import frc.robot.commands.FieldOrientedDrive;
 import frc.robot.commands.ManualClaw;
+import frc.robot.commands.ManualIntake;
 import frc.robot.commands.FieldOrientedTurret;
 import frc.robot.commands.TiltArmManual;
 import frc.robot.commands.AutoArmPose;
@@ -22,6 +23,7 @@ import frc.robot.commands.TeleopArmPose;
 import frc.robot.commands.SetPointArmExtension;
 import frc.robot.commands.TestSetpoints;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Claw;
@@ -47,10 +49,11 @@ public class RobotContainer {
   private final ArmExtend extend = ArmExtend.getInstance();
   private final ArmTilt tilt = ArmTilt.getInstance();
   private final Turret turret = Turret.getInstance();
-  //private final DriveTrain driveTrain = DriveTrain.getInstance();
+  private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Claw claw = Claw.getInstance();
+  private final Intake intake = Intake.getInstance();
 
-  // private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive();
+  private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive();
   // private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
   // private final CharacterizeDrivetrainCommand characterize = new CharacterizeDrivetrainCommand(driveTrain);
 
@@ -58,7 +61,8 @@ public class RobotContainer {
   // Controls inverted for ExtendArmManual, down is extend and up is retract
   private final ExtendArmManual manualExtend = new ExtendArmManual();
   private final ManualTurret manualTurret = new ManualTurret();
-  //private final ManualClaw manualClaw = new ManualClaw();
+  private final ManualClaw manualClaw = new ManualClaw();
+  private final ManualIntake manualIntake = new ManualIntake();
 
   private final SetPointArmExtension pidExtend = new SetPointArmExtension();
   private final SetPointArmTilt pidTilt = new SetPointArmTilt();
@@ -85,9 +89,10 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     turret.setDefaultCommand(manualTurret);
     extend.setDefaultCommand(manualExtend); //armTilt       //back
-    //tilt.setDefaultCommand(manualTilt); //armExtension\[]       //back
-    //driveTrain.setDefaultCommand(fieldDrive);
-    //claw.setDefaultCommand(manualClaw);
+    tilt.setDefaultCommand(manualTilt); //armExtension\[]       //back
+    driveTrain.setDefaultCommand(fieldDrive);
+    claw.setDefaultCommand(manualClaw);
+    intake.setDefaultCommand(manualIntake);
   }
 
   /**

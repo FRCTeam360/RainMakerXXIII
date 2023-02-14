@@ -26,9 +26,9 @@ public class ManualClaw extends CommandBase {
   @Override
   public void execute() {
     if(Math.abs(operatorCont.getLeftTriggerAxis()) > 0.1){ //close
-      claw.adjustsClaw(operatorCont.getLeftTriggerAxis());
+      claw.adjustsClaw(operatorCont.getLeftTriggerAxis() * 0.3);
     } else if (Math.abs(operatorCont.getRightTriggerAxis()) > 0.1) { //open
-      claw.adjustsClaw(operatorCont.getRightTriggerAxis() * -1.0);
+      claw.adjustsClaw(operatorCont.getRightTriggerAxis() * -0.3);
     } else {
       claw.stopClaw();
     }

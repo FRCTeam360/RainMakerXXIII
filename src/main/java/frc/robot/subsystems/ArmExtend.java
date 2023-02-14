@@ -37,23 +37,23 @@ public class ArmExtend extends SubsystemBase {
   private double kMinOutput = -1;
   private double maxRPM = 5700;
 
-  private float extensionLimit = (float)0.8;
+  private float forwardLimit = (float)0.7;
+  private float reverseLimit = (float)0.0;
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
 
   /** Creates a new Extend. */
   public ArmExtend() {
     leadMotor.restoreFactoryDefaults();
-    leadMotor.setInverted(false);
+    leadMotor.setInverted(true);
     leadMotor.setIdleMode(IdleMode.kBrake);
 
     followMotor.restoreFactoryDefaults();
-    followMotor.setInverted(false);
+    followMotor.setInverted(true);
     followMotor.setIdleMode(IdleMode.kBrake);
     followMotor.follow(leadMotor);
     
     pidController = leadMotor.getPIDController();
-
 
     pidController.setP(kP);
     pidController.setI(kI);
@@ -61,8 +61,11 @@ public class ArmExtend extends SubsystemBase {
     pidController.setFF(kFF);
     pidController.setIZone(kIz);
     
-    leadMotor.setSoftLimit(SoftLimitDirection.kForward, extensionLimit);
+    leadMotor.setSoftLimit(SoftLimitDirection.kForward, forwardLimit);
     leadMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    leadMotor.setSoftLimit(SoftLimitDirection.kReverse, reverseLimit);
+    leadMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
 
     encoder = leadMotor.getEncoder();
 

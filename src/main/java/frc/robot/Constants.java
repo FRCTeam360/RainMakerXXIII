@@ -18,7 +18,7 @@ public final class Constants {
     DRAFT, PRACTICE
   }
 
-  public static final RobotType robotType = RobotType.DRAFT;
+  public static final RobotType robotType = RobotType.PRACTICE;
 
   public static RobotType getRobotType() {
     return robotType;
@@ -94,7 +94,7 @@ public final class Constants {
     public final static int EXTEND_LEAD_ID = 5;
     public final static int EXTEND_FOLLOW_ID = 6;
     public final static int CLAW_GRIP_ID = 7;
-    public final static int CLAW_ROLLER_ID = 8;
+    public final static int INTAKE_ID = 8;
 
     public static class CANivore {
         public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 12; 
