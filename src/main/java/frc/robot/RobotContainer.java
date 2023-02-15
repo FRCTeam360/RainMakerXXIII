@@ -20,6 +20,7 @@ import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
+import frc.robot.Autos;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -33,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final Autos auto = new Autos();
   private final ArmExtend extend = ArmExtend.getInstance();
   private final ArmTilt tilt = ArmTilt.getInstance();
   private final Turret turret = Turret.getInstance();
@@ -63,11 +65,11 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    turret.setDefaultCommand(fieldOrientedTurret);
-    tilt.setDefaultCommand(armTilt);
-    extend.setDefaultCommand(armExtension);
+    // turret.setDefaultCommand(manualTurret);
+    // tilt.setDefaultCommand(armTilt);
+    // extend.setDefaultCommand(armExtension);
     driveTrain.setDefaultCommand(fieldDrive);
-    claw.setDefaultCommand(manualClaw);
+    // claw.setDefaultCommand(manualClaw);
   }
 
 
@@ -96,8 +98,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   // An example command will be run in autonomous
-  //   return Autos.exampleAuto(m_exampleSubsystem);
-  // }
+  public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    return auto.getAuto();
+  }
 }
