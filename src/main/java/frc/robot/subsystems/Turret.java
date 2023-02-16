@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.CANIds;
 import frc.robot.Constants.DigitalIOIds;
+import frc.robot.Constants.RobotType;
 
 public class Turret extends SubsystemBase {
 
@@ -36,6 +38,7 @@ public class Turret extends SubsystemBase {
 
   public static final double conversionFactorWoodBot = 1 / ((1.0 / 20.0) * (1.5 / 17.5) * (360.0 / 1.0));
   public static final double conversionFactorPractice = (1.0 / 16.0) * (24.0 / 300.0) * (360.0 / 1.0);
+  public static final double conversionFactorComp = 1;
 
   public static final float softLimitForwardPractice = 90.0f;
   public static final float softLimitReversePractice = -90.0f;
@@ -48,7 +51,10 @@ public class Turret extends SubsystemBase {
     motor.restoreFactoryDefaults();
     motor.setInverted(false);
     motor.setIdleMode(IdleMode.kCoast);
-    motor.getEncoder().setPositionConversionFactor(conversionFactorPractice);
+
+    motor.getEncoder().setPositionConversionFactor(Constants.getRobotType() == RobotType.PRACTICE ? conversionFactorPractice : 
+        Constants.getRobotType() == RobotType.DRAFT ? conversionFactorWoodBot : conversionFactorComp);
+
     motor.setSoftLimit(SoftLimitDirection.kForward, softLimitForwardPractice);
     motor.setSoftLimit(SoftLimitDirection.kReverse, softLimitReversePractice);
     motor.enableSoftLimit(SoftLimitDirection.kForward, true);
