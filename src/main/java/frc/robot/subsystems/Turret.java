@@ -29,7 +29,7 @@ public class Turret extends SubsystemBase {
   private RelativeEncoder encoder;
 
   private final DigitalInput limitSwitch = new DigitalInput(DigitalIOIds.TURRET_LIMIT_SWITCH_ID);
-  private boolean prevLimitSwitchStatus = false;
+  private boolean pastLimitSwitchState = false;
 
   private static Turret instance;
   private double relativeAngle;
@@ -93,6 +93,10 @@ public class Turret extends SubsystemBase {
   }
 
   public void angleTurn(double inputAngle) {
+    setPosition(getNearestTurretAngle(inputAngle));
+  }
+
+  public void setPosition(double inputAngle) {
     pidController.setReference(inputAngle, ControlType.kPosition);
   }
 
@@ -115,19 +119,33 @@ public class Turret extends SubsystemBase {
     pidController.setReference(relativeAngle, ControlType.kPosition, 1);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    setAngleLimitSwitch();
+  private double getNearestTurretAngle(double angle){
+    double turretFactor = (double) Math.round((getAngleRelativeToRobot() - angle) / 360.0);
+    return angle + (360.0 * turretFactor);
   }
 
-  private void setAngleLimitSwitch() {
-    boolean currLimitSwitchStatus = limitSwitch.get();
-    if (!currLimitSwitchStatus && prevLimitSwitchStatus) {
-      double angle = encoder.getPosition();
-      double newAngle = Math.round(angle / 180.0) * 180;
-      motor.getEncoder().setPosition(newAngle);
+  private double getNearestLimitSwitchPosition(){
+    double turretFactor = (double) Math.round((getAngleRelativeToRobot()) / 180.0);
+    return (180.0 * turretFactor);
+  }
+
+  private void checkLimitSwitch(){
+    boolean currentLimitState = limitSwitch.get();
+
+    if (currentLimitState == false && pastLimitSwitchState == true) {
+        resetAngle(getNearestLimitSwitchPosition());
+        System.out.println("lil zero");
     }
-    prevLimitSwitchStatus = currLimitSwitchStatus;
+
+    pastLimitSwitchState = currentLimitState;
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("turret angle", getAngleRelativeToRobot());
+    SmartDashboard.putNumber("relative position", getNearestTurretAngle(40.5));
+    // tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
+    // This method will be called once per scheduler run
+    checkLimitSwitch();
   }
 }
