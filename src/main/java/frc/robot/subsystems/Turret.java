@@ -120,7 +120,6 @@ public class Turret extends SubsystemBase {
     SmartDashboard.putNumber("turret angle", getAngleRelativeToRobot());
     SmartDashboard.putNumber("relative position", getNearestTurretAngle(40.5));
     // tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
-    // checkLimitSwitch();
     // This method will be called once per scheduler run
   }
 }

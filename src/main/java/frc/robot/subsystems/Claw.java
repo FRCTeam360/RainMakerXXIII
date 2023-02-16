@@ -11,28 +11,40 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
 
-public class ArmExtend extends SubsystemBase {
-  private final CANSparkMax extendMotor = new CANSparkMax(CANIds.EXTEND_LEAD_ID, MotorType.kBrushless);
-  private static ArmExtend instance;
+public class Claw extends SubsystemBase {
 
-  /** Creates a new Extend. */
-  public ArmExtend() {
-    extendMotor.restoreFactoryDefaults();
-    extendMotor.setInverted(false);
-    extendMotor.setIdleMode(IdleMode.kBrake);
-    
+  private final CANSparkMax motor = new CANSparkMax(CANIds.CLAW_GRIP_ID, MotorType.kBrushless);
+  private static Claw instance;
+  /** Creates a new Claw. */
+  public Claw() {
+    motor.restoreFactoryDefaults();
+
+    motor.setInverted(false);
+
+    motor.setIdleMode(IdleMode.kBrake);
+
+    motor.setSmartCurrentLimit(20);
+
   }
 
-  public static ArmExtend getInstance() {
+  public static Claw getInstance() {
     if (instance == null) {
-      instance = new ArmExtend();
+      instance = new Claw();
     }
 
     return instance;
   }
 
-  public void adjustExtension(double speed) {
-    extendMotor.set(speed); 
+  public void adjustsClaw(double speed){
+    motor.set(speed);
+  }
+
+  public void stopClaw(){
+    motor.stopMotor();
+  }
+
+  public double getCurrent(){
+    return motor.getOutputCurrent();
   }
 
   @Override

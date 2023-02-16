@@ -86,7 +86,7 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       CANivore.FRONT_LEFT_MODULE_DRIVE_MOTOR,
       CANivore.FRONT_LEFT_MODULE_STEER_MOTOR,
       CANivore.FRONT_LEFT_MODULE_STEER_ENCODER,
-      SwerveConstants.FRONT_LEFT_MODULE_STEER_OFFSET);
+      SwerveConstants.getFrontLeftModuleSteerOffset());
       System.out.println("module: " + m_frontLeftModule.toString());
       m_frontRightModule = Mk4iSwerveModuleHelper.createFalcon500(
         tab.getLayout("Front Right Module", BuiltInLayouts.kList)
@@ -96,7 +96,7 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
         CANivore.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
         CANivore.FRONT_RIGHT_MODULE_STEER_MOTOR,
         CANivore.FRONT_RIGHT_MODULE_STEER_ENCODER,
-        SwerveConstants.FRONT_RIGHT_MODULE_STEER_OFFSET);
+        SwerveConstants.getFrontRightModuleSteerOffset());
 
       m_backLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
         tab.getLayout("Back Left Module", BuiltInLayouts.kList)
@@ -106,7 +106,7 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
         CANivore.BACK_LEFT_MODULE_DRIVE_MOTOR,
         CANivore.BACK_LEFT_MODULE_STEER_MOTOR,
         CANivore.BACK_LEFT_MODULE_STEER_ENCODER,
-        SwerveConstants.BACK_LEFT_MODULE_STEER_OFFSET);
+        SwerveConstants.getBackLeftModuleSteerOffset());
 
       m_backRightModule = Mk4iSwerveModuleHelper.createFalcon500(
         tab.getLayout("Back Right Module", BuiltInLayouts.kList)
@@ -116,7 +116,7 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
         CANivore.BACK_RIGHT_MODULE_DRIVE_MOTOR,
         CANivore.BACK_RIGHT_MODULE_STEER_MOTOR,
         CANivore.BACK_RIGHT_MODULE_STEER_ENCODER,
-        SwerveConstants.BACK_RIGHT_MODULE_STEER_OFFSET);
+        SwerveConstants.getBackRightModuleSteerOffset());
 
         odometry = new SwerveDriveOdometry(m_kinematics, m_pigeon.getRotation2d(), getModulePositions());
   }
