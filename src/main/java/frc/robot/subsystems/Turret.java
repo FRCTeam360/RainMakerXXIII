@@ -99,16 +99,16 @@ public class Turret extends SubsystemBase {
     return angle + (360.0 * turretFactor);
   }
 
-  private double getNearestLimitSwitchPosition(double angle){
-    double turretFactor = (double) Math.round((getAngleRelativeToRobot() - angle) / 180.0);
-    return angle + (180.0 * turretFactor);
+  private double getNearestLimitSwitchPosition(){
+    double turretFactor = (double) Math.round((getAngleRelativeToRobot()) / 180.0);
+    return (180.0 * turretFactor);
   }
 
   private void checkLimitSwitch(){
     boolean currentLimitState = limitSwitch.get();
 
     if (currentLimitState == false && pastLimitSwitchState == true) {
-        resetAngle(getNearestLimitSwitchPosition(0));
+        resetAngle(getNearestLimitSwitchPosition());
         System.out.println("lil zero");
     }
 
