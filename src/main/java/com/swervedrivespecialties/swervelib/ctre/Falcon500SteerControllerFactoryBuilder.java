@@ -116,7 +116,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
                 motorConfiguration.supplyCurrLimit.enable = true;
             }
 
-            WPI_TalonFX motor = new WPI_TalonFX(steerConfiguration.getMotorPort(), Constants.SwerveConstants.CANBUS);
+            WPI_TalonFX motor = new WPI_TalonFX(steerConfiguration.getMotorPort(), Constants.CANIds.CANivore.CANBUS);
             checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS), "Failed to configure Falcon 500 settings");
 
             if (hasVoltageCompensation()) {

@@ -56,7 +56,7 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
   // Back right
   new Translation2d(-SwerveConstants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -SwerveConstants.DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
-  private final WPI_Pigeon2 m_pigeon = new WPI_Pigeon2(CANivore.DRIVETRAIN_PIGEON_ID, SwerveConstants.CANBUS);
+  private final WPI_Pigeon2 m_pigeon = new WPI_Pigeon2(CANivore.DRIVETRAIN_PIGEON_ID, CANIds.CANivore.CANBUS);
 
   private final SwerveDriveOdometry odometry;
 
