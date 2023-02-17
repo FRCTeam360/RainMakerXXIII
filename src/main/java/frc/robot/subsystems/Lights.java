@@ -59,6 +59,10 @@ public class Lights extends SubsystemBase {
     candle.animate(new SingleFadeAnimation(254, 106, 0));
   }
 
+  public void setRedTwinkle(){
+    candle.animate(new TwinkleAnimation(255, 0, 0));
+  }
+
   public void fireball(){
     candle.animate(new FireAnimation());
   }
