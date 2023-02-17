@@ -26,9 +26,9 @@ public class ManualIntake extends CommandBase {
   @Override
   public void execute() {
     if(operatorCont.getLeftBumper()){
-      intake.run(0.3);
+      intake.run(-0.5);
     } else if(operatorCont.getRightBumper()){
-      intake.run(-0.2);
+      intake.run(0.5);
     } else {
       intake.stop();
     }

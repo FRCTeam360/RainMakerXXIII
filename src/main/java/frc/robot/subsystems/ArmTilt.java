@@ -32,8 +32,7 @@ public class ArmTilt extends SubsystemBase {
   private final CANSparkMax tiltLead = new CANSparkMax(CANIds.TILT_LEAD_ID, MotorType.kBrushless);
   private final CANSparkMax tiltFollow = new CANSparkMax(CANIds.TILT_FOLLOW_ID, MotorType.kBrushless); 
   private final RelativeEncoder encoder;
-  
-  private final AbsoluteEncoder absoluteEncoder = tiltLead.getAbsoluteEncoder(Type.kDutyCycle);
+  private final AbsoluteEncoder absoluteEncoder;
 
   private static ArmTilt instance;
   private SparkMaxPIDController pidController;
@@ -72,6 +71,10 @@ public class ArmTilt extends SubsystemBase {
     tiltLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     encoder = tiltLead.getEncoder();
+
+    absoluteEncoder = tiltLead.getAbsoluteEncoder(Type.kDutyCycle);
+    absoluteEncoder.setPositionConversionFactor(360);
+    absoluteEncoder.setZeroOffset(86.5);
 
     pidController = tiltLead.getPIDController();
 
@@ -132,5 +135,6 @@ public class ArmTilt extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("arm position", encoder.getPosition());
+    SmartDashboard.putNumber("arm absolute position", absoluteEncoder.getPosition());
  }
 }
