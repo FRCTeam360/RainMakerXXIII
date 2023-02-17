@@ -35,6 +35,14 @@ public class Lights extends SubsystemBase {
     return instance;
   }
 
+  public void setYellow(){
+    candle.setLEDs(239, 223, 13);
+  }
+
+  public void setPurple(){
+    candle.setLEDs(163, 23, 172);
+  }
+
   public void setOrange(){
     candle.setLEDs(254, 106, 0);
   }
