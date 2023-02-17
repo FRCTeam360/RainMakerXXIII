@@ -12,7 +12,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -36,12 +35,12 @@ public class Turret extends SubsystemBase {
   private static Turret instance;
   private double relativeAngle;
 
-  public static final double conversionFactorWoodBot = 1 / ((1.0 / 20.0) * (1.5 / 17.5) * (360.0 / 1.0));
+  public static final double conversionFactorWoodBot = 1 / ((1.0 / 20.0) * (1.5 / 17.5) * (360.0 / 1.0)); //gearbox pulley teeth degrees
   public static final double conversionFactorPractice = (1.0 / 16.0) * (24.0 / 300.0) * (360.0 / 1.0);
   public static final double conversionFactorComp = 1;
 
-  public static final float softLimitForwardPractice = 90.0f;
-  public static final float softLimitReversePractice = -90.0f;
+  public static final float softLimitForwardPractice = 200.0f;
+  public static final float softLimitReversePractice = -200.0f;
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
 
@@ -53,7 +52,7 @@ public class Turret extends SubsystemBase {
     motor.setIdleMode(IdleMode.kCoast);
 
     motor.getEncoder().setPositionConversionFactor(Constants.getRobotType() == RobotType.PRACTICE ? conversionFactorPractice : 
-        Constants.getRobotType() == RobotType.DRAFT ? conversionFactorWoodBot : conversionFactorComp);
+        Constants.getRobotType() == RobotType.DRAFT ? conversionFactorWoodBot : conversionFactorComp); // delete last if and comp factor if no difference from practice
 
     motor.setSoftLimit(SoftLimitDirection.kForward, softLimitForwardPractice);
     motor.setSoftLimit(SoftLimitDirection.kReverse, softLimitReversePractice);
@@ -62,7 +61,7 @@ public class Turret extends SubsystemBase {
 
     pidController = motor.getPIDController();
     pidController.setP(0.05);
-    pidController.setD(0.01);
+    pidController.setD(0.01); 
     pidController.setI(0.0);
     pidController.setFF(0.0);
     encoder = motor.getEncoder();
@@ -111,7 +110,7 @@ public class Turret extends SubsystemBase {
   }
 
   public void resetAngle(double inputReset) {
-    this.angleTurn(inputReset);
+    this.getEncoder().setPosition(inputReset);
   }
 
   public double getRelativeAngle() {

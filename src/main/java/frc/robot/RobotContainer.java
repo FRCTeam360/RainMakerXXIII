@@ -88,11 +88,11 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     turret.setDefaultCommand(manualTurret);
-    extend.setDefaultCommand(manualExtend); //armTilt       //back
-    tilt.setDefaultCommand(manualTilt); //armExtension\[]       //back
+    // extend.setDefaultCommand(manualExtend); //armTilt       //back
+    // tilt.setDefaultCommand(manualTilt); //armExtension\[]       //back
     driveTrain.setDefaultCommand(fieldDrive);
-    claw.setDefaultCommand(manualClaw);
-    intake.setDefaultCommand(manualIntake);
+    // claw.setDefaultCommand(manualClaw);
+    // intake.setDefaultCommand(manualIntake);
   }
 
   /**
