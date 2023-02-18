@@ -37,8 +37,8 @@ public class ArmExtend extends SubsystemBase {
   private double kMinOutput = -1;
   private double maxRPM = 5700;
 
-  private float forwardLimit = (float)0.7;
-  private float reverseLimit = (float)0.0;
+  private float forwardLimit = (float)0.61;
+  private float reverseLimit = (float)-0.0;
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
 

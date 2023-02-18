@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -15,8 +14,6 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
-import edu.wpi.first.hal.PowerDistributionFaults;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -68,8 +65,8 @@ public class ArmTilt extends SubsystemBase {
 
     tiltLead.setSoftLimit(SoftLimitDirection.kForward,90.0f);
     tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -30.0f);
-    tiltLead.enableSoftLimit(SoftLimitDirection.kForward, true);
-    tiltLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    // tiltLead.enableSoftLimit(SoftLimitDirection.kForward, true);
+    // tiltLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     encoder = tiltLead.getEncoder();
 
