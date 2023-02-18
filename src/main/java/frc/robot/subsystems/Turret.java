@@ -49,7 +49,7 @@ public class Turret extends SubsystemBase {
     motor = new CANSparkMax(CANIds.TURRET_ID, MotorType.kBrushless);
     motor.restoreFactoryDefaults();
     motor.setInverted(false);
-    motor.setIdleMode(IdleMode.kCoast);
+    motor.setIdleMode(IdleMode.kBrake);
 
     motor.getEncoder().setPositionConversionFactor(Constants.getRobotType() == RobotType.PRACTICE ? conversionFactorPractice : 
         Constants.getRobotType() == RobotType.DRAFT ? conversionFactorWoodBot : conversionFactorComp); // delete last if and comp factor if no difference from practice

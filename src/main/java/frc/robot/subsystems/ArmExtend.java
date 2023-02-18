@@ -40,8 +40,8 @@ public class ArmExtend extends SubsystemBase {
   private float forwardLimit = (float)(1.33);
   private float reverseLimit = (float)0.1;
 
-  private double balancePoint = 0.1; //TODO TUNE VALUE
-  public double tuningDistance = 0.6; //TODO TUNE VALUE
+  private double balancePoint = -0.3; //TODO TUNE VALUE
+  public double maxExtendMinusBalance = 1.33 - balancePoint; //TODO TUNE VALUE
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
 
@@ -67,7 +67,7 @@ public class ArmExtend extends SubsystemBase {
     leadMotor.setSoftLimit(SoftLimitDirection.kForward, forwardLimit);
     leadMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     leadMotor.setSoftLimit(SoftLimitDirection.kReverse, reverseLimit);
-    leadMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+    leadMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
 
     encoder = leadMotor.getEncoder();

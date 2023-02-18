@@ -41,7 +41,7 @@ public class ArmTilt extends SubsystemBase {
   private double kI = 0;
   private double kD = 0;
   private double kIz = 0;
-  public double kFF = 0;
+  public double kFF = 0.06 * 12; //0.01 retracted 0.05 extended
   private double kMaxOutput = 1;
   private double kMinOutput = -1;
   private double maxRPM = 5700;
@@ -84,7 +84,7 @@ public class ArmTilt extends SubsystemBase {
     pidController.setI(kI);
     pidController.setD(kD);
     pidController.setIZone(kIz);
-    pidController.setFF(kFF * (Math.cos(getAngle()) * (extend.getDistanceFromBalance() / extend.tuningDistance)));
+    //pidController.setFF(kFF * (Math.cos(getAngle()) * (extend.getDistanceFromBalance() / extend.tuningDistance)));
     pidController.setOutputRange(kMinOutput, kMaxOutput);
 
     pidController.setFeedbackDevice(encoder);
@@ -92,6 +92,8 @@ public class ArmTilt extends SubsystemBase {
     tab.addDouble("Arm Tilt", () -> encoder.getPosition());
     tab.addDouble("arm absolute", () -> absoluteEncoder.getPosition() - 90);
     tab.addDouble("arm ff", () -> kFF);
+    tab.addDouble("ff math", () -> kFF * (Math.cos(Math.toRadians(getAngle())) * (extend.getDistanceFromBalance() / extend.maxExtendMinusBalance)));
+    tab.addDouble("arm output", () -> tiltLead.getAppliedOutput());
   }
 
     public static ArmTilt getInstance() {
@@ -115,12 +117,15 @@ public class ArmTilt extends SubsystemBase {
   }
   
   public void adjustTilt(double speed) {
-    tiltLead.set(speed);
+    tiltLead.set(speed + getFeedForward()/12);
   }
 
   public void setAngle(double inputAngle) {
-    System.out.println("set angleing " + inputAngle);
-    pidController.setReference(inputAngle, ControlType.kPosition);
+    pidController.setReference(inputAngle, ControlType.kPosition, 0, getFeedForward());
+  }
+
+  public double getFeedForward() {
+    return kFF * (Math.cos(Math.toRadians(getAngle())) * (extend.getDistanceFromBalance() / extend.maxExtendMinusBalance));
   }
 
   public void smartTilt(double inputAngle) {
@@ -154,6 +159,5 @@ public class ArmTilt extends SubsystemBase {
     SmartDashboard.putNumber("arm absolute position", absoluteEncoder.getPosition());
 
     reseedMotorPosition();
-    pidController.setFF(kFF); //* (Math.cos(getAngle()) * (extend.getDistanceFromBalance() / extend.tuningDistance)));
  }
 }

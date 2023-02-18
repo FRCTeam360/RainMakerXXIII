@@ -29,12 +29,7 @@ public class SetPointArmTilt extends CommandBase {
   public void execute() {
    double setPoint = SmartDashboard.getNumber("ArmTilt SetPoint", 0);
    tilt.setAngle(setPoint);
-
-    if(testCont.getAButtonPressed()){
-      tilt.kFF += 0.1;
-    } else if (testCont.getBButtonPressed()){
-      tilt.kFF -= 0.1;
-    }
+    
   }
 
   // Called once the command ends or is interrupted.

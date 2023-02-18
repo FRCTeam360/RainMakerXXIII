@@ -28,10 +28,10 @@ public class ManualTurret extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(operatorCont.getRightX()) >= 0.1) {
+    if(Math.abs(operatorCont.getRightX()) >= 0.2) {
       turret.turn(-operatorCont.getRightX());
     } else {
-      turret.turn(0);
+      turret.turn(operatorCont.getRightX());
     }
     
   }
