@@ -48,6 +48,8 @@ public class ArmTilt extends SubsystemBase {
   private double kMinOutput = -1;
   private double maxRPM = 5700;
 
+  private int iterations = 0;
+
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
 
   /** Creates a new Tilt. */
@@ -63,7 +65,6 @@ public class ArmTilt extends SubsystemBase {
     tiltFollow.setInverted(false);
     tiltFollow.setIdleMode(IdleMode.kBrake);
     tiltFollow.follow(tiltLead);
-
 
     tiltLead.setSoftLimit(SoftLimitDirection.kForward,90.0f);
     tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -30.0f);
@@ -87,7 +88,7 @@ public class ArmTilt extends SubsystemBase {
     pidController.setFF(kFF * (Math.cos(getAngle()) * extend.getDistanceFromPivot()));
     pidController.setOutputRange(kMinOutput, kMaxOutput);
 
-    pidController.setFeedbackDevice(absoluteEncoder);
+    pidController.setFeedbackDevice(encoder);
 
     tab.addDouble("Arm Tilt", () -> encoder.getPosition());
   }
@@ -132,9 +133,25 @@ public class ArmTilt extends SubsystemBase {
     encoder.setPosition(0.0);
   }
 
+  public void reseedMotorPosition(){
+    if(encoder.getVelocity() < 0.1){
+      iterations++;
+    } else {
+      iterations = 0;
+    }
+
+    if(iterations >= 100){
+      encoder.setPosition(absoluteEncoder.getPosition() - 90);
+      iterations = 0;
+      System.out.println("position reset");
+    }
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("arm position", encoder.getPosition());
     SmartDashboard.putNumber("arm absolute position", absoluteEncoder.getPosition());
+
+    reseedMotorPosition();
  }
 }
