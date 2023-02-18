@@ -4,9 +4,9 @@
 
 package frc.robot;
 
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +35,11 @@ public final class Autos {
 
   //create events of commands here
   private static HashMap<String, Command> eventMap = new HashMap<>() {{
-    put("hello", new PrintCommand("passed marker 1"));
+    put("Open Claw", new OpenClaw());
+    put("Close Claw", new CloseClaw());
+    put("Set Point Arm Extension", new SetPointArmExtension());
+    put("Set Point Arm Tilt", new SetPointArmTilt());
+    put("Set Point Turret", new SetPointTurret());
   }};
 
   //instantiate autos here
