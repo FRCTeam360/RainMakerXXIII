@@ -30,14 +30,14 @@ public class ExtendArmManual extends CommandBase {
   public void execute() {
     if(Math.abs(operatorCont.getLeftY()) >= 0.1) {
       // Controls inverted, down is extend and up is retract
-      extend.adjustExtensionSpeed(-operatorCont.getLeftY() * 0.5);
+      extend.adjustExtensionSpeed(operatorCont.getLeftY() * -0.2);
     } else {
-      extend.adjustExtensionSpeed(0);
+      extend.adjustExtensionSpeed(operatorCont.getLeftY() * 0.2);
     }
   }
 
 
-  // Called once the command ends or is interrupted.
+  // Called once the command ends or is interupted.
   @Override
   public void end(boolean interrupted) {}
 
