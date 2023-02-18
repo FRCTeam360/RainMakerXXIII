@@ -26,7 +26,7 @@ public class ArmExtend extends SubsystemBase {
   private final SparkMaxPIDController pidController;
   private final RelativeEncoder encoder;
 
-  private double rotationsToMeters = (0.0354*(25.5-4.625))/30.0;
+  private double rotationsToMeters = (0.0354*(51.875-13.625))/23.8808; //(0.0354*(25.5-4.625))/30.0;
 
   private double kP = 10;
   private double kI = 0;
@@ -37,8 +37,11 @@ public class ArmExtend extends SubsystemBase {
   private double kMinOutput = -1;
   private double maxRPM = 5700;
 
-  private float forwardLimit = (float)0.61;
-  private float reverseLimit = (float)-0.0;
+  private float forwardLimit = (float)(1.33);
+  private float reverseLimit = (float)0.1;
+
+  private double balancePoint = 0.1; //TODO TUNE VALUE
+  public double tuningDistance = 0.6; //TODO TUNE VALUE
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
 
@@ -64,7 +67,7 @@ public class ArmExtend extends SubsystemBase {
     leadMotor.setSoftLimit(SoftLimitDirection.kForward, forwardLimit);
     leadMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     leadMotor.setSoftLimit(SoftLimitDirection.kReverse, reverseLimit);
-    leadMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    leadMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
 
 
     encoder = leadMotor.getEncoder();
@@ -108,6 +111,10 @@ public class ArmExtend extends SubsystemBase {
 
   public double getDistanceFromPivot(){
     return getExtendDistance() + 0.0254 * 16.35; //conv factor * inches
+  }
+
+  public double getDistanceFromBalance(){
+    return getExtendDistance() - balancePoint; 
   }
 
   @Override

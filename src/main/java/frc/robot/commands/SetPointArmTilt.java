@@ -4,12 +4,14 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmTilt;
 
 public class SetPointArmTilt extends CommandBase {
   ArmTilt tilt = ArmTilt.getInstance();
+  XboxController testCont = new XboxController(2);
   /** Creates a new SetPointArmTilt. */
   public SetPointArmTilt() {
     addRequirements(tilt);
@@ -27,6 +29,12 @@ public class SetPointArmTilt extends CommandBase {
   public void execute() {
    double setPoint = SmartDashboard.getNumber("ArmTilt SetPoint", 0);
    tilt.setAngle(setPoint);
+
+    if(testCont.getAButtonPressed()){
+      tilt.kFF += 0.1;
+    } else if (testCont.getBButtonPressed()){
+      tilt.kFF -= 0.1;
+    }
   }
 
   // Called once the command ends or is interrupted.

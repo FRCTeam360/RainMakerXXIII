@@ -35,12 +35,13 @@ public class ArmTilt extends SubsystemBase {
   private SparkMaxPIDController pidController;
 
   private double motorRotationsToArmDegrees = 360.0/(5.0*5.0*4.0*3.0);
+  private double practiceMotorRotationsToArmDegrees = 360.0/(5.0*5.0*(64.0/12.0)); //7, 5
 
-  private double kP = 3;
+  private double kP = 0; //3
   private double kI = 0;
   private double kD = 0;
   private double kIz = 0;
-  private double kFF = 0;
+  public double kFF = 0;
   private double kMaxOutput = 1;
   private double kMinOutput = -1;
   private double maxRPM = 5700;
@@ -73,21 +74,24 @@ public class ArmTilt extends SubsystemBase {
     absoluteEncoder = tiltLead.getAbsoluteEncoder(Type.kDutyCycle);
     absoluteEncoder.setPositionConversionFactor(360);
     absoluteEncoder.setZeroOffset(86.5);
+    absoluteEncoder.setInverted(true);
 
     pidController = tiltLead.getPIDController();
 
-    encoder.setPositionConversionFactor(motorRotationsToArmDegrees);
+    encoder.setPositionConversionFactor(practiceMotorRotationsToArmDegrees);
 
     pidController.setP(kP);
     pidController.setI(kI);
     pidController.setD(kD);
     pidController.setIZone(kIz);
-    pidController.setFF(kFF * (Math.cos(getAngle()) * extend.getDistanceFromPivot()));
+    pidController.setFF(kFF * (Math.cos(getAngle()) * (extend.getDistanceFromBalance() / extend.tuningDistance)));
     pidController.setOutputRange(kMinOutput, kMaxOutput);
 
     pidController.setFeedbackDevice(encoder);
 
     tab.addDouble("Arm Tilt", () -> encoder.getPosition());
+    tab.addDouble("arm absolute", () -> absoluteEncoder.getPosition() - 90);
+    tab.addDouble("arm ff", () -> kFF);
   }
 
     public static ArmTilt getInstance() {
@@ -150,5 +154,6 @@ public class ArmTilt extends SubsystemBase {
     SmartDashboard.putNumber("arm absolute position", absoluteEncoder.getPosition());
 
     reseedMotorPosition();
+    pidController.setFF(kFF); //* (Math.cos(getAngle()) * (extend.getDistanceFromBalance() / extend.tuningDistance)));
  }
 }
