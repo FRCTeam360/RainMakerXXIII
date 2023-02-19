@@ -10,6 +10,7 @@ import frc.robot.commands.FieldOrientedDrive;
 import frc.robot.commands.ManualClaw;
 import frc.robot.commands.ManualIntake;
 import frc.robot.commands.FieldOrientedTurret;
+import frc.robot.commands.Homing;
 import frc.robot.commands.TiltArmManual;
 import frc.robot.commands.AutoArmPose;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
@@ -70,6 +71,8 @@ public class RobotContainer {
 
   private final TeleopArmPose move = new TeleopArmPose();
 
+  private final Homing homing = new Homing();
+
   private final FieldOrientedTurret fieldOrientedTurret = new FieldOrientedTurret();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
@@ -87,10 +90,10 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    //turret.setDefaultCommand(manualTurret);
+    turret.setDefaultCommand(manualTurret);
     extend.setDefaultCommand(manualExtend); 
-    tilt.setDefaultCommand(manualTilt); 
-    // driveTrain.setDefaultCommand(fieldDrive);
+    tilt.setDefaultCommand(pidTilt); 
+    driveTrain.setDefaultCommand(fieldDrive);
     claw.setDefaultCommand(manualClaw);
     intake.setDefaultCommand(manualIntake);
   }
@@ -118,6 +121,7 @@ public class RobotContainer {
     // cancelling on release.
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     //driverController.b().whileTrue(driveTrain.xOutCommand());
+    //operatorController.y().onTrue(homing);
   }
 
   /**

@@ -4,19 +4,24 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.XboxConstants;
 import frc.robot.subsystems.ArmExtend;
+import frc.robot.subsystems.ArmTilt;
+import frc.robot.subsystems.Turret;
 
-public class SetPointArmExtension extends CommandBase {
-  /** Creates a new SetPointArmExtensions. */
+public class Homing extends CommandBase {
+  private final ArmTilt tilt = ArmTilt.getInstance();
+  private final ArmExtend extend = ArmExtend.getInstance();
+  private final Turret turret = Turret.getInstance();
 
-  ArmExtend extend = ArmExtend.getInstance();
+  private final XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
 
-  public SetPointArmExtension() {
+  /** Creates a new Homing. */
+  public Homing() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(extend);
-    SmartDashboard.putNumber("ArmExtendSetPoint", 0);
+    addRequirements(tilt, extend, turret);
   }
 
   // Called when the command is initially scheduled.
@@ -26,8 +31,11 @@ public class SetPointArmExtension extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double setPosition = SmartDashboard.getNumber("ArmExtendSetPoint", 0);
-    extend.setPosition(setPosition);
+    if (operatorCont.getYButtonPressed()) {
+      tilt.setAngle(90);
+      extend.setPosition(0.1);
+      turret.setPosition(0);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -37,7 +37,7 @@ public class ArmTilt extends SubsystemBase {
   private double motorRotationsToArmDegrees = 360.0/(5.0*5.0*4.0*3.0);
   private double practiceMotorRotationsToArmDegrees = 360.0/(5.0*5.0*(64.0/12.0)); //7, 5
 
-  private double kP = 0; //3
+  private double kP = 0.001; //3
   private double kI = 0;
   private double kD = 0;
   private double kIz = 0;

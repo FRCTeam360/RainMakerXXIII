@@ -11,7 +11,10 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,14 +31,16 @@ public class ArmExtend extends SubsystemBase {
 
   private double rotationsToMeters = (0.0354*(51.875-13.625))/23.8808; //(0.0354*(25.5-4.625))/30.0;
 
-  private double kP = 10;
+  private double kP = 1;
   private double kI = 0;
   private double kD = 0;
   private double kIz = 0;
-  private double kFF = 0;
+  private double kFF = 0.045;
   private double kMaxOutput = 1;
   private double kMinOutput = -1;
   private double maxRPM = 5700;
+
+  // private TrapezoidProfile profile = new TrapezoidProfile(new Constraints(0.25, 0.25), null);
 
   private float forwardLimit = (float)(1.33);
   private float reverseLimit = (float)0.1;
@@ -61,8 +66,12 @@ public class ArmExtend extends SubsystemBase {
     pidController.setP(kP);
     pidController.setI(kI);
     pidController.setD(kD);
-    pidController.setFF(kFF);
+    // pidController.setFF(kFF);
     pidController.setIZone(kIz);
+    // pidController.setSmartMotionMaxAccel(0.1, 0);
+    // pidController.setSmartMotionMaxVelocity(0.1, 0);
+    // pidController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
+    pidController.setOutputRange(-0.5, 0.5);
     
     leadMotor.setSoftLimit(SoftLimitDirection.kForward, forwardLimit);
     leadMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
@@ -73,6 +82,7 @@ public class ArmExtend extends SubsystemBase {
     encoder = leadMotor.getEncoder();
 
     encoder.setPositionConversionFactor(rotationsToMeters);
+    encoder.setVelocityConversionFactor(rotationsToMeters);
     
     tab.addDouble("Arm Extension", () -> encoder.getPosition());
   }
@@ -98,11 +108,23 @@ public class ArmExtend extends SubsystemBase {
   }
 
   public void adjustExtensionSpeed(double speed) {
-    leadMotor.set(speed); 
+    leadMotor.set(speed + getFeedForward()/12); 
   }
 
   public void setPosition(double meters){
-    pidController.setReference(meters, ControlType.kPosition);
+    pidController.setReference(meters, ControlType.kPosition, 0, getFeedForward());
+  }
+
+  public void setSmartPosition(double meters){
+    pidController.setReference(meters, ControlType.kSmartMotion);
+  }
+
+  public double getFeedForward(){
+    return kFF * Math.sin(Math.toRadians(ArmTilt.getInstance().getAngle())) * 12;
+  }
+
+  public void stop() {
+    leadMotor.stopMotor();
   }
 
   public double getExtendDistance(){

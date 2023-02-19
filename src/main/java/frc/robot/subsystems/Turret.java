@@ -60,8 +60,8 @@ public class Turret extends SubsystemBase {
     motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     pidController = motor.getPIDController();
-    pidController.setP(0.05);
-    pidController.setD(0.01); 
+    pidController.setP(0.02);
+    pidController.setD(0.00); 
     pidController.setI(0.0);
     pidController.setFF(0.0);
     encoder = motor.getEncoder();
@@ -103,6 +103,11 @@ public class Turret extends SubsystemBase {
 
   public void setPosition(double inputAngle) {
     pidController.setReference(inputAngle, ControlType.kPosition);
+  }
+
+  public void stop() {
+    motor.stopMotor();
+
   }
 
   public void resetEncoderTicks() {
