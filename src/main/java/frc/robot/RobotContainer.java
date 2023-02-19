@@ -92,7 +92,7 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     turret.setDefaultCommand(manualTurret);
     extend.setDefaultCommand(manualExtend); 
-    tilt.setDefaultCommand(pidTilt); 
+    tilt.setDefaultCommand(manualTilt); 
     driveTrain.setDefaultCommand(fieldDrive);
     claw.setDefaultCommand(manualClaw);
     intake.setDefaultCommand(manualIntake);
@@ -120,8 +120,8 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    //driverController.b().whileTrue(driveTrain.xOutCommand());
-    //operatorController.y().onTrue(homing);
+    driverController.leftStick().whileTrue(driveTrain.xOutCommand());
+    operatorController.pov(0).whileTrue(homing);
   }
 
   /**

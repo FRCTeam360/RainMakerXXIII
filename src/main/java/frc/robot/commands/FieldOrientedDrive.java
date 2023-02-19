@@ -44,7 +44,7 @@ public class FieldOrientedDrive extends CommandBase {
                 )
         );
 
-        if(drivercont.getAButton()){
+        if(drivercont.getPOV() == 0){
             driveTrain.zeroGyroscope();
         }
     }

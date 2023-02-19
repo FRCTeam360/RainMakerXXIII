@@ -64,10 +64,10 @@ public class ArmTilt extends SubsystemBase {
     tiltFollow.setIdleMode(IdleMode.kBrake);
     tiltFollow.follow(tiltLead);
 
-    tiltLead.setSoftLimit(SoftLimitDirection.kForward,90.0f);
-    tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -30.0f);
-    // tiltLead.enableSoftLimit(SoftLimitDirection.kForward, true);
-    // tiltLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    tiltLead.setSoftLimit(SoftLimitDirection.kForward,190.0f);
+    tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -10.0f);
+    tiltLead.enableSoftLimit(SoftLimitDirection.kForward, true);
+    tiltLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     encoder = tiltLead.getEncoder();
 
