@@ -37,13 +37,13 @@ public class ArmTilt extends SubsystemBase {
   private double motorRotationsToArmDegrees = 360.0/(5.0*5.0*4.0*3.0);
   private double practiceMotorRotationsToArmDegrees = 360.0/(5.0*5.0*(64.0/12.0)); //7, 5
 
-  private double kP = 0.001; //3
+  private double kP = 0.1; //3
   private double kI = 0;
   private double kD = 0;
   private double kIz = 0;
   public double kFF = 0.06 * 12; //0.01 retracted 0.05 extended
-  private double kMaxOutput = 1;
-  private double kMinOutput = -1;
+  private double kMaxOutput = 0.5;
+  private double kMinOutput = -0.5;
   private double maxRPM = 5700;
 
   private int iterations = 0;
@@ -122,6 +122,7 @@ public class ArmTilt extends SubsystemBase {
 
   public void setAngle(double inputAngle) {
     pidController.setReference(inputAngle, ControlType.kPosition, 0, getFeedForward());
+    SmartDashboard.putNumber("error", getAngle() - inputAngle);
   }
 
   public double getFeedForward() {

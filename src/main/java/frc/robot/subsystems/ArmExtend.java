@@ -31,13 +31,13 @@ public class ArmExtend extends SubsystemBase {
 
   private double rotationsToMeters = (0.0354*(51.875-13.625))/23.8808; //(0.0354*(25.5-4.625))/30.0;
 
-  private double kP = 1;
+  private double kP = 3;
   private double kI = 0;
   private double kD = 0;
   private double kIz = 0;
-  private double kFF = 0.045;
-  private double kMaxOutput = 1;
-  private double kMinOutput = -1;
+  private double kFF = 0.05;
+  private double kMaxOutput = 0.3;
+  private double kMinOutput = -0.3;
   private double maxRPM = 5700;
 
   // private TrapezoidProfile profile = new TrapezoidProfile(new Constraints(0.25, 0.25), null);
@@ -71,7 +71,7 @@ public class ArmExtend extends SubsystemBase {
     // pidController.setSmartMotionMaxAccel(0.1, 0);
     // pidController.setSmartMotionMaxVelocity(0.1, 0);
     // pidController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
-    pidController.setOutputRange(-0.5, 0.5);
+    pidController.setOutputRange(kMinOutput, kMaxOutput);
     
     leadMotor.setSoftLimit(SoftLimitDirection.kForward, forwardLimit);
     leadMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
@@ -113,6 +113,7 @@ public class ArmExtend extends SubsystemBase {
 
   public void setPosition(double meters){
     pidController.setReference(meters, ControlType.kPosition, 0, getFeedForward());
+    // SmartDashboard.putNumber("error", getExtendDistance() - meters);
   }
 
   public void setSmartPosition(double meters){
@@ -141,6 +142,8 @@ public class ArmExtend extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // SmartDashboard.putNumber("arm extension", getExtendDistance());
+    // SmartDashboard.putNumber("arm effort", leadMotor.getAppliedOutput());
     // This method will be called once per scheduler run
     }
 }
