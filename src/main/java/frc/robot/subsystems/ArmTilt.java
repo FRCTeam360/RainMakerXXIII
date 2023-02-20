@@ -44,6 +44,21 @@ public class ArmTilt extends SubsystemBase {
   public double kFF = 0.06 * 12; //0.01 retracted 0.05 extended
   private double kMaxOutput = 0.5;
   private double kMinOutput = -0.5;
+
+  private double kP2 = 0.1; //3
+  private double kI2 = 0;
+  private double kD2 = 0.5;
+  private double kIz2 = 0;
+  private double kMaxOutput2 = 0.35;
+  private double kMinOutput2 = -0.35;
+
+  private double kP3 = 0.1; //3
+  private double kI3 = 0;
+  private double kD3 = 0;
+  private double kIz3 = 0;
+  private double kMaxOutput3 = 0.2;
+  private double kMinOutput3 = -0.2;
+
   private double maxRPM = 5700;
 
   private int iterations = 0;
@@ -84,8 +99,19 @@ public class ArmTilt extends SubsystemBase {
     pidController.setI(kI);
     pidController.setD(kD);
     pidController.setIZone(kIz);
-    //pidController.setFF(kFF * (Math.cos(getAngle()) * (extend.getDistanceFromBalance() / extend.tuningDistance)));
     pidController.setOutputRange(kMinOutput, kMaxOutput);
+
+    pidController.setP(kP2, 1);
+    pidController.setI(kI2, 1);
+    pidController.setD(kD2, 1);
+    pidController.setIZone(kIz2, 1);
+    pidController.setOutputRange(kMinOutput2, kMaxOutput2, 1);
+
+    pidController.setP(kP3, 2);
+    pidController.setI(kI3, 2);
+    pidController.setD(kD3, 2);
+    pidController.setIZone(kIz3, 2);
+    pidController.setOutputRange(kMinOutput3, kMaxOutput3, 2);
 
     pidController.setFeedbackDevice(encoder);
 
@@ -121,8 +147,14 @@ public class ArmTilt extends SubsystemBase {
   }
 
   public void setAngle(double inputAngle) {
-    pidController.setReference(inputAngle, ControlType.kPosition, 0, getFeedForward());
-    SmartDashboard.putNumber("error", getAngle() - inputAngle);
+    if(ArmExtend.getInstance().getExtendDistance() >= 0.8){
+      pidController.setReference(inputAngle, ControlType.kPosition, 2, getFeedForward());
+    } else if(ArmExtend.getInstance().getExtendDistance() >= 0.4){
+      pidController.setReference(inputAngle, ControlType.kPosition, 1, getFeedForward());
+    } else {
+      pidController.setReference(inputAngle, ControlType.kPosition, 0, getFeedForward());
+    }
+      SmartDashboard.putNumber("error", getAngle() - inputAngle);
   }
 
   public double getFeedForward() {
@@ -147,7 +179,7 @@ public class ArmTilt extends SubsystemBase {
       iterations = 0;
     }
 
-    if(iterations >= 100){
+    if(iterations >= 5){
       encoder.setPosition(absoluteEncoder.getPosition() - 90);
       iterations = 0;
       System.out.println("position reset");

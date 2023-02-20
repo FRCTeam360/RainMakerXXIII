@@ -31,8 +31,8 @@ public class Homing extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // tilt.setAngle(90);
-    // extend.setPosition(0.1);
+    tilt.setAngle(90);
+    extend.setPosition(0.1);
     turret.setPosition(0);
   }
 
