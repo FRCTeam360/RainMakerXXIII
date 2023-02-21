@@ -42,6 +42,12 @@ public class Turret extends SubsystemBase {
   public static final float softLimitForwardPractice = 200.0f;
   public static final float softLimitReversePractice = -200.0f;
 
+  public static final float softLimitForwardComp = 0;
+  public static final float softLimitReverseComp = 0;
+
+  public static float softLimitForward;
+  public static float softLimitReverse;
+
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
 
   /** Creates a new Turret. */
@@ -51,11 +57,14 @@ public class Turret extends SubsystemBase {
     motor.setInverted(false);
     motor.setIdleMode(IdleMode.kBrake);
 
+    softLimitForward = Constants.getRobotType() == RobotType.COMP ? softLimitForwardComp : softLimitForwardPractice;
+    softLimitReverse = Constants.getRobotType() == RobotType.COMP ? softLimitReverseComp : softLimitReversePractice;
+
     motor.getEncoder().setPositionConversionFactor(Constants.getRobotType() == RobotType.PRACTICE ? conversionFactorPractice : 
         Constants.getRobotType() == RobotType.DRAFT ? conversionFactorWoodBot : conversionFactorComp); // delete last if and comp factor if no difference from practice
 
-    motor.setSoftLimit(SoftLimitDirection.kForward, softLimitForwardPractice);
-    motor.setSoftLimit(SoftLimitDirection.kReverse, softLimitReversePractice);
+    motor.setSoftLimit(SoftLimitDirection.kForward, softLimitForward);
+    motor.setSoftLimit(SoftLimitDirection.kReverse, softLimitReverse);
     motor.enableSoftLimit(SoftLimitDirection.kForward, true);
     motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
@@ -98,7 +107,7 @@ public class Turret extends SubsystemBase {
   }
 
   public void angleTurn(double inputAngle) {
-    setPosition(getNearestTurretAngle(inputAngle));
+    setPosition(getNearestActualTurretAngle(inputAngle));
   }
 
   public void setPosition(double inputAngle) {
@@ -132,6 +141,19 @@ public class Turret extends SubsystemBase {
   private double getNearestTurretAngle(double angle){
     double turretFactor = (double) Math.round((getAngleRelativeToRobot() - angle) / 360.0);
     return angle + (360.0 * turretFactor);
+  }
+
+  //accounts for soft limits by wraping impossible angles by 90 degrees
+  private double getNearestActualTurretAngle(double angle){
+    angle = getNearestTurretAngle(angle);
+
+    if(angle > softLimitForward){ 
+      return getNearestActualTurretAngle(angle - 360.0);
+    } else if(getNearestTurretAngle(angle) < softLimitReverse){
+      return getNearestActualTurretAngle(angle + 360.0);
+    } else {
+      return getNearestTurretAngle(angle);
+    }
   }
 
   private double getNearestLimitSwitchPosition(){

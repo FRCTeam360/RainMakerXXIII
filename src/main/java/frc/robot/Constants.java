@@ -15,7 +15,7 @@ package frc.robot;
 public final class Constants {
 
   public enum RobotType {
-    DRAFT, PRACTICE
+    DRAFT, PRACTICE, COMP
   }
 
   public static final RobotType robotType = RobotType.PRACTICE;

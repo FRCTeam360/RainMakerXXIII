@@ -7,6 +7,7 @@ package frc.robot.utils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.subsystems.ArmExtend;
+import frc.robot.subsystems.DriveTrain;
 
 public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
 
@@ -143,8 +144,12 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
     return getTransform().getZ();
   }
 
-  public double getTurretRotation(){ //TODO: gotta subtract from the drivetrain angle
-    return Math.toDegrees(Math.atan(getY()/getX()));
+  public double getTurretRotation(){ 
+    return Math.toDegrees(Math.atan(getY()/getX())); //TODO fix math to account for atan range
+  }
+
+  public double getFieldRelativeTurretRotation(){
+    return DriveTrain.getInstance().getGyroscopeRotation().getDegrees() - getTurretRotation();
   }
 
   public double get2dDistance(){
