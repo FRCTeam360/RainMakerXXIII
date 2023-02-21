@@ -14,7 +14,7 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
 
   private static final double pivotHeight = 0.57;
 
-  private Translation3d robotTrans = new Translation3d(); 
+  private Translation3d robotTrans = new Translation3d(0, 0, pivotHeight); 
   private Translation3d targetTrans = new Translation3d();
 
   private final int cube = 0;
