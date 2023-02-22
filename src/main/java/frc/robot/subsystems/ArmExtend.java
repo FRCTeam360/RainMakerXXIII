@@ -29,7 +29,11 @@ public class ArmExtend extends SubsystemBase {
   private final SparkMaxPIDController pidController;
   private final RelativeEncoder encoder;
 
-  private double rotationsToMeters = (0.0354*(51.875-13.625))/23.8808; //(0.0354*(25.5-4.625))/30.0;
+  private static final double pivotHeight = 0.5334; //if changed, also change ArmPoseCalculator
+
+  private final double rotationsToMeters = (0.0354*(51.875-13.625))/23.8808; //(0.0354*(25.5-4.625))/30.0;
+
+  private final double pivotToClawRetracted = 0.0254 * 16.35; //TODO remeasure
 
   private double kP = 3;
   private double kI = 0;
@@ -38,6 +42,7 @@ public class ArmExtend extends SubsystemBase {
   private double kFF = 0.05;
   private double kMaxOutput = 0.3;
   private double kMinOutput = -0.3;
+  private double kMaxRampRate = 0.5; //TODO TUNE
   private double maxRPM = 5700;
 
   // private TrapezoidProfile profile = new TrapezoidProfile(new Constraints(0.25, 0.25), null);
@@ -112,8 +117,17 @@ public class ArmExtend extends SubsystemBase {
   }
 
   public void setPosition(double meters){
-    pidController.setReference(meters, ControlType.kPosition, 0, getFeedForward());
+    pidController.setReference(getLimitedPosition(meters), ControlType.kPosition, 0, getFeedForward());
     // SmartDashboard.putNumber("error", getExtendDistance() - meters);
+  }
+
+  public void setPositionFromPivot(double meters){
+    setPosition(meters - pivotToClawRetracted);
+  }
+
+  //if the extension plus the distance from floor to beginning of extension is greater than height limit, limit extension
+  private double getLimitedPosition(double meters){
+    return meters + pivotToClawRetracted + pivotHeight > 1.9 ? 1.9 - pivotToClawRetracted - pivotHeight: meters;
   }
 
   public void setSmartPosition(double meters){
@@ -133,7 +147,7 @@ public class ArmExtend extends SubsystemBase {
   }
 
   public double getDistanceFromPivot(){
-    return getExtendDistance() + 0.0254 * 16.35; //conv factor * inches
+    return getExtendDistance() + pivotToClawRetracted; 
   }
 
   public double getDistanceFromBalance(){

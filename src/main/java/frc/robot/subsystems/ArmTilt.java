@@ -12,6 +12,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -40,6 +41,8 @@ public class ArmTilt extends SubsystemBase {
 
   private double motorRotationsToArmDegrees = 360.0/(5.0*5.0*4.0*3.0);
   private double practiceMotorRotationsToArmDegrees = 360.0/(5.0*5.0*(64.0/12.0)); //7, 5
+
+  private double kMaxRampRate = 0.5; //TODO TUNE
 
   private double kP = 0.05; //3
   private double kI = 0;
@@ -100,11 +103,14 @@ public class ArmTilt extends SubsystemBase {
     absoluteEncoder.setPositionConversionFactor(360);
     absoluteEncoder.setZeroOffset(86.5);
     absoluteEncoder.setInverted(true);
+    tiltLead.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20); //TODO remove if doesn't work
 
     pidController = tiltLead.getPIDController();
 
     encoder.setPositionConversionFactor(practiceMotorRotationsToArmDegrees);
     encoder.setVelocityConversionFactor(practiceMotorRotationsToArmDegrees / 60);
+
+    tiltLead.setClosedLoopRampRate(kMaxRampRate); 
 
     pidController.setP(kP);
     pidController.setI(kI);
