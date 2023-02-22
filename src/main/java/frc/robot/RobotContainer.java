@@ -18,8 +18,10 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
 import frc.robot.commands.PIDTuner;
 import frc.robot.commands.RobotOrientedDrive;
+import frc.robot.commands.SetArmPose;
 import frc.robot.commands.SetPointArmTilt;
 import frc.robot.commands.SetPointTurret;
+import frc.robot.commands.SetPositions;
 import frc.robot.commands.TeleopArmPose;
 import frc.robot.commands.SetPointArmExtension;
 import frc.robot.commands.TestSetpoints;
@@ -30,6 +32,7 @@ import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -90,7 +93,7 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    // turret.setDefaultCommand(manualTurret);
+    turret.setDefaultCommand(manualTurret);
     extend.setDefaultCommand(manualExtend); 
     tilt.setDefaultCommand(manualTilt); 
     driveTrain.setDefaultCommand(fieldDrive);
@@ -122,6 +125,11 @@ public class RobotContainer {
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     operatorController.pov(0).whileTrue(homing);
+    operatorController.a().whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.7), true));
+    operatorController.b().whileTrue(new SetArmPose(new Translation3d(0.3, 0, 0.05), false));
+    operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
+    operatorController.pov(270).whileTrue(new SetPositions(40, 1.1, -15));
+    operatorController.pov(90).whileTrue(new SetPositions(40, 1.1, 15));
   }
 
   /**

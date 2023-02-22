@@ -13,7 +13,7 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
 
   private ArmExtend extend = ArmExtend.getInstance();
 
-  private static final double pivotHeight = 0.57;
+  private static final double pivotHeight = 0.5334;
 
   private Translation3d robotTrans = new Translation3d(0, 0, pivotHeight); 
   private Translation3d targetTrans = new Translation3d();
@@ -145,11 +145,17 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   }
 
   public double getTurretRotation(){ 
-    return Math.toDegrees(Math.atan(getY()/getX())); //TODO fix math to account for atan range
+    if(getX() >= 0){
+      return Math.toDegrees(Math.atan(getY()/getX())); //TODO fix math to account for atan range
+    } else if(getY() >= 0){
+      return Math.toDegrees(Math.atan(getY()/getX())) + 180;
+    } else {
+      return Math.toDegrees(Math.atan(getY()/getX())) - 180;
+    }
   }
 
   public double getFieldRelativeTurretRotation(){
-    return DriveTrain.getInstance().getGyroscopeRotation().getDegrees() - getTurretRotation();
+    return getTurretRotation() - DriveTrain.getInstance().getGyroscopeRotation().getDegrees();
   }
 
   public double get2dDistance(){

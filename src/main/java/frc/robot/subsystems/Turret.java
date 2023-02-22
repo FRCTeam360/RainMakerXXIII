@@ -39,8 +39,8 @@ public class Turret extends SubsystemBase {
   public static final double conversionFactorPractice = (1.0 / 16.0) * (24.0 / 300.0) * (360.0 / 1.0);
   public static final double conversionFactorComp = 1;
 
-  public static final float softLimitForwardPractice = 200.0f;
-  public static final float softLimitReversePractice = -200.0f;
+  public static final float softLimitForwardPractice = 270.0f;
+  public static final float softLimitReversePractice = -180.0f;
 
   public static final float softLimitForwardComp = 0;
   public static final float softLimitReverseComp = 0;

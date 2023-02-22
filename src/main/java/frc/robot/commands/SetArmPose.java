@@ -34,6 +34,7 @@ public class SetArmPose extends CommandBase {
   }
 
   public SetArmPose(Translation3d desiredPosition) {
+    isInverted = false;
 
     trans = desiredPosition;
 
@@ -51,9 +52,9 @@ public class SetArmPose extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    tilt.setAngle(calculator.getActualElevationAngleDegrees());
-    extend.setPosition(calculator.getExtendDistance());
-    turret.angleTurn(calculator.getTurretRotation());
+    tilt.setAngle(isInverted ? 180 - calculator.getActualElevationAngleDegrees() : calculator.getActualElevationAngleDegrees());
+    // extend.setPosition(calculator.getExtendDistance());
+    // turret.angleTurn(isInverted ? calculator.getTurretRotation() + 180.0 : calculator.getTurretRotation() );
   }
 
   // Called once the command ends or is interrupted.
