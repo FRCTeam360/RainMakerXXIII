@@ -171,7 +171,8 @@ public class ArmPoseCalculator { //NEVER MAKE STATIC ! WILL BREAK THINGS !
   }
 
   public double getActualElevationAngleDegrees(){
-    return Math.toDegrees(Math.asin(getZ() / extend.getDistanceFromPivot()));
+    //if z setpoint is less than the current extension,  get sine for angle setpoint.            Else, just set to 90 (straight up)
+    return getZ() <= extend.getDistanceFromPivot() ? Math.toDegrees(Math.asin(getZ() / extend.getDistanceFromPivot())) : 90;
   }
 }
 
