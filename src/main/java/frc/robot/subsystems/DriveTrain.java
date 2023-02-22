@@ -152,6 +152,9 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
   }
 
   public void setStates(SwerveModuleState[] states){
+    for(SwerveModuleState state: states) {
+      System.out.println("Swerve Module States of TSLA" + state);
+    }
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
     boolean speedIsZero = false;
     for(int i = 0; i<states.length; i++) {
