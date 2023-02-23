@@ -103,14 +103,14 @@ public class ArmTilt extends SubsystemBase {
     absoluteEncoder.setPositionConversionFactor(360);
     absoluteEncoder.setZeroOffset(86.5);
     absoluteEncoder.setInverted(true);
-    tiltLead.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20); //TODO remove if doesn't work
+    // tiltLead.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20); //TODO remove if doesn't work
 
     pidController = tiltLead.getPIDController();
 
     encoder.setPositionConversionFactor(practiceMotorRotationsToArmDegrees);
     encoder.setVelocityConversionFactor(practiceMotorRotationsToArmDegrees / 60);
 
-    tiltLead.setClosedLoopRampRate(kMaxRampRate); 
+    // tiltLead.setClosedLoopRampRate(kMaxRampRate); 
 
     pidController.setP(kP);
     pidController.setI(kI);
@@ -164,7 +164,7 @@ public class ArmTilt extends SubsystemBase {
   }
 
   public void setAngle(double inputAngle) {
-    System.out.println("angle set"+ inputAngle);
+    // System.out.println("angle set"+ inputAngle);
     // inputAngle = inputAngle + 90;
     if(ArmExtend.getInstance().getExtendDistance() >= 0.8){
       pidController.setReference(inputAngle, ControlType.kPosition, 2, getFeedForward());

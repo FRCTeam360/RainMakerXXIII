@@ -40,9 +40,9 @@ public class ArmExtend extends SubsystemBase {
   private double kD = 0;
   private double kIz = 0;
   private double kFF = 0.05;
-  private double kMaxOutput = 0.3;
-  private double kMinOutput = -0.3;
-  private double kMaxRampRate = 0.5; //TODO TUNE
+  private double kMaxOutput = 0.7;
+  private double kMinOutput = -0.4;
+  private double kMaxRampRate = 0.3; //TODO TUNE
   private double maxRPM = 5700;
 
   // private TrapezoidProfile profile = new TrapezoidProfile(new Constraints(0.25, 0.25), null);
@@ -77,6 +77,7 @@ public class ArmExtend extends SubsystemBase {
     // pidController.setSmartMotionMaxVelocity(0.1, 0);
     // pidController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, 0);
     pidController.setOutputRange(kMinOutput, kMaxOutput);
+    leadMotor.setClosedLoopRampRate(kMaxRampRate);
     
     leadMotor.setSoftLimit(SoftLimitDirection.kForward, forwardLimit);
     leadMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
@@ -117,7 +118,7 @@ public class ArmExtend extends SubsystemBase {
   }
 
   public void setPosition(double meters){
-    pidController.setReference(getLimitedPosition(meters), ControlType.kPosition, 0, getFeedForward());
+    pidController.setReference(meters, ControlType.kPosition, 0, getFeedForward());
     // SmartDashboard.putNumber("error", getExtendDistance() - meters);
   }
 

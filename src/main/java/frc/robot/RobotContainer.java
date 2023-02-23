@@ -14,8 +14,11 @@ import frc.robot.commands.Homing;
 import frc.robot.commands.TiltArmManual;
 import frc.robot.commands.AutoArmPose;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
+import frc.robot.commands.CloseClaw;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
+import frc.robot.commands.OpenClawCone;
+import frc.robot.commands.OpenClawCube;
 import frc.robot.commands.PIDTuner;
 import frc.robot.commands.RobotOrientedDrive;
 import frc.robot.commands.SetArmPose;
@@ -123,13 +126,19 @@ public class RobotContainer {
     // pressed,
     // cancelling on release.
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
+    // operatorController.leftTrigger().whileTrue(new CloseClaw());
+    // operatorController.rightTrigger().whileTrue(new OpenClaw());
+
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     operatorController.pov(0).whileTrue(homing);
     operatorController.a().whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.7), true));
     operatorController.b().whileTrue(new SetArmPose(new Translation3d(0.3, 0, 0.05), false));
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
-    operatorController.pov(270).whileTrue(new SetPositions(40, 1.1, -15));
-    operatorController.pov(90).whileTrue(new SetPositions(40, 1.1, 15));
+    operatorController.back().whileTrue(new OpenClawCube());
+    operatorController.start().whileTrue(new OpenClawCone());
+    operatorController.pov(270).whileTrue(new SetPositions(40, 1.05, -15));
+    operatorController.pov(90).whileTrue(new SetPositions(40, 1.05, 15));
   }
 
   /**

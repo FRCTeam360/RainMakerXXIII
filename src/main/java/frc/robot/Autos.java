@@ -35,7 +35,7 @@ public final class Autos {
 
   //create events of commands here
   private static HashMap<String, Command> eventMap = new HashMap<>() {{
-    put("Open Claw", new OpenClaw());
+    put("Open Claw", new OpenClawCube());
     put("Close Claw", new CloseClaw());
     put("Set Point Arm Extension", new SetPointArmExtension());
     put("Set Point Arm Tilt", new SetPointArmTilt());

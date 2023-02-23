@@ -53,8 +53,8 @@ public class SetArmPose extends CommandBase {
   @Override
   public void execute() {
     tilt.setAngle(isInverted ? 180 - calculator.getActualElevationAngleDegrees() : calculator.getActualElevationAngleDegrees());
-    // extend.setPosition(calculator.getExtendDistance());
-    // turret.angleTurn(isInverted ? calculator.getTurretRotation() + 180.0 : calculator.getTurretRotation() );
+    extend.setPosition(calculator.getExtendDistance());
+    turret.angleTurn(isInverted ? calculator.getTurretRotation() + 180.0 : calculator.getTurretRotation() );
   }
 
   // Called once the command ends or is interrupted.
