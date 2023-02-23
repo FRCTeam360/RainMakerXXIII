@@ -63,14 +63,14 @@ public final class Autos {
   private Command getMyAuto() {
     List<PathPlannerTrajectory> epicPathGroup = PathPlanner.loadPathGroup("tsla stock is good",
         new PathConstraints(4, 3));
-    for(PathPlannerTrajectory epicPath : epicPathGroup){
-      // epicPath = PathPlannerTrajectory.transformTrajectoryForAlliance(epicPath, Alliance.Red);
-    }
-    Command stockMarketCrash = autoBuilder.resetPose(PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(0), Alliance.Red));
-    Command pathTSLA1 = autoBuilder.followPath(PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(0), Alliance.Red));
-    Command pathTSLA2 = autoBuilder.followPath(PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(1), Alliance.Red));
+   // for(int i = 0; i<epicPathGroup.size(); i++){
+     //PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i), Alliance.Red);
+ //  }
+    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command pathTSLA1 = autoBuilder.followPath(epicPathGroup.get(0));
+    Command pathTSLA2 = autoBuilder.followPath(epicPathGroup.get(1));
 
-    return stockMarketCrash.andThen(pathTSLA1).andThen(pathTSLA2);
+    return (new WaitCommand(1.0)).andThen(stockMarketCrash).andThen(pathTSLA1).andThen(new WaitCommand(.25)).andThen(pathTSLA2);
   }
 
   private static SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
@@ -81,6 +81,7 @@ public final class Autos {
       new PIDConstants(1.5, 0, 0),
       driveTrain::setStates,
       eventMap,
+      true,
       driveTrain);
 
   public Command getAuto() {
