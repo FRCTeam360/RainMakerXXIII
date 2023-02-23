@@ -25,12 +25,14 @@ import frc.robot.Constants.CANIds.CANivore;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static frc.robot.Constants.*;
 
 public class DriveTrain extends SubsystemBase {
-    private static DriveTrain instance;
+  private static DriveTrain instance;
+  private final Field2d field = new Field2d();
   public static final double MAX_VOLTAGE = 12.0;
 
   private static final double ADJUSTMENT_FACTOR = 0.1;
@@ -119,6 +121,7 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
         SwerveConstants.getBackRightModuleSteerOffset());
 
         odometry = new SwerveDriveOdometry(m_kinematics, m_pigeon.getRotation2d(), getModulePositions());
+        SmartDashboard.putData("Field", field);
   }
   public void zeroGyroscope() {
     // FIXME Remove if you are using a Pigeon
@@ -129,21 +132,8 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
     // m_navx.zeroYaw();
   }
 
-  public Rotation2d getGyroscopeRotation() {
-    // FIXME Remove if you are using a Pigeon
-    // return Rotation2d.fromDegrees(m_pigeon.getFusedHeading());
-
+  public Rotation2d getGyroscopeRotation() {;
     return m_pigeon.getRotation2d();
-
-    // // FIXME Uncomment if you are using a NavX
-    // if (m_navx.isMagnetometerCalibrated()) {
-    // // We will only get valid fused headings if the magnetometer is calibrated
-    // return Rotation2d.fromDegrees(m_navx.getFusedHeading());
-    // }
-    
-    // // We have to invert the angle of the NavX so that rotating the robot
-    // // counter-clockwise makes the angle increase.
-    // return Rotation2d.fromDegrees(360.0 - m_navx.getYaw());
   }
 
   public void adjustAnglePosition(){
@@ -162,6 +152,9 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
   }
 
   public void setStates(SwerveModuleState[] states){
+    for(SwerveModuleState state: states) {
+      System.out.println("Swerve Module States of TSLA" + state);
+    }
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
     boolean speedIsZero = false;
     for(int i = 0; i<states.length; i++) {
@@ -245,8 +238,9 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 
   @Override
   public void periodic() {
-    // SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
-    // SmartDashboard.putNumber("roll", m_pigeon.getRoll());
+    field.setRobotPose(odometry.getPoseMeters());
+    SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
+    SmartDashboard.putNumber("roll", m_pigeon.getRoll());
 
     pose = odometry.update(getGyroscopeRotation(), getModulePositions());
 

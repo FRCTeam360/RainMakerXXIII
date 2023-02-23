@@ -36,6 +36,7 @@ import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
 import edu.wpi.first.math.geometry.Translation3d;
+import frc.robot.Autos;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -53,6 +54,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final Autos auto = new Autos();
   private final ArmExtend extend = ArmExtend.getInstance();
   private final ArmTilt tilt = ArmTilt.getInstance();
   private final Turret turret = Turret.getInstance();
@@ -146,15 +148,15 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   // An example command will be run in autonomous
-  //   return Autos.exampleAuto(m_exampleSubsystem);
-  // }
 
   public double calcFFTorqueMultiplier() {
     return Math.cos(Math.toRadians(this.tilt.getAngle())) * this.extend.getDistanceFromPivot();
   }
   public double extendFeedForward(){
     return Math.sin(Math.toRadians(this.tilt.getAngle()));
+  }
+  public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    return auto.getAuto();
   }
 }
