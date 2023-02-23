@@ -5,38 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.*;
-import frc.robot.commands.ExtendArmManual;
-import frc.robot.commands.FieldOrientedDrive;
-import frc.robot.commands.ManualClaw;
-import frc.robot.commands.ManualIntake;
-import frc.robot.commands.FieldOrientedTurret;
-import frc.robot.commands.Homing;
-import frc.robot.commands.TiltArmManual;
-import frc.robot.commands.AutoArmPose;
-import frc.robot.commands.CharacterizeDrivetrainCommand;
-import frc.robot.commands.CloseClaw;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.ManualTurret;
-import frc.robot.commands.OpenClawCone;
-import frc.robot.commands.OpenClawCube;
-import frc.robot.commands.PIDTuner;
-import frc.robot.commands.RobotOrientedDrive;
-import frc.robot.commands.SetArmPose;
-import frc.robot.commands.SetPointArmTilt;
-import frc.robot.commands.SetPointTurret;
-import frc.robot.commands.SetPositions;
-import frc.robot.commands.TeleopArmPose;
-import frc.robot.commands.SetPointArmExtension;
-import frc.robot.commands.TestSetpoints;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ArmExtend;
-import frc.robot.subsystems.ArmTilt;
-import frc.robot.subsystems.Claw;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Turret;
-import edu.wpi.first.math.geometry.Translation3d;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import frc.robot.Autos;
+
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -66,22 +39,23 @@ public class RobotContainer {
   // private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
   // private final CharacterizeDrivetrainCommand characterize = new CharacterizeDrivetrainCommand(driveTrain);
 
+  private final RunIntake runIntake = new RunIntake();
+  private final RunIntakeReversed runIntakeReversed = new RunIntakeReversed();
+
   private final TiltArmManual manualTilt = new TiltArmManual();
   // Controls inverted for ExtendArmManual, down is extend and up is retract
   private final ExtendArmManual manualExtend = new ExtendArmManual();
   private final ManualTurret manualTurret = new ManualTurret();
   private final ManualClaw manualClaw = new ManualClaw();
-  private final ManualIntake manualIntake = new ManualIntake();
 
   private final SetPointArmExtension pidExtend = new SetPointArmExtension();
   private final SetPointArmTilt pidTilt = new SetPointArmTilt();
   private final SetPointTurret pidTurret = new SetPointTurret();
 
-  private final TeleopArmPose move = new TeleopArmPose();
-
+  private final TeleopArmPose teleopArmPose = new TeleopArmPose();
+  private final FieldOrientedTurret fieldOrientedTurret = new FieldOrientedTurret();
   private final Homing homing = new Homing();
 
-  private final FieldOrientedTurret fieldOrientedTurret = new FieldOrientedTurret();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
       new CommandXboxController(XboxConstants.DRIVER_CONTROLLER_PORT);
@@ -103,7 +77,6 @@ public class RobotContainer {
     tilt.setDefaultCommand(manualTilt); 
     driveTrain.setDefaultCommand(fieldDrive);
     claw.setDefaultCommand(manualClaw);
-    intake.setDefaultCommand(manualIntake);
   }
 
   /**
@@ -133,14 +106,19 @@ public class RobotContainer {
     // operatorController.rightTrigger().whileTrue(new OpenClaw());
 
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
-    operatorController.pov(0).whileTrue(homing);
     operatorController.a().whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.7), true));
     operatorController.b().whileTrue(new SetArmPose(new Translation3d(0.3, 0, 0.05), false));
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
+
     operatorController.back().whileTrue(new OpenClawCube());
     operatorController.start().whileTrue(new OpenClawCone());
-    operatorController.pov(270).whileTrue(new SetPositions(40, 1.05, -15));
+
+    operatorController.pov(0).whileTrue(homing);
     operatorController.pov(90).whileTrue(new SetPositions(40, 1.05, 15));
+    operatorController.pov(270).whileTrue(new SetPositions(40, 1.05, -15));
+
+    operatorController.leftBumper().whileTrue(runIntakeReversed);
+    operatorController.rightBumper().whileTrue(runIntake);
   }
 
   /**

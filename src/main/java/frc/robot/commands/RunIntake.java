@@ -4,18 +4,16 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.XboxConstants;
 import frc.robot.subsystems.Intake;
 
-public class ManualIntake extends CommandBase {
-  Intake intake = Intake.getInstance();
-  XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
-  /** Creates a new ManualIntake. */
-  public ManualIntake() {
-    addRequirements(intake);
+public class RunIntake extends CommandBase {
+  private final Intake intake = Intake.getInstance();
+
+  /** Creates a new RunIntake. */
+  public RunIntake() {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -25,20 +23,12 @@ public class ManualIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(operatorCont.getLeftBumper()){
-      intake.run(-0.5);
-    } else if(operatorCont.getRightBumper()){
-      intake.run(0.5);
-    } else {
-      intake.stop();
-    }
+    intake.run(0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.stop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

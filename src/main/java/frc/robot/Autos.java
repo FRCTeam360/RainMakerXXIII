@@ -78,7 +78,36 @@ public final class Autos {
     Command pathTSLA1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command pathTSLA2 = autoBuilder.followPath(epicPathGroup.get(1));
 
-    return (new SetPositions(42, 1.1, -15)).andThen(new OpenClawCube()).andThen(new Homing()).andThen(new ParallelRaceGroup(stockMarketCrash, new SequentialCommandGroup(new SetPositions(90, 0.1, -180), /* not working yet */ new SetArmPose(new Translation3d(0.3, 0, 0.05), false) ))).andThen(new ParallelRaceGroup(pathTSLA1)).andThen(new WaitCommand(.25)).andThen(pathTSLA2);
+    //return (new SetPositions(42, 1.1, -15)).andThen(new OpenClawCube()).andThen(new Homing()).andThen(new ParallelRaceGroup(stockMarketCrash, new SequentialCommandGroup(new SetPositions(90, 0.1, -180), /* not working yet */ new SetArmPose(new Translation3d(0.3, 0, 0.05), false) ))).andThen(new ParallelRaceGroup(pathTSLA1)).andThen(new WaitCommand(.25)).andThen(pathTSLA2);
+    
+    return new SequentialCommandGroup(
+      new SetPositions(42, 1.1, -15), //dropping first game piece
+      new OpenClawCube(), //opening to cube position works for cones too
+      new Homing(),
+      stockMarketCrash,
+
+      new ParallelRaceGroup( //going to second game piece
+        pathTSLA1,
+        new SequentialCommandGroup(
+          new SetPositions(90, 0.1, -180),
+          new SetArmPose(new Translation3d(0.3, 0, 0.05), false)
+        )
+      ),
+      
+      new ParallelRaceGroup( //getting second game piece
+        new WaitCommand(0.25),
+        eventMap.get("Close Claw")
+      ),
+      
+      new ParallelRaceGroup( //going back 
+        pathTSLA2,
+        new Homing()
+      ),
+
+      new SetPositions(42, 1.05, 15), //TODO: tune or swap w SetArmPose
+      eventMap.get("Open Claw"),
+      new Homing()
+    );
   }
 
   private static SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
