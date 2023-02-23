@@ -69,7 +69,7 @@ public class Turret extends SubsystemBase {
     motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     pidController = motor.getPIDController();
-    pidController.setP(0.02);
+    pidController.setP(0.03);
     pidController.setD(0.00); 
     pidController.setI(0.0);
     pidController.setFF(0.0);
@@ -138,7 +138,7 @@ public class Turret extends SubsystemBase {
     pidController.setReference(relativeAngle, ControlType.kPosition, 1);
   }
 
-  private double getNearestTurretAngle(double angle){
+  public double getNearestTurretAngle(double angle){
     double turretFactor = (double) Math.round((getAngleRelativeToRobot() - angle) / 360.0);
     return angle + (360.0 * turretFactor);
   }

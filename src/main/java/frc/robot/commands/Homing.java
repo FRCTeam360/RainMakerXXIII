@@ -43,6 +43,6 @@ public class Homing extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 2 && Math.abs(turret.getAngleRelativeToRobot() - 0) < 2;
   }
 }

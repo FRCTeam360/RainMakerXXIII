@@ -44,11 +44,13 @@ public class SetPositions extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("ending positoins");
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(tilt.getAngle() - tiltAngle) < 2 && Math.abs(turret.getAngleRelativeToRobot() - turret.getNearestTurretAngle(turretAngle)) < 1 && Math.abs(extend.getExtendDistance() - extendDistance) < 0.02;
   }
 }

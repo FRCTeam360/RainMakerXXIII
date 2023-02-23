@@ -236,7 +236,7 @@ public class ArmTilt extends SubsystemBase {
     if(iterations >= 5){
       encoder.setPosition(absoluteEncoder.getPosition() - 90);
       iterations = 0;
-      System.out.println("position reset");
+      // System.out.println("position reset");
     }
   }
 

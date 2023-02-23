@@ -17,13 +17,16 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public final class Autos {
@@ -75,7 +78,7 @@ public final class Autos {
     Command pathTSLA1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command pathTSLA2 = autoBuilder.followPath(epicPathGroup.get(1));
 
-    return (new WaitCommand(1.0)).andThen(stockMarketCrash).andThen(pathTSLA1).andThen(new WaitCommand(.25)).andThen(pathTSLA2);
+    return (new SetPositions(42, 1.1, -15)).andThen(new OpenClawCube()).andThen(new Homing()).andThen(new ParallelRaceGroup(stockMarketCrash, new SequentialCommandGroup(new SetPositions(90, 0.1, -180), /* not working yet */ new SetArmPose(new Translation3d(0.3, 0, 0.05), false) ))).andThen(new ParallelRaceGroup(pathTSLA1)).andThen(new WaitCommand(.25)).andThen(pathTSLA2);
   }
 
   private static SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(

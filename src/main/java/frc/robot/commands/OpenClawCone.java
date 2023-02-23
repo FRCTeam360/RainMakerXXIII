@@ -34,6 +34,6 @@ public class OpenClawCone extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(claw.getAbsoluteAngle() - 90.0) < 3;
   }
 }
