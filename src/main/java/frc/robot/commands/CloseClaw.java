@@ -22,6 +22,7 @@ public class CloseClaw extends CommandBase {
   @Override
   public void initialize() {}
 
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -29,9 +30,9 @@ public class CloseClaw extends CommandBase {
       hitLimit= true;
     }
     if(hitLimit){
-      claw.adjustsClaw(0.1);
+      claw.adjustsClaw(-0.1);
     } else {
-      claw.adjustsClaw(0.3);
+      claw.adjustsClaw(-0.3);
     }
   }
 

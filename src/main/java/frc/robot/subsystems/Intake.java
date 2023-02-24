@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
   public Intake() {
     motor.restoreFactoryDefaults();
-    motor.setInverted(false);
+    motor.setInverted(true);
     motor.setIdleMode(IdleMode.kBrake);
     motor.setSmartCurrentLimit(20);
 

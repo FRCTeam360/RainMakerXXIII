@@ -117,8 +117,8 @@ public class RobotContainer {
     operatorController.pov(90).whileTrue(new SetPositions(40, 1.05, 15));
     operatorController.pov(270).whileTrue(new SetPositions(40, 1.05, -15));
 
-    operatorController.leftBumper().whileTrue(runIntakeReversed);
-    operatorController.rightBumper().whileTrue(runIntake);
+    operatorController.rightBumper().whileTrue(runIntakeReversed);
+    operatorController.leftBumper().whileTrue(runIntake);
   }
 
   /**
