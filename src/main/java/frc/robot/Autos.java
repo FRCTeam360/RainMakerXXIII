@@ -8,6 +8,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,7 +39,7 @@ public final class Autos {
       new PathConstraints(4, 3));
   private static List<PathPlannerTrajectory> notPathGroup = PathPlanner.loadPathGroup("lets go brandon",
       new PathConstraints(4, 3));
-
+  
   // create events of commands here
   private static HashMap<String, Command> eventMap = new HashMap<>() {
     {
@@ -56,8 +58,27 @@ public final class Autos {
     autoChooser.addOption("chop suey!", example);
     autoChooser.addOption("lets go brandon", notExample);
     autoChooser.addOption("tsla stock is good", getMyAuto());
+    autoChooser.addOption("mario broskito", getMyMarioAuto());
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
+  }
+
+  private List<PathPlannerTrajectory> mirrorPathsForAlliance(List<PathPlannerTrajectory> mTrajectory) {
+    ArrayList<PathPlannerTrajectory> newTrajectory = new ArrayList<PathPlannerTrajectory>();
+    for(int i = 0; i<mTrajectory.size(); i++) {
+      newTrajectory.add(PathPlannerTrajectory.transformTrajectoryForAlliance(mTrajectory.get(i), DriverStation.getAlliance()));
+    }
+    return newTrajectory;
+  }
+
+  private Command getMyMarioAuto() {
+    List<PathPlannerTrajectory> luigi = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(4, 3));
+    luigi = mirrorPathsForAlliance(luigi);
+    Command rainbowRoad = autoBuilder.resetPose(luigi.get(0));
+    Command coconutMall = autoBuilder.followPath(luigi.get(0));
+    Command DKJungle = autoBuilder.followPath(luigi.get(1));
+    Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
+    return rainbowRoad.andThen(coconutMall).andThen(DKJungle).andThen(ShroomRidge);
   }
 
   private Command getMyAuto() {
