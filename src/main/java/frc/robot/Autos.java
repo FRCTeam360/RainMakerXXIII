@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.AutoEngage;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -45,6 +46,7 @@ public final class Autos {
     {
       put("tsla yay", new PrintCommand("tsla stock is good rn"));
       put("tsla halt", new WaitCommand(20));
+      put("engage", new AutoEngage());
     }
   };
 
