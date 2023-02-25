@@ -142,7 +142,7 @@ public class DriveTrain extends SubsystemBase {
 
     estimator = new SwerveDrivePoseEstimator(m_kinematics, getGyroscopeRotation(), getModulePositions(), new Pose2d(),
     new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01),
-    new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.9, 0.9, 0.9));
+    new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.3, 0.3, 0.9));
     // SmartDashboard.putData("Field", field);
   }
 
