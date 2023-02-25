@@ -80,7 +80,7 @@ public final class Autos {
     Command coconutMall = autoBuilder.followPath(luigi.get(0));
     Command DKJungle = autoBuilder.followPath(luigi.get(1));
     Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
-    return rainbowRoad.andThen(coconutMall).andThen(DKJungle).andThen(ShroomRidge);
+    return rainbowRoad.andThen(coconutMall).andThen(DKJungle).andThen(ShroomRidge).andThen(new AutoEngage());
   }
 
   private Command getMyAuto() {
