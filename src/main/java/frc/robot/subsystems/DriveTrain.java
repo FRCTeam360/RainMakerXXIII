@@ -9,10 +9,14 @@ import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -24,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds.CANivore;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -73,6 +78,8 @@ public class DriveTrain extends SubsystemBase {
   private final SwerveDriveOdometry odometry;
 
   private Pose2d pose;
+
+  private SwerveDrivePoseEstimator estimator;
 
   private ChassisSpeeds currentVelocity = new ChassisSpeeds();
 
@@ -132,6 +139,10 @@ public class DriveTrain extends SubsystemBase {
         SwerveConstants.BACK_RIGHT_MODULE_STEER_OFFSET);
 
     odometry = new SwerveDriveOdometry(m_kinematics, m_pigeon.getRotation2d(), getModulePositions());
+
+    estimator = new SwerveDrivePoseEstimator(m_kinematics, getGyroscopeRotation(), getModulePositions(), new Pose2d(),
+    new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01),
+    new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.9, 0.9, 0.9));
     // SmartDashboard.putData("Field", field);
   }
 
@@ -205,7 +216,7 @@ public class DriveTrain extends SubsystemBase {
       m_backLeftModule.set(0.0, stateAngles[2].getRadians());
       m_backRightModule.set(0.0, stateAngles[3].getRadians());
     }
-    pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+    // pose = odometry.update(getGyroscopeRotation(), getModulePositions());
   }
 
   public SwerveModulePosition[] getModulePositions() {
@@ -258,15 +269,16 @@ public class DriveTrain extends SubsystemBase {
     m_backRightModule.resetSteerEncoder();
   }
 
-  public CommandBase xOutCommand(){
-    return run( () -> {
+  public CommandBase xOutCommand() {
+    return run(() -> {
       m_frontLeftModule.set(0, Math.toRadians(45));
       m_frontRightModule.set(0, Math.toRadians(135));
       m_backLeftModule.set(0, Math.toRadians(135));
-      m_backRightModule.set(0, Math.toRadians(45));});
-    }
+      m_backRightModule.set(0, Math.toRadians(45));
+    });
+  }
 
-  public void xOut(){
+  public void xOut() {
     m_frontLeftModule.set(0, Math.toRadians(45));
     m_frontRightModule.set(0, Math.toRadians(135));
     m_backLeftModule.set(0, Math.toRadians(135));
@@ -277,17 +289,25 @@ public class DriveTrain extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
     SmartDashboard.putNumber("roll", m_pigeon.getRoll());
+    SmartDashboard.putNumber("X pose", getPose() == null ? 0.0 : getPose().getX());
+    SmartDashboard.putNumber("Y pose", getPose() == null ? 0.0 : getPose().getY());
     ll.runVision();
     if(Objects.isNull(ll.getAveragePose())) {
-      pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+      // pose = odometry.update(getGyroscopeRotation(), getModulePositions());
     } else {
-      pose = this.setPose(ll.getAveragePose());
+      // pose = this.setPose(ll.getAveragePose());
+      // estimator.addVisionMeasurement((new Pose3d(ll.getTrans(), new Rotation3d(0, 0, getGyroscopeRotation().getRadians())).toPose2d()), Timer.getFPGATimestamp());
+      estimator.addVisionMeasurement(new Pose2d(ll.getTrans(), getGyroscopeRotation()), Timer.getFPGATimestamp());
+      
     }
+    estimator.update(getGyroscopeRotation(), getModulePositions());
+    pose = estimator.getEstimatedPosition();
     field.setRobotPose(pose);
-    
+
     SmartDashboard.putData("field", field);
     SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("timestamp", ll.getTimestamp());
   }
 }

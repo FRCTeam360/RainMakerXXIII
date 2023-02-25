@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,6 +29,7 @@ public class Limelight{
   private NetworkTableEntry tl = lime.getEntry("tl");
   private NetworkTableEntry botpose = lime.getEntry("botpose_wpiblue");
   private NetworkTableEntry snap = lime.getEntry("snapshot");
+  private NetworkTableEntry ts = lime.getEntry("ts");
   private double[] botposeArray = new double[6]; 
   private Translation3d averagePose = null;
   /**private double zX;
@@ -74,6 +76,14 @@ public class Limelight{
 
   public boolean isOnTarget() {
     return Math.abs(getTX()) <=1 && hasValidTarget();
+  }
+
+  public double getTimestamp() {
+    return ts.getDouble(0.0);
+  }
+
+  public Translation2d getTrans(){
+    return new Translation2d(botposeArray[0], botposeArray[1]);
   }
 
 
@@ -159,6 +169,7 @@ public class Limelight{
 
   public void runVision() {
     if(getTV() == 1) {
+      botposeArray = botpose.getDoubleArray(botposeArray);
       periodicCycles = 10;
       Rotation3d r = new Rotation3d(botposeArray[3], botposeArray[4], botposeArray[5]);
       Translation3d tempPose = new Translation3d(botposeArray[0], botposeArray[1], botposeArray[2]);
@@ -174,7 +185,7 @@ public class Limelight{
         averagePose = averagePositions(poses);
       }
       else{
-        averagePose = null;
+        averagePose = null; 
       }
     } else {
       periodicCycles--;
@@ -183,6 +194,5 @@ public class Limelight{
       poses.clear();
       averagePose = null;
     }
-    botposeArray = botpose.getDoubleArray(botposeArray);
   }
 }
