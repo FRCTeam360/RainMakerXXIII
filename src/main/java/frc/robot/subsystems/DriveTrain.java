@@ -136,6 +136,14 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
     return m_pigeon.getRotation2d();
   }
 
+  public double getPitch() {
+    return m_pigeon.getPitch();
+  }
+
+  public double getRoll() {
+    return m_pigeon.getRoll();
+  }
+
   public void adjustAnglePosition(){
     drive(
       new ChassisSpeeds(

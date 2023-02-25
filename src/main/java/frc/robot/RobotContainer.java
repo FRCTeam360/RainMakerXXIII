@@ -10,6 +10,7 @@ import frc.robot.commands.FieldOrientedDrive;
 import frc.robot.commands.ManualClaw;
 import frc.robot.commands.FieldOrientedTurret;
 import frc.robot.commands.TiltArmManual;
+import frc.robot.commands.AutoEngage;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.ManualTurret;
@@ -91,6 +92,7 @@ public class RobotContainer {
     // cancelling on release.
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     driverController.b().whileTrue(driveTrain.xOutCommand());
+    driverController.y().whileTrue(new AutoEngage());
   }
 
   /**
