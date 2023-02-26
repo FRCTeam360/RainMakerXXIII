@@ -33,7 +33,7 @@ public class ArmExtend extends SubsystemBase {
 
   private final double rotationsToMeters = (0.0354*(51.875-13.625))/23.8808; //(0.0354*(25.5-4.625))/30.0;
 
-  private final double pivotToClawRetracted = 0.0254 * 16.35; //TODO remeasure
+  private final double pivotToClawRetracted = 0.0254 * 20.5; 
 
   private double kP = 2.5;
   private double kI = 0;
