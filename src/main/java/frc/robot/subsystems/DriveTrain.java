@@ -99,16 +99,16 @@ public class DriveTrain extends SubsystemBase {
   public DriveTrain() {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
     m_frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
-        tab.getLayout("Front Left Module", BuiltInLayouts.kList)
-            .withSize(2, 4)
-            .withPosition(0, 0),
-        Mk4iSwerveModuleHelper.GearRatio.L1,
-        CANivore.FRONT_LEFT_MODULE_DRIVE_MOTOR,
-        CANivore.FRONT_LEFT_MODULE_STEER_MOTOR,
-        CANivore.FRONT_LEFT_MODULE_STEER_ENCODER,
-        SwerveConstants.FRONT_LEFT_MODULE_STEER_OFFSET);
-    System.out.println("module: " + m_frontLeftModule.toString());
-    m_frontRightModule = Mk4iSwerveModuleHelper.createFalcon500(
+      tab.getLayout("Front Left Module", BuiltInLayouts.kList)
+          .withSize(2, 4)
+          .withPosition(0, 0),
+      Mk4iSwerveModuleHelper.GearRatio.L1,
+      CANivore.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+      CANivore.FRONT_LEFT_MODULE_STEER_MOTOR,
+      CANivore.FRONT_LEFT_MODULE_STEER_ENCODER,
+      SwerveConstants.getFrontLeftModuleSteerOffset());
+      System.out.println("module: " + m_frontLeftModule.toString());
+      m_frontRightModule = Mk4iSwerveModuleHelper.createFalcon500(
         tab.getLayout("Front Right Module", BuiltInLayouts.kList)
             .withSize(2, 4)
             .withPosition(2, 0),
@@ -116,7 +116,7 @@ public class DriveTrain extends SubsystemBase {
         CANivore.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
         CANivore.FRONT_RIGHT_MODULE_STEER_MOTOR,
         CANivore.FRONT_RIGHT_MODULE_STEER_ENCODER,
-        SwerveConstants.FRONT_RIGHT_MODULE_STEER_OFFSET);
+        SwerveConstants.getFrontRightModuleSteerOffset());
 
     m_backLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
         tab.getLayout("Back Left Module", BuiltInLayouts.kList)
@@ -126,7 +126,7 @@ public class DriveTrain extends SubsystemBase {
         CANivore.BACK_LEFT_MODULE_DRIVE_MOTOR,
         CANivore.BACK_LEFT_MODULE_STEER_MOTOR,
         CANivore.BACK_LEFT_MODULE_STEER_ENCODER,
-        SwerveConstants.BACK_LEFT_MODULE_STEER_OFFSET);
+        SwerveConstants.getBackLeftModuleSteerOffset());
 
     m_backRightModule = Mk4iSwerveModuleHelper.createFalcon500(
         tab.getLayout("Back Right Module", BuiltInLayouts.kList)
@@ -136,7 +136,7 @@ public class DriveTrain extends SubsystemBase {
         CANivore.BACK_RIGHT_MODULE_DRIVE_MOTOR,
         CANivore.BACK_RIGHT_MODULE_STEER_MOTOR,
         CANivore.BACK_RIGHT_MODULE_STEER_ENCODER,
-        SwerveConstants.BACK_RIGHT_MODULE_STEER_OFFSET);
+        SwerveConstants.getBackRightModuleSteerOffset());
 
     odometry = new SwerveDriveOdometry(m_kinematics, m_pigeon.getRotation2d(), getModulePositions());
 
@@ -155,21 +155,16 @@ public class DriveTrain extends SubsystemBase {
     // m_navx.zeroYaw();
   }
 
-  public Rotation2d getGyroscopeRotation() {
-    // FIXME Remove if you are using a Pigeon
-    // return Rotation2d.fromDegrees(m_pigeon.getFusedHeading());
-
+  public Rotation2d getGyroscopeRotation() {;
     return m_pigeon.getRotation2d();
+  }
 
-    // // FIXME Uncomment if you are using a NavX
-    // if (m_navx.isMagnetometerCalibrated()) {
-    // // We will only get valid fused headings if the magnetometer is calibrated
-    // return Rotation2d.fromDegrees(m_navx.getFusedHeading());
-    // }
+  public double getPitch() {
+    return m_pigeon.getPitch();
+  }
 
-    // // We have to invert the angle of the NavX so that rotating the robot
-    // // counter-clockwise makes the angle increase.
-    // return Rotation2d.fromDegrees(360.0 - m_navx.getYaw());
+  public double getRoll() {
+    return m_pigeon.getRoll();
   }
 
   public void adjustAnglePosition() {
@@ -287,6 +282,7 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    field.setRobotPose(odometry.getPoseMeters());
     SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
     SmartDashboard.putNumber("roll", m_pigeon.getRoll());
     SmartDashboard.putNumber("X pose", getPose() == null ? 0.0 : getPose().getX());
