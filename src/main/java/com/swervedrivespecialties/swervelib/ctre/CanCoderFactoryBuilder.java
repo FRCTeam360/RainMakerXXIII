@@ -32,7 +32,7 @@ public class CanCoderFactoryBuilder {
             config.sensorDirection = direction == Direction.CLOCKWISE;
             config.initializationStrategy = configuration.getInitStrategy();
 
-            WPI_CANCoder encoder = new WPI_CANCoder(configuration.getId(), Constants.SwerveConstants.CANBUS);
+            WPI_CANCoder encoder = new WPI_CANCoder(configuration.getId(), Constants.CANIds.CANivore.CANBUS);
             CtreUtils.checkCtreError(encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
 
             CtreUtils.checkCtreError(encoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, periodMilliseconds, 250), "Failed to configure CANCoder update rate");
