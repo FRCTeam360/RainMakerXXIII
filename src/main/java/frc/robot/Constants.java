@@ -15,10 +15,10 @@ package frc.robot;
 public final class Constants {
 
   public enum RobotType {
-    DRAFT, PRACTICE
+    DRAFT, PRACTICE, COMP
   }
 
-  public static final RobotType robotType = RobotType.DRAFT;
+  public static final RobotType robotType = RobotType.COMP;
 
   public static RobotType getRobotType() {
     return robotType;
@@ -37,11 +37,18 @@ public final class Constants {
     public static final double PRACTICE_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(210.41015625); //210.41015625 
     public static final double PRACTICE_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(294.43359375); //294.43359375 
 
+    public static final double COMP_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(218.935546875); //308.49609375
+    public static final double COMP_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(51.416015625); //140.80078125
+    public static final double COMP_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(110.56640625); //201.62109375
+    public static final double COMP_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(1.845703125); //90.703125
+
     public static double getBackRightModuleSteerOffset() {
       if(robotType == RobotType.DRAFT) {
         return SwerveConstants.DRAFT_BACK_RIGHT_MODULE_STEER_OFFSET;
       } else if(robotType == RobotType.PRACTICE) {
         return SwerveConstants.PRACTICE_BACK_RIGHT_MODULE_STEER_OFFSET;
+      } else if(robotType == RobotType.COMP){
+        return SwerveConstants.COMP_BACK_RIGHT_MODULE_STEER_OFFSET;
       } else {
         return 0.0;
       }
@@ -52,6 +59,8 @@ public final class Constants {
         return SwerveConstants.DRAFT_BACK_LEFT_MODULE_STEER_OFFSET;
       } else if(robotType == RobotType.PRACTICE) {
         return SwerveConstants.PRACTICE_BACK_LEFT_MODULE_STEER_OFFSET;
+      } else if(robotType == RobotType.COMP){
+        return SwerveConstants.COMP_BACK_LEFT_MODULE_STEER_OFFSET;
       } else {
         return 0.0;
       }
@@ -62,6 +71,8 @@ public final class Constants {
         return SwerveConstants.DRAFT_FRONT_RIGHT_MODULE_STEER_OFFSET;
       } else if(robotType == RobotType.PRACTICE) {
         return SwerveConstants.PRACTICE_FRONT_RIGHT_MODULE_STEER_OFFSET;
+      } else if(robotType == RobotType.COMP) {
+        return SwerveConstants.COMP_FRONT_RIGHT_MODULE_STEER_OFFSET;
       } else {
         return 0.0;
       }
@@ -72,6 +83,8 @@ public final class Constants {
         return SwerveConstants.DRAFT_FRONT_LEFT_MODULE_STEER_OFFSET;
       } else if(robotType == RobotType.PRACTICE) {
         return SwerveConstants.PRACTICE_FRONT_LEFT_MODULE_STEER_OFFSET;
+      } else if(robotType == RobotType.COMP) {
+        return SwerveConstants.COMP_FRONT_LEFT_MODULE_STEER_OFFSET;
       } else {
         return 0.0;
       }
@@ -93,7 +106,7 @@ public final class Constants {
     public final static int EXTEND_LEAD_ID = 5;
     public final static int EXTEND_FOLLOW_ID = 6;
     public final static int CLAW_GRIP_ID = 7;
-    public final static int CLAW_ROLLER_ID = 8;
+    public final static int INTAKE_ID = 8;
 
     public final static int CANDLE_ID = 10;
 
@@ -119,8 +132,9 @@ public final class Constants {
         public static final int DRIVETRAIN_PIGEON_ID = 13; 
 
     }
-  
-    
   }
 
+  public static class DigitalIOIds {
+    public static final int TURRET_LIMIT_SWITCH_ID = 0;
+  }
 }
