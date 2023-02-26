@@ -7,10 +7,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Claw;
 
-public class OpenClawCone extends CommandBase {
+public class OpenClawConeSubstation extends CommandBase {
   private final Claw claw = Claw.getInstance();
   /** Creates a new OpenClawCone. */
-  public OpenClawCone() {
+  public OpenClawConeSubstation() {
     addRequirements(claw);
     // Use addRequirements() here to declare subsystem dependencies.
   }

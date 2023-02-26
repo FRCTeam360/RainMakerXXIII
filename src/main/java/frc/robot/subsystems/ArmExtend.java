@@ -35,13 +35,13 @@ public class ArmExtend extends SubsystemBase {
 
   private final double pivotToClawRetracted = 0.0254 * 16.35; //TODO remeasure
 
-  private double kP = 3;
+  private double kP = 2.5;
   private double kI = 0;
   private double kD = 0;
   private double kIz = 0;
   private double kFF = 0.05;
   private double kMaxOutput = 0.5;
-  private double kMinOutput = -0.4;
+  private double kMinOutput = -0.3;
   private double kMaxRampRate = 0.3; //TODO TUNE
   private double maxRPM = 5700;
 
@@ -71,7 +71,7 @@ public class ArmExtend extends SubsystemBase {
     pidController.setP(kP);
     pidController.setI(kI);
     pidController.setD(kD);
-    // pidController.setFF(kFF);
+    pidController.setFF(kFF);
     pidController.setIZone(kIz);
     // pidController.setSmartMotionMaxAccel(0.1, 0);
     // pidController.setSmartMotionMaxVelocity(0.1, 0);
@@ -136,7 +136,7 @@ public class ArmExtend extends SubsystemBase {
   }
 
   public double getFeedForward(){
-    return kFF * Math.sin(Math.toRadians(ArmTilt.getInstance().getAngle())) * 12;
+    return kFF * Math.sin(Math.toRadians(ArmTilt.getInstance().getAngle())) * 12.0;
   }
 
   public void stop() {
@@ -160,5 +160,6 @@ public class ArmExtend extends SubsystemBase {
     // SmartDashboard.putNumber("arm extension", getExtendDistance());
     // SmartDashboard.putNumber("arm effort", leadMotor.getAppliedOutput());
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("extend ff", getFeedForward());
     }
 }

@@ -40,7 +40,7 @@ public class ArmTilt extends SubsystemBase {
   private SparkMaxPIDController pidController;
 
   private double motorRotationsToArmDegrees = 360.0/(5.0*5.0*4.0*3.0);
-  private double practiceMotorRotationsToArmDegrees = 360.0/(5.0*5.0*(64.0/12.0)); //7, 5
+  private double practiceMotorRotationsToArmDegrees = 360.0/(6.0*6.0*(64.0/12.0)); //7, 5
 
   private double kMaxRampRate = 0.5; //TODO TUNE
 
@@ -48,7 +48,7 @@ public class ArmTilt extends SubsystemBase {
   private double kI = 0;
   private double kD = 0;
   private double kIz = 0;
-  public double kFF = 0.06 * 12; //0.01 retracted 0.05 extended
+  public double kFF = 0.035; //0.01 retracted 0.05 extended
   private double kMaxOutput = 0.5;
   private double kMinOutput = -0.5;
 
@@ -134,9 +134,10 @@ public class ArmTilt extends SubsystemBase {
 
     tab.addDouble("Arm Tilt", () -> encoder.getPosition());
     tab.addDouble("arm absolute", () -> absoluteEncoder.getPosition() - 90);
-    tab.addDouble("arm ff", () -> kFF);
-    tab.addDouble("ff math", () -> kFF * (Math.cos(Math.toRadians(getAngle())) * (extend.getDistanceFromBalance() / extend.maxExtendMinusBalance)));
+    tab.addDouble("tilt ff", () -> kFF);
+    tab.addDouble("tilt ff math", () -> kFF * (Math.cos(Math.toRadians(getAngle())) * (extend.getDistanceFromBalance() / extend.maxExtendMinusBalance)));
     tab.addDouble("arm output", () -> tiltLead.getAppliedOutput());
+    // SmartDashboard.putNumber("kff", kFF);
   }
 
     public static ArmTilt getInstance() {
@@ -160,14 +161,14 @@ public class ArmTilt extends SubsystemBase {
   }
   
   public void adjustTilt(double speed) {
-    tiltLead.set(speed + getFeedForward()/12);
+    tiltLead.set(speed + getFeedForward()/12.0); 
   }
 
   public void setAngle(double inputAngle) {
     // System.out.println("angle set"+ inputAngle);
     // inputAngle = inputAngle + 90;
     if(ArmExtend.getInstance().getExtendDistance() >= 0.8){
-      pidController.setReference(inputAngle, ControlType.kPosition, 2, getFeedForward());
+      pidController.setReference(inputAngle, ControlType.kPosition, 2, getFeedForward()); //was , getFeedForward()
     } else if(ArmExtend.getInstance().getExtendDistance() >= 0.4){
       pidController.setReference(inputAngle, ControlType.kPosition, 1, getFeedForward());
     } else {
@@ -207,7 +208,7 @@ public class ArmTilt extends SubsystemBase {
   // }
 
   public double getFeedForward() {
-    return kFF * (Math.cos(Math.toRadians(getAngle())) * (extend.getDistanceFromBalance() / extend.maxExtendMinusBalance));
+    return kFF * 12.0 * (Math.cos(Math.toRadians(getAngle())) * (extend.getDistanceFromBalance() / extend.maxExtendMinusBalance));
   }
 
   public void smartTilt(double inputAngle) {
@@ -244,7 +245,7 @@ public class ArmTilt extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("arm position", encoder.getPosition());
     SmartDashboard.putNumber("arm absolute position", absoluteEncoder.getPosition());
-
     reseedMotorPosition();
+    // kFF = SmartDashboard.getNumber("kFF", 0.0);
  }
 }

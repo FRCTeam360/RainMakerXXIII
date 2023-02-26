@@ -107,18 +107,18 @@ public class RobotContainer {
 
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     operatorController.a().whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.7), true));
-    operatorController.b().whileTrue(new SetArmPose(new Translation3d(0.3, 0, 0.05), false));
+    operatorController.b().whileTrue(new GroundPickup(false));
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
 
     operatorController.back().whileTrue(new OpenClawCube());
-    operatorController.start().whileTrue(new OpenClawCone());
+    operatorController.start().whileTrue(new OpenClawConeSubstation());
 
     operatorController.pov(0).whileTrue(homing);
     operatorController.pov(90).whileTrue(new SetPositions(40, 1.05, 15));
     operatorController.pov(270).whileTrue(new SetPositions(40, 1.05, -15));
 
-    operatorController.rightBumper().whileTrue(runIntakeReversed);
-    operatorController.leftBumper().whileTrue(runIntake);
+    operatorController.rightBumper().whileTrue(runIntake);
+    operatorController.leftBumper().whileTrue(runIntakeReversed);
   }
 
   /**
