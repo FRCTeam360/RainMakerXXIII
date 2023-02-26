@@ -4,9 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DriverStation.MatchType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Lights;
+import frc.robot.utils.ArmPoseCalculator;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,6 +27,11 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private Lights lights = Lights.getInstance();
+
+  private boolean wasOnFMS = false;
+  private ArmPoseCalculator calculator = new ArmPoseCalculator();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,6 +41,22 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+
+    
+    // calculator.setRobotPose(new Pose3d(0.0, 0.0, 0.0, new Rotation3d(0, 0, 0)));
+    // calculator.setTargetPose(new Pose3d(1.0, 1.0, 1.0, new Rotation3d(0, 0, 0)));
+
+    calculator.setRobotTrans(new Translation3d(0,0,0));
+    calculator.setTargetTrans(new Translation3d(1,-1,1));
+
+    System.out.println("trans x: " + calculator.getX());
+    System.out.println("trans y: " + calculator.getY());
+    System.out.println("trans z: " + calculator.getZ());
+    System.out.println("2d distance: " + calculator.get2dDistance());
+    // System.out.println("elevation: "+ calculator.getElevationAngleDegrees());
+    System.out.println("turret rotation: " + calculator.getTurretRotation());
+    System.out.println("extension: " + calculator.getExtendDistance());
   }
 
   /**
@@ -48,10 +77,25 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    // lights.setOrangeFade();
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+
+    // if(DriverStation.isFMSAttached() && !wasOnFMS){
+    //   if(DriverStation.getMatchType() == MatchType.Elimination){
+    //     lights.fireball();
+    //   }else if(DriverStation.getAlliance() == Alliance.Red){
+    //     lights.setRedTwinkle();
+    //   }else{
+    //     lights.setBlueTwinkle();
+    //   }
+    //   wasOnFMS = true;
+    // }
+
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -87,6 +131,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    lights.fireball();
   }
 
   /** This function is called periodically during test mode. */

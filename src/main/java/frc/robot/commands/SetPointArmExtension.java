@@ -4,43 +4,35 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.ArmExtend;
 
-public class CloseClaw extends CommandBase {
-  private Claw claw = Claw.getInstance();
+public class SetPointArmExtension extends CommandBase {
+  /** Creates a new SetPointArmExtensions. */
 
-  private boolean hitLimit;
-  
-  /** Creates a new CloseClaw. */
-  public CloseClaw() {
-    addRequirements(claw);
+  ArmExtend extend = ArmExtend.getInstance();
+
+  public SetPointArmExtension() {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(extend);
+    SmartDashboard.putNumber("ArmExtendSetPoint", 0);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(claw.getCurrent() > 15){
-      hitLimit= true;
-    }
-    if(hitLimit){
-      claw.adjustsClaw(-0.1);
-    } else {
-      claw.adjustsClaw(-0.3);
-    }
+    double setPosition = SmartDashboard.getNumber("ArmExtendSetPoint", 0);
+    extend.setPosition(setPosition);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    claw.stopClaw();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds.CANivore;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -38,10 +39,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.*;
 
 import java.util.Objects;
+import java.sql.Driver;
 
 public class DriveTrain extends SubsystemBase {
   private final Field2d field = new Field2d();
   private static DriveTrain instance;
+  private final Lights lights = Lights.getInstance();
   public static final double MAX_VOLTAGE = 12.0;
 
   private static final double ADJUSTMENT_FACTOR = 0.1;
@@ -72,7 +75,7 @@ public class DriveTrain extends SubsystemBase {
       new Translation2d(-SwerveConstants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
           -SwerveConstants.DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
-  private final WPI_Pigeon2 m_pigeon = new WPI_Pigeon2(CANivore.DRIVETRAIN_PIGEON_ID, SwerveConstants.CANBUS);
+  private final WPI_Pigeon2 m_pigeon = new WPI_Pigeon2(CANivore.DRIVETRAIN_PIGEON_ID, CANivore.CANBUS);
   private final Limelight ll = Limelight.getInstance();
 
   private final SwerveDriveOdometry odometry;
@@ -280,6 +283,32 @@ public class DriveTrain extends SubsystemBase {
     m_backRightModule.set(0, Math.toRadians(45));
   }
 
+  private void checkEncoders(){
+    if(Math.abs(m_frontRightModule.getSteerAngle() - m_frontRightModule.getSteerEncoder().getAbsoluteAngle()) < 0.5){
+      lights.setINdividualGreen(1);
+    } else {
+      lights.setIndividualRed(1);
+    }
+
+    if(Math.abs(m_backRightModule.getSteerAngle() - m_backRightModule.getSteerEncoder().getAbsoluteAngle()) < 0.5){
+      lights.setINdividualGreen(2);
+    } else {
+      lights.setIndividualRed(2);
+    }
+
+    if(Math.abs(m_backLeftModule.getSteerAngle() - m_backLeftModule.getSteerEncoder().getAbsoluteAngle()) < 0.5){
+      lights.setINdividualGreen(5);
+    } else {
+      lights.setIndividualRed(5);
+    }
+
+    if(Math.abs(m_frontLeftModule.getSteerAngle() - m_frontLeftModule.getSteerEncoder().getAbsoluteAngle()) < 0.5){
+      lights.setINdividualGreen(6);
+    } else {
+      lights.setIndividualRed(6);
+    }
+  }
+
   @Override
   public void periodic() {
     field.setRobotPose(odometry.getPoseMeters());
@@ -305,5 +334,15 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("timestamp", ll.getTimestamp());
+    pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+
+    if(DriverStation.isDisabled()){
+      checkEncoders();
+    }
+
+    // SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
+    // SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
+    // This method will be called once per scheduler run
+
   }
 }

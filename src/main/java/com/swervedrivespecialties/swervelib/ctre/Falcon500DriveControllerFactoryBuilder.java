@@ -56,7 +56,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
                 motorConfiguration.supplyCurrLimit.enable = true;
             }
 
-            WPI_TalonFX motor = new WPI_TalonFX(id, Constants.SwerveConstants.CANBUS);
+            WPI_TalonFX motor = new WPI_TalonFX(id, Constants.CANIds.CANivore.CANBUS);
             CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500");
 
             if (hasVoltageCompensation()) {

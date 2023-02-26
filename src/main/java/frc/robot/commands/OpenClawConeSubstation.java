@@ -4,18 +4,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Claw;
 
-public class ManualClaw extends CommandBase {
-  private Claw claw = Claw.getInstance();
-
-  boolean hitLimit = false;
-
-  private XboxController operatorCont = new XboxController(1);
-  /** Creates a new ManualClaw. */
-  public ManualClaw() {
+public class OpenClawConeSubstation extends CommandBase {
+  private final Claw claw = Claw.getInstance();
+  /** Creates a new OpenClawCone. */
+  public OpenClawConeSubstation() {
     addRequirements(claw);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -27,34 +22,18 @@ public class ManualClaw extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(claw.getCurrent() > 15){
-      hitLimit= true;
-    }
-    if(Math.abs(operatorCont.getLeftTriggerAxis()) > 0.1){ //close
-      if(hitLimit){
-        claw.adjustsClaw(-0.05);
-      } else {
-        claw.adjustsClaw(operatorCont.getLeftTriggerAxis() * -0.3);
-      }
-    } else if (Math.abs(operatorCont.getRightTriggerAxis()) > 0.1) { //open
-      claw.adjustsClaw(operatorCont.getRightTriggerAxis() *0.3);
-      hitLimit = false;
-    } else {
-      claw.stopClaw();
-      hitLimit = false;
-    }
+    claw.setPosition(30);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     claw.stopClaw();
-    hitLimit = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(claw.getAbsoluteAngle() - 90.0) < 3;
   }
 }
