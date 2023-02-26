@@ -48,7 +48,9 @@ public class Lights extends SubsystemBase {
   }
 
   public void setPurple(){
+    candle.clearAnimation(0);
     candle.setLEDs(163, 23, 172);
+    System.out.println("setting purple");
   }
 
   public void setOrange(){
@@ -65,6 +67,7 @@ public class Lights extends SubsystemBase {
 
   public void setOrangeFade(){
     candle.animate(new SingleFadeAnimation(254, 106, 0));
+    System.out.println("setting orange");
   }
 
   public void setRedTwinkle(){

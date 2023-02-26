@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,6 +27,14 @@ public class Claw extends SubsystemBase {
   private final SparkMaxPIDController pidController;
   private static Claw instance;
 
+  // enum GamePiece {CONE, CUBE, NONE};
+
+  // private GamePiece gamePiece = GamePiece.NONE;
+
+  private Lights lights = Lights.getInstance();
+
+  private XboxController driverCont = new XboxController(0);
+
   private int iterations = 0;
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
@@ -35,6 +44,9 @@ public class Claw extends SubsystemBase {
 
   /** Creates a new Claw. */
   public Claw() {
+
+    // gamePiece = GamePiece.NONE;
+
     motor.restoreFactoryDefaults();
 
     motor.setInverted(true);
@@ -102,8 +114,19 @@ public class Claw extends SubsystemBase {
     }
   }
 
+  private void checkGamePieceMode(){
+    if(driverCont.getBackButton()){
+      // gamePiece = GamePiece.CONE;
+      lights.setPurple();
+    } else if(driverCont.getStartButton()){
+      // gamePiece = GamePiece.CUBE;
+      lights.setYellow();
+    }
+  }
+
   @Override
   public void periodic() {
+    checkGamePieceMode();
     // This method will be called once per scheduler run
   }
 }

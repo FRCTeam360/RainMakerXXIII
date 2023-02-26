@@ -78,22 +78,22 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    lights.setOrangeFade();
+    // lights.setOrangeFade();
   }
 
   @Override
   public void disabledPeriodic() {
 
-    if(DriverStation.isFMSAttached() && !wasOnFMS){
-      if(DriverStation.getMatchType() == MatchType.Elimination){
-        lights.fireball();
-      }else if(DriverStation.getAlliance() == Alliance.Red){
-        lights.setRedTwinkle();
-      }else{
-        lights.setBlueTwinkle();
-      }
-      wasOnFMS = true;
-    }
+    // if(DriverStation.isFMSAttached() && !wasOnFMS){
+    //   if(DriverStation.getMatchType() == MatchType.Elimination){
+    //     lights.fireball();
+    //   }else if(DriverStation.getAlliance() == Alliance.Red){
+    //     lights.setRedTwinkle();
+    //   }else{
+    //     lights.setBlueTwinkle();
+    //   }
+    //   wasOnFMS = true;
+    // }
 
   }
 

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds.CANivore;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -29,6 +30,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static frc.robot.Constants.*;
+
+import java.sql.Driver;
 
 public class DriveTrain extends SubsystemBase {
   private static DriveTrain instance;
@@ -271,7 +274,9 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
 
     pose = odometry.update(getGyroscopeRotation(), getModulePositions());
 
-    checkEncoders();
+    if(DriverStation.isDisabled()){
+      checkEncoders();
+    }
 
     // SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
     // SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
