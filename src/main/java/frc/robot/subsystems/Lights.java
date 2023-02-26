@@ -36,15 +36,21 @@ public class Lights extends SubsystemBase {
   }
 
   public void setIndividualRed(int index){
+    candle.setLEDs(0,0,0,0,0,1);
+    candle.setLEDs(0,0,0,0,3,2);
+    candle.setLEDs(0,0,0,0,7,1);
     candle.setLEDs(254, 0, 0, 0, index, 1);
   }
 
   public void setINdividualGreen(int index){
+    candle.setLEDs(0,0,0,0,0,1);
+    candle.setLEDs(0,0,0,0,3,2);
+    candle.setLEDs(0,0,0,0,7,1);
     candle.setLEDs(0, 254, 0, 0, index, 1);
   }
 
   public void setYellow(){
-    candle.setLEDs(239, 223, 13);
+    candle.setLEDs(255, 200, 0); //239, 223, 13
   }
 
   public void setPurple(){
