@@ -1,11 +1,16 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
 import java.util.function.DoubleSupplier;
+
+import org.opencv.core.Mat;
 
 public class FieldOrientedDrive extends CommandBase {
     private final DriveTrain driveTrain = DriveTrain.getInstance();
@@ -40,7 +45,7 @@ public class FieldOrientedDrive extends CommandBase {
                     -getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND,
                     -getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND,
                     -getWithDeadzone(drivercont.getRightX()) * DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-                        driveTrain.getGyroscopeRotation()
+                        DriverStation.getAlliance() == Alliance.Red ? driveTrain.getGyroscopeRotation().minus(new Rotation2d(Math.PI)) : driveTrain.getGyroscopeRotation()
                 )
         );
 
