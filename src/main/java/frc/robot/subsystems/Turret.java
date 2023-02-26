@@ -36,14 +36,13 @@ public class Turret extends SubsystemBase {
   private double relativeAngle;
 
   public static final double conversionFactorWoodBot = 1 / ((1.0 / 20.0) * (1.5 / 17.5) * (360.0 / 1.0)); //gearbox pulley teeth degrees
-  public static final double conversionFactorPractice = (1.0 / 16.0) * (24.0 / 300.0) * (360.0 / 1.0);
-  public static final double conversionFactorComp = 1;
+  public static final double conversionFactorPractice = (1.0 / 16.0) * (24.0 / 300.0) * (360.0 / 1.0); //same as comp
 
   public static final float softLimitForwardPractice = 270.0f;
   public static final float softLimitReversePractice = -180.0f;
 
-  public static final float softLimitForwardComp = 0;
-  public static final float softLimitReverseComp = 0;
+  public static final float softLimitForwardComp = 270.0f;
+  public static final float softLimitReverseComp = -270.0f;
 
   public static float softLimitForward;
   public static float softLimitReverse;
@@ -61,7 +60,7 @@ public class Turret extends SubsystemBase {
     softLimitReverse = Constants.getRobotType() == RobotType.COMP ? softLimitReverseComp : softLimitReversePractice;
 
     motor.getEncoder().setPositionConversionFactor(Constants.getRobotType() == RobotType.PRACTICE ? conversionFactorPractice : 
-        Constants.getRobotType() == RobotType.DRAFT ? conversionFactorWoodBot : conversionFactorComp); // delete last if and comp factor if no difference from practice
+        Constants.getRobotType() == RobotType.DRAFT ? conversionFactorWoodBot : conversionFactorPractice); // delete last if and comp factor if no difference from practice
 
     motor.setSoftLimit(SoftLimitDirection.kForward, softLimitForward);
     motor.setSoftLimit(SoftLimitDirection.kReverse, softLimitReverse);
@@ -73,6 +72,13 @@ public class Turret extends SubsystemBase {
     pidController.setD(0.00); 
     pidController.setI(0.0);
     pidController.setFF(0.0);
+    pidController.setOutputRange(-0.7, 0.7); //TODO TUNE
+
+    pidController.setP(0.03, 1);
+    pidController.setOutputRange(-0.5, 0.5, 1); //TODO TUNE
+
+    pidController.setP(0.03, 2);
+    pidController.setOutputRange(-0.3, 0.3); //TODO TUNE
     encoder = motor.getEncoder();
 
     tab.addDouble("Turret Angle", () -> encoder.getPosition());
@@ -111,7 +117,14 @@ public class Turret extends SubsystemBase {
   }
 
   public void setPosition(double inputAngle) {
-    pidController.setReference(inputAngle, ControlType.kPosition);
+    double distance = ArmExtend.getInstance().getExtendDistance() * Math.abs(Math.cos(ArmTilt.getInstance().getAngle()));
+    if(distance > 0.8){
+      pidController.setReference(inputAngle, ControlType.kPosition, 2);
+    } else if (distance > 0.4){
+      pidController.setReference(inputAngle, ControlType.kPosition, 1);
+    } else {
+      pidController.setReference(inputAngle, ControlType.kPosition);
+    }
   }
 
   public void stop() {

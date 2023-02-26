@@ -37,9 +37,9 @@ public class FieldOrientedDrive extends CommandBase {
         // You can use `new ChassisSpeeds(...)` for robot-oriented movement instead of field-oriented movement
         driveTrain.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                    -getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 0.8,
-                    -getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 0.8,
-                    -getWithDeadzone(drivercont.getRightX()) * DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+                    -getYWithDeadzone() * getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 0.8,
+                    -getXWithDeadzone() * getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 0.8,
+                    -getWithDeadzone(drivercont.getRightX()) * getWithDeadzone(drivercont.getRightX()) * DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
                         driveTrain.getGyroscopeRotation()
                 )
         );

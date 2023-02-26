@@ -28,7 +28,7 @@ public class TiltArmManual extends CommandBase {
   @Override
   public void execute() {
     if(Math.abs(operatorCont.getRightY()) >= 0.1) {
-      tilt.adjustTilt(operatorCont.getRightY() * 0.5);
+      tilt.adjustTilt(operatorCont.getRightY() * 0.7);
       } else {
         tilt.adjustTilt(0);
       }
