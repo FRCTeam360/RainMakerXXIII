@@ -15,10 +15,10 @@ package frc.robot;
 public final class Constants {
 
   public enum RobotType {
-    DRAFT, PRACTICE
+    DRAFT, PRACTICE, COMP
   }
 
-  public static final RobotType robotType = RobotType.DRAFT;
+  public static final RobotType robotType = RobotType.COMP;
 
   public static RobotType getRobotType() {
     return robotType;
@@ -38,10 +38,10 @@ public final class Constants {
     public static final double PRACTICE_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(210.41015625); //210.41015625 
     public static final double PRACTICE_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(294.43359375); //294.43359375 
 
-    public static final double COMP_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(308.49609375); //308.49609375
-    public static final double COMP_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(140.80078125); //140.80078125
-    public static final double COMP_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(201.62109375); //201.62109375
-    public static final double COMP_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(90.703125); //90.703125
+    public static final double COMP_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(218.935546875); //308.49609375
+    public static final double COMP_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(51.416015625); //140.80078125
+    public static final double COMP_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(110.56640625); //201.62109375
+    public static final double COMP_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(1.845703125); //90.703125
 
     public static double getBackRightModuleSteerOffset() {
       if(robotType == RobotType.DRAFT) {

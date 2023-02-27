@@ -275,7 +275,7 @@ public final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
     SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
     SmartDashboard.putNumber("roll", m_pigeon.getRoll());
 
-    pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+    // pose = odometry.update(getGyroscopeRotation(), getModulePositions());
 
     SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
