@@ -38,11 +38,18 @@ public final class Constants {
     public static final double PRACTICE_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(210.41015625); //210.41015625 
     public static final double PRACTICE_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(294.43359375); //294.43359375 
 
+    public static final double COMP_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(308.49609375); //308.49609375
+    public static final double COMP_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(140.80078125); //140.80078125
+    public static final double COMP_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(201.62109375); //201.62109375
+    public static final double COMP_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(90.703125); //90.703125
+
     public static double getBackRightModuleSteerOffset() {
       if(robotType == RobotType.DRAFT) {
         return SwerveConstants.DRAFT_BACK_RIGHT_MODULE_STEER_OFFSET;
       } else if(robotType == RobotType.PRACTICE) {
         return SwerveConstants.PRACTICE_BACK_RIGHT_MODULE_STEER_OFFSET;
+      } else if(robotType == RobotType.COMP){
+        return SwerveConstants.COMP_BACK_RIGHT_MODULE_STEER_OFFSET;
       } else {
         return 0.0;
       }
@@ -53,6 +60,8 @@ public final class Constants {
         return SwerveConstants.DRAFT_BACK_LEFT_MODULE_STEER_OFFSET;
       } else if(robotType == RobotType.PRACTICE) {
         return SwerveConstants.PRACTICE_BACK_LEFT_MODULE_STEER_OFFSET;
+      } else if(robotType == RobotType.COMP){
+        return SwerveConstants.COMP_BACK_LEFT_MODULE_STEER_OFFSET;
       } else {
         return 0.0;
       }
@@ -63,6 +72,8 @@ public final class Constants {
         return SwerveConstants.DRAFT_FRONT_RIGHT_MODULE_STEER_OFFSET;
       } else if(robotType == RobotType.PRACTICE) {
         return SwerveConstants.PRACTICE_FRONT_RIGHT_MODULE_STEER_OFFSET;
+      } else if(robotType == RobotType.COMP) {
+        return SwerveConstants.COMP_FRONT_RIGHT_MODULE_STEER_OFFSET;
       } else {
         return 0.0;
       }
@@ -73,6 +84,8 @@ public final class Constants {
         return SwerveConstants.DRAFT_FRONT_LEFT_MODULE_STEER_OFFSET;
       } else if(robotType == RobotType.PRACTICE) {
         return SwerveConstants.PRACTICE_FRONT_LEFT_MODULE_STEER_OFFSET;
+      } else if(robotType == RobotType.COMP) {
+        return SwerveConstants.COMP_FRONT_LEFT_MODULE_STEER_OFFSET;
       } else {
         return 0.0;
       }
@@ -87,13 +100,14 @@ public final class Constants {
   public static class CANIds {
     //0 is roborio id
     public final static int PDH_ID = 1;
-    public final static int PH_ID = 2;
 
-    public final static int TURRET_ID = 3;
+    public final static int TURRET_ID = 2;
+    public final static int TILT_FOLLOW_ID = 3;
     public final static int TILT_LEAD_ID = 4;
-    //public final static int TILT_FOLLOW_ID = 5;
-    public final static int EXTEND_ID = 6;
-    public final static int CLAW_ID = 7;
+    public final static int EXTEND_LEAD_ID = 5;
+    public final static int EXTEND_FOLLOW_ID = 6;
+    public final static int CLAW_GRIP_ID = 7;
+    public final static int CLAW_ROLLER_ID = 8;
 
     public static class CANivore {
         public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 12; 
