@@ -13,7 +13,7 @@ import frc.robot.subsystems.DriveTrain;
 public class AutoEngage extends CommandBase {
   private final DriveTrain driveTrain = DriveTrain.getInstance();
 
-  private final double kP = 0.1;
+  private final double kP = 0.003;
   private final double kI = 0;
   private final double kD = 0.00;
 
@@ -37,7 +37,7 @@ public class AutoEngage extends CommandBase {
     System.out.println("flattening the covid curve");
     double currentAngle = calculateAngle(driveTrain.getPitch(), driveTrain.getRoll());
 
-    if(currentAngle - pastAngle < -0.7|| Math.abs(currentAngle) < 2){
+    if(currentAngle - pastAngle < -1|| Math.abs(currentAngle) < 2){
       driveTrain.xOut();
     } else {
       driveTrain.drive(

@@ -36,9 +36,9 @@ public class ArmExtend extends SubsystemBase {
   private final double pivotToClawRetracted = 0.0254 * 20.5; 
 
   private double kP = 2.5;
-  private double kI = 0;
+  private double kI = 0.001;
   private double kD = 0;
-  private double kIz = 0;
+  private double kIz = 0.03;
   private double kFF = 0.05;
   private double kMaxOutput = 0.5;
   private double kMinOutput = -0.3;

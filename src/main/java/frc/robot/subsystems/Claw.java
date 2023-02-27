@@ -41,7 +41,7 @@ public class Claw extends SubsystemBase {
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
   
-  private double kP = 0.01;
+  private double kP = 0.02;
   
   private boolean isComp;
 
@@ -66,7 +66,7 @@ public class Claw extends SubsystemBase {
     // absoluteEncoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
     absoluteEncoder = motor.getAbsoluteEncoder(Type.kDutyCycle); //oops this is extremely bad, dont do this please but we kinda have to
     absoluteEncoder.setPositionConversionFactor(360);
-    absoluteEncoder.setZeroOffset(325);
+    absoluteEncoder.setZeroOffset(Constants.getRobotType() == RobotType.COMP ? 35 : 325); //325
     absoluteEncoder.setInverted(isComp);
 
     pidController = motor.getPIDController();

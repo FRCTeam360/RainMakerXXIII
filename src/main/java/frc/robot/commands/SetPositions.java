@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmExtend;
@@ -20,6 +22,14 @@ public class SetPositions extends CommandBase {
   private double turretAngle;
 
   /** Creates a new SetPositions. */
+  public SetPositions(double tiltAngle, double extendDistance, double turretAngle, boolean checkAlliance) {
+    addRequirements(tilt, extend, turret);
+    this.tiltAngle = tiltAngle;
+    this.extendDistance = extendDistance;
+    this.turretAngle = checkAlliance && DriverStation.getAlliance() == Alliance.Red ? -turretAngle : turretAngle;
+    // Use addRequirements() here to declare subsystem dependencies.
+  }
+
   public SetPositions(double tiltAngle, double extendDistance, double turretAngle) {
     addRequirements(tilt, extend, turret);
     this.tiltAngle = tiltAngle;
@@ -35,6 +45,7 @@ public class SetPositions extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("setting positions");
     // if(Math.abs(extend.getExtendDistance() - extendDistance) <= 0.3){
       tilt.setAngle(tiltAngle);
     // }

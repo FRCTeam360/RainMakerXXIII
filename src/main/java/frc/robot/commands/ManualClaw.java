@@ -27,10 +27,10 @@ public class ManualClaw extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(claw.getCurrent() > 15){
-      hitLimit= true;
-    }
     if(Math.abs(operatorCont.getLeftTriggerAxis()) > 0.1){ //close
+      if(claw.getCurrent() > 15){
+        hitLimit= true;
+      }
       if(hitLimit){
         claw.adjustsClaw(-0.05);
       } else {

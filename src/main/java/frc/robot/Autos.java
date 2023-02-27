@@ -44,7 +44,7 @@ public final class Autos {
       new PathConstraints(4, 3));
   private static List<PathPlannerTrajectory> notPathGroup = PathPlanner.loadPathGroup("lets go brandon",
       new PathConstraints(4, 3));
-  
+
   // create events of commands here
   private static HashMap<String, Command> eventMap = new HashMap<>() {
     {
@@ -78,20 +78,23 @@ public final class Autos {
 
   private List<PathPlannerTrajectory> mirrorPathsForAlliance(List<PathPlannerTrajectory> mTrajectory) {
     ArrayList<PathPlannerTrajectory> newTrajectory = new ArrayList<PathPlannerTrajectory>();
-    for(int i = 0; i<mTrajectory.size(); i++) {
-      newTrajectory.add(PathPlannerTrajectory.transformTrajectoryForAlliance(mTrajectory.get(i), DriverStation.getAlliance()));
+    for (int i = 0; i < mTrajectory.size(); i++) {
+      newTrajectory
+          .add(PathPlannerTrajectory.transformTrajectoryForAlliance(mTrajectory.get(i), DriverStation.getAlliance()));
     }
     return newTrajectory;
   }
 
   private Command getMyMarioAuto() {
-    List<PathPlannerTrajectory> luigi = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(4, 3));
+    List<PathPlannerTrajectory> luigi = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(3, 3));
     luigi = mirrorPathsForAlliance(luigi);
     Command rainbowRoad = autoBuilder.resetPose(luigi.get(0));
     Command coconutMall = autoBuilder.followPath(luigi.get(0));
-    Command DKJungle = autoBuilder.followPath(luigi.get(1));
-    Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
-    return rainbowRoad.andThen(coconutMall).andThen(DKJungle).andThen(ShroomRidge).andThen(new AutoEngage());
+    // Command DKJungle = autoBuilder.followPath(luigi.get(1));
+    // Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
+    return rainbowRoad.andThen(new SetPositions(42, 1.1, 15, true).andThen(new OpenClawCube()))
+        .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge);//.andThen(new
+                                                                                  // AutoEngage());
   }
 
   private Command getMyAuto() {
@@ -105,12 +108,13 @@ public final class Autos {
     Command pathTSLA1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command pathTSLA2 = autoBuilder.followPath(epicPathGroup.get(1));
 
-    return (new SetPositions(42, 1.1, -15)).andThen(new OpenClawCube()).andThen(new Homing())
+    return (new SetPositions(42, 1.1, -15, true)).andThen(new OpenClawCube()).andThen(new Homing())
         .andThen(stockMarketCrash)
         .andThen(new ParallelRaceGroup(pathTSLA1, new RunIntake(),
-            new SequentialCommandGroup(/*new SetPositions(90, 0.1, -180), */ new WaitCommand(1),
+            new SequentialCommandGroup(/* new SetPositions(90, 0.1, -180), */ new WaitCommand(1),
                 /* not working yet */ new SetArmPose(new Translation3d(0.3, 0, 0.05), false))))
-        .andThen(new WaitCommand(.25)).andThen(pathTSLA2.alongWith(new Homing()).alongWith(new CloseClaw()));
+        .andThen(new WaitCommand(.25)).andThen(pathTSLA2.alongWith(new Homing()).raceWith(new CloseClaw()))
+        .andThen(new SetPositions(42, 1.1, 15, true)).andThen(new OpenClawCube()).andThen(new Homing());
 
     // return new SequentialCommandGroup(
     // new SetPositions(42, 1.1, -15), //dropping first game piece
@@ -146,7 +150,7 @@ public final class Autos {
       driveTrain::getPose,
       driveTrain::setPose,
       driveTrain.m_kinematics,
-      new PIDConstants(3.1465, 0, 0),
+      new PIDConstants(5, 0, 0),
       new PIDConstants(1.5, 0, 0),
       driveTrain::setStates,
       eventMap,
