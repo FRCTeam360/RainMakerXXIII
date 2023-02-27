@@ -332,6 +332,12 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putData("field", field);
     SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
+    // if(DriverStation.isDisabled()){
+      checkEncoders();
+    // }
+
+    // SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
+    // SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("timestamp", ll.getTimestamp());
     pose = odometry.update(getGyroscopeRotation(), getModulePositions());

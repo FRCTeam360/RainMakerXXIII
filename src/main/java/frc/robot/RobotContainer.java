@@ -9,6 +9,8 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.Autos;
 
+import com.swervedrivespecialties.swervelib.DriveController;
+
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -107,6 +109,7 @@ public class RobotContainer {
     // operatorController.rightTrigger().whileTrue(new OpenClaw());
 
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
+    driverController.y().whileTrue(new AutoEngage());
     operatorController.a().whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.7), true));
     operatorController.b().whileTrue(new GroundPickup(false));
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));

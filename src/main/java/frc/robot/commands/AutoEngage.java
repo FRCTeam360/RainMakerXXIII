@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -12,7 +13,12 @@ import frc.robot.subsystems.DriveTrain;
 public class AutoEngage extends CommandBase {
   private final DriveTrain driveTrain = DriveTrain.getInstance();
 
-  private final double kP = 0.04;
+  private final double kP = 0.1;
+  private final double kI = 0;
+  private final double kD = 0.00;
+
+  private final PIDController pitchController = new PIDController(kP, kI, kD);
+  private final PIDController rollController = new PIDController(kP, kI, kD);
 
   private double pastAngle; 
   /** Creates a new AutoEngage. */
@@ -35,7 +41,7 @@ public class AutoEngage extends CommandBase {
       driveTrain.xOut();
     } else {
       driveTrain.drive(
-        new ChassisSpeeds(-driveTrain.getPitch() * kP, driveTrain.getRoll() * kP, 0)
+        new ChassisSpeeds(-pitchController.calculate(-driveTrain.getPitch()*driveTrain.getPitch()*Math.signum(driveTrain.getPitch())), rollController.calculate(-driveTrain.getRoll()*driveTrain.getRoll()*Math.signum(driveTrain.getRoll())), 0)
       );
     }
 
