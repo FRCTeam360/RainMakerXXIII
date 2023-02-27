@@ -22,6 +22,12 @@ import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
 import frc.robot.Autos;
+
+import frc.robot.commands.*;
+
+import com.swervedrivespecialties.swervelib.DriveController;
+
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -91,8 +97,25 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    driverController.b().whileTrue(driveTrain.xOutCommand());
+
+    // operatorController.leftTrigger().whileTrue(new CloseClaw());
+    // operatorController.rightTrigger().whileTrue(new OpenClaw());
+
+    driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     driverController.y().whileTrue(new AutoEngage());
+    operatorController.a().whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.7), true));
+    operatorController.b().whileTrue(new GroundPickup(false));
+    operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
+
+    operatorController.back().whileTrue(new OpenClawCube());
+    operatorController.start().whileTrue(new OpenClawConeSubstation());
+
+    operatorController.pov(0).whileTrue(homing);
+    operatorController.pov(90).whileTrue(new SetPositions(40, 1.05, 15));
+    operatorController.pov(270).whileTrue(new SetPositions(40, 1.05, -15));
+
+    operatorController.rightBumper().whileTrue(runIntake);
+    operatorController.leftBumper().whileTrue(runIntakeReversed);
   }
 
   /**
