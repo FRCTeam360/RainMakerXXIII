@@ -4,24 +4,28 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.XboxConstants;
-import frc.robot.subsystems.ArmExtend;
-import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Turret;
 
-public class Homing extends CommandBase {
-  private final ArmTilt tilt = ArmTilt.getInstance();
-  private final ArmExtend extend = ArmExtend.getInstance();
+public class SetTurretAngle extends CommandBase {
   private final Turret turret = Turret.getInstance();
 
-  private final XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
+  private double turretAngle;
 
   /** Creates a new Homing. */
-  public Homing() {
+  public SetTurretAngle(double turretAngle) {
+    this.turretAngle = turretAngle;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(tilt, extend, turret);
+    addRequirements(turret);
+  }
+
+  /** Creates a new Homing. */
+  public SetTurretAngle(double turretAngle, boolean checkAlliance) {
+    this.turretAngle = checkAlliance && DriverStation.getAlliance() == Alliance.Red ? -turretAngle : turretAngle;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(turret);
   }
 
   // Called when the command is initially scheduled.
@@ -33,11 +37,7 @@ public class Homing extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    tilt.setAngle(90);
-    extend.setPosition(0.1);
-    if (extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 10) {
-      turret.setPosition(0);
-    }
+    turret.setPosition(turretAngle);
   }
 
   // Called once the command ends or is interrupted.
@@ -49,7 +49,6 @@ public class Homing extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 2
-        && Math.abs(turret.getAngleRelativeToRobot() - 0) < 2;
+    return Math.abs(turret.getAngleRelativeToRobot() - 0) < 2;
   }
 }

@@ -35,8 +35,11 @@ public class Turret extends SubsystemBase {
   private static Turret instance;
   private double relativeAngle;
 
-  public static final double conversionFactorWoodBot = 1 / ((1.0 / 20.0) * (1.5 / 17.5) * (360.0 / 1.0)); //gearbox pulley teeth degrees
-  public static final double conversionFactorPractice = (1.0 / 16.0) * (24.0 / 300.0) * (360.0 / 1.0); //same as comp
+  public static final double conversionFactorWoodBot = 1 / ((1.0 / 20.0) * (1.5 / 17.5) * (360.0 / 1.0)); // gearbox
+                                                                                                          // pulley
+                                                                                                          // teeth
+                                                                                                          // degrees
+  public static final double conversionFactorPractice = (1.0 / 16.0) * (24.0 / 300.0) * (360.0 / 1.0); // same as comp
 
   public static final float softLimitForwardPractice = 270.0f;
   public static final float softLimitReversePractice = -180.0f;
@@ -59,8 +62,19 @@ public class Turret extends SubsystemBase {
     softLimitForward = Constants.getRobotType() == RobotType.COMP ? softLimitForwardComp : softLimitForwardPractice;
     softLimitReverse = Constants.getRobotType() == RobotType.COMP ? softLimitReverseComp : softLimitReversePractice;
 
-    motor.getEncoder().setPositionConversionFactor(Constants.getRobotType() == RobotType.PRACTICE ? conversionFactorPractice : 
-        Constants.getRobotType() == RobotType.DRAFT ? conversionFactorWoodBot : conversionFactorPractice); // delete last if and comp factor if no difference from practice
+    motor.getEncoder()
+        .setPositionConversionFactor(Constants.getRobotType() == RobotType.PRACTICE ? conversionFactorPractice
+            : Constants.getRobotType() == RobotType.DRAFT ? conversionFactorWoodBot : conversionFactorPractice); // delete
+                                                                                                                 // last
+                                                                                                                 // if
+                                                                                                                 // and
+                                                                                                                 // comp
+                                                                                                                 // factor
+                                                                                                                 // if
+                                                                                                                 // no
+                                                                                                                 // difference
+                                                                                                                 // from
+                                                                                                                 // practice
 
     motor.setSoftLimit(SoftLimitDirection.kForward, softLimitForward);
     motor.setSoftLimit(SoftLimitDirection.kReverse, softLimitReverse);
@@ -69,16 +83,16 @@ public class Turret extends SubsystemBase {
 
     pidController = motor.getPIDController();
     pidController.setP(0.03, 0);
-    pidController.setD(0.00, 0); 
+    pidController.setD(0.00, 0);
     pidController.setI(0.0, 0);
     pidController.setFF(0.0, 0);
-    pidController.setOutputRange(-0.9, 0.9, 0); //TODO TUNE
+    pidController.setOutputRange(-0.9, 0.9, 0); // TODO TUNE
 
     pidController.setP(0.03, 1);
-    pidController.setOutputRange(-0.5, 0.5, 1); //TODO TUNE
+    pidController.setOutputRange(-0.5, 0.5, 1); // TODO TUNE
 
     pidController.setP(0.03, 2);
-    pidController.setOutputRange(-0.3, 0.3, 2); //TODO TUNE
+    pidController.setOutputRange(-0.3, 0.3, 2); // TODO TUNE
     encoder = motor.getEncoder();
 
     tab.addDouble("Turret Angle", () -> encoder.getPosition());
@@ -121,10 +135,11 @@ public class Turret extends SubsystemBase {
   }
 
   public void setPosition(double inputAngle) {
-    double distance = 0;// ArmExtend.getInstance().getExtendDistance() * Math.abs(Math.cos(ArmTilt.getInstance().getAngle()));
-    if(distance > 0.8){
+    double distance = 0;// ArmExtend.getInstance().getExtendDistance() *
+                        // Math.abs(Math.cos(ArmTilt.getInstance().getAngle()));
+    if (distance > 0.8) {
       pidController.setReference(inputAngle, ControlType.kPosition, 2);
-    } else if (distance > 0.4){
+    } else if (distance > 0.4) {
       pidController.setReference(inputAngle, ControlType.kPosition, 1);
     } else {
       pidController.setReference(inputAngle, ControlType.kPosition, 0);
@@ -155,38 +170,42 @@ public class Turret extends SubsystemBase {
     pidController.setReference(relativeAngle, ControlType.kPosition, 1);
   }
 
-  public double getNearestTurretAngle(double angle){
+  public double getNearestTurretAngle(double angle) {
     double turretFactor = (double) Math.round((getAngleRelativeToRobot() - angle) / 360.0);
     return angle + (360.0 * turretFactor);
   }
 
-  //accounts for soft limits by wraping impossible angles by 90 degrees
-  private double getNearestActualTurretAngle(double angle){
+  // accounts for soft limits by wraping impossible angles by 90 degrees
+  private double getNearestActualTurretAngle(double angle) {
     angle = getNearestTurretAngle(angle);
 
-    if(angle > softLimitForward){ 
+    if (angle > softLimitForward) {
       return getNearestActualTurretAngle(angle - 360.0);
-    } else if(getNearestTurretAngle(angle) < softLimitReverse){
+    } else if (getNearestTurretAngle(angle) < softLimitReverse) {
       return getNearestActualTurretAngle(angle + 360.0);
     } else {
       return getNearestTurretAngle(angle);
     }
   }
 
-  private double getNearestLimitSwitchPosition(){
+  private double getNearestLimitSwitchPosition() {
     double turretFactor = (double) Math.round((getAngleRelativeToRobot()) / 180.0);
     return (180.0 * turretFactor);
   }
 
-  private void checkLimitSwitch(){
+  private void checkLimitSwitch() {
     boolean currentLimitState = limitSwitch.get();
 
     if (currentLimitState == false && pastLimitSwitchState == true) {
-        resetAngle(getNearestLimitSwitchPosition());
-        System.out.println("lil zero");
+      resetAngle(getNearestLimitSwitchPosition());
+      System.out.println("lil zero");
     }
 
     pastLimitSwitchState = currentLimitState;
+  }
+
+  public double getAngle() {
+    return encoder.getPosition();
   }
 
   @Override

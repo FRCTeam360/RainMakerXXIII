@@ -20,7 +20,7 @@ public class GroundPickup extends ParallelCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SetArmPose(new Translation3d(0.3, 0, 0.05), false), 
-      isCone ? new OpenClawConeGround() : new OpenClawCube() 
+      isCone ? new OpenClawConeGround() : new OpenClawToHoldCube() 
     );
   }
 }

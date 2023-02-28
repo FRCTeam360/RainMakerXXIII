@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.commands.AutoEngage;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.*;
@@ -28,6 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -53,7 +52,7 @@ public final class Autos {
       put("tsla halt", new WaitCommand(20));
       put("engage", new AutoEngage());
 
-      put("Open Claw", new OpenClawCube());
+      put("Open Claw", new OpenClawToHoldCube());
       put("Close Claw", new CloseClaw());
       put("Set Point Arm Extension", new SetPointArmExtension());
       put("Set Point Arm Tilt", new SetPointArmTilt());
@@ -70,7 +69,7 @@ public final class Autos {
     // add auto options to chooser here
     autoChooser.addOption("chop suey!", example);
     autoChooser.addOption("lets go brandon", notExample);
-    autoChooser.addOption("tsla stock is good", getMyAuto());
+    autoChooser.addOption("tsla stock is good", getScore2AndBalanceOnAudienceSide());
     autoChooser.addOption("mario broskito", getMyMarioAuto());
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -92,47 +91,51 @@ public final class Autos {
     Command coconutMall = autoBuilder.followPath(luigi.get(0));
     // Command DKJungle = autoBuilder.followPath(luigi.get(1));
     // Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
-    return rainbowRoad.andThen(new SetPositions(42, 1.1, 15, true).andThen(new OpenClawCube()))
+    return rainbowRoad.andThen(new SetPositions(42, 1.1, 15, true).andThen(new OpenClawToHoldCube()))
         .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge);//.andThen(new
                                                                                   // AutoEngage());
   }
 
-  private Command getMyAuto() {
-    List<PathPlannerTrajectory> epicPathGroupInitial = PathPlanner.loadPathGroup("tsla stock is good",
+  private Command getScore2AndBalanceOnAudienceSide() {
+    List<PathPlannerTrajectory> rawPath = PathPlanner.loadPathGroup("Score 2 and Balance Audience Side",
         new PathConstraints(2, 3));
-    // for(int i = 0; i<epicPathGroup.size(); i++){
-    // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
-    // Alliance.Red);
-    // }
-    List<PathPlannerTrajectory> epicPathGroup = mirrorPathsForAlliance(epicPathGroupInitial);
-    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
-    Command pathTSLA1 = autoBuilder.followPath(epicPathGroup.get(0));
-    Command pathTSLA2 = autoBuilder.followPath(epicPathGroup.get(1));
 
-    return (new SetPositions(42, 1.05, -15, true))
-        .andThen(new OpenClawCube())
-        .andThen(new Homing())
-        .andThen(stockMarketCrash)
+    List<PathPlannerTrajectory> mirroredPathGroup = mirrorPathsForAlliance(rawPath);
+    Command resetBotPose = autoBuilder.resetPose(mirroredPathGroup.get(0))
+        .andThen(() -> System.out.println("reset bot pose"));
+    Command pathSegment1 = autoBuilder.followPath(mirroredPathGroup.get(0))
+        .andThen(() -> System.out.println("finished path segment 1"));
+    Command pathSegment2 = autoBuilder.followPath(mirroredPathGroup.get(1))
+        .andThen(() -> System.out.println("finished path segment 2"));
+
+    return (resetBotPose.andThen(new SetPositions(42, 1.05, -15, true))
+        .andThen(new OpenClawToHoldCube())
         .andThen(
-            new ParallelRaceGroup(
-                new ParallelRaceGroup(
-                    pathTSLA1,
-                    new RunIntake(),
-                    new SequentialCommandGroup(/* new SetPositions(90, 0.1, -180), */
-                        new SetPositions(0, 0.15, 180, true),
-                        // new WaitCommand(1),
-                        /* not working yet */
-                        new SetPositions(-68, 0.6, 180, true)),
-                        new OpenClawCube())))
+            pathSegment1
+                .raceWith(new SequentialCommandGroup(
+                    // pulls the arm into travel pose
+                    new TravelPose(),
+                    // rotates the turret into position to pickup cube
+                    new TravelPose().alongWith(new SetTurretAngle(180, true)),
+                    // lowers and extends arm to pick up cube
+                    new SetPositions(-68, 0.6, 180, true)
+                        // while running the intake and holding the claw at the correct position to pick
+                        // up a cube
+                        .alongWith(new RunIntake()).alongWith(new OpenClawToHoldCube(false)))))
+        .andThen(new ParallelRaceGroup(
+            new WaitCommand(.25),
+            new RunIntake(),
+            new OpenClawToHoldCube(false)))
         .andThen(
-            new ParallelRaceGroup((new WaitCommand(.25)), (new RunIntake()), (new OpenClawCube(false))))
+            pathSegment2
+                .raceWith(new OpenClawToHoldCube(false))
+                .alongWith(new TravelPose()
+                    .andThen(new TravelPose().alongWith(new SetTurretAngle(15, true)))))
+        .andThen(new SetPositions(42, 1.05, 15, true)
+            .raceWith(new OpenClawToHoldCube(false)))
         .andThen(
-            pathTSLA2.alongWith(new Homing())// .raceWith(new CloseClaw())
-        )
-        .andThen(new SetPositions(42, 1.05, 15, true))
-        .andThen(
-            new ParallelRaceGroup(new OpenClawCube(false), new RunIntakeReversed(), new WaitCommand(1)))
-        .andThen(new Homing());
+            new ParallelRaceGroup(new OpenClawToHoldCube(false), new RunIntakeReversed(), new WaitCommand(1)))
+        .andThen(new TravelPose()));
   }
 
   private static SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(

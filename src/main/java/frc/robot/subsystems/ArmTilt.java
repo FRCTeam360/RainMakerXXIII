@@ -27,10 +27,6 @@ import frc.robot.Constants.CANIds;
 
 public class ArmTilt extends SubsystemBase {
 
-
-
-  private ArmExtend extend = ArmExtend.getInstance();
-
   private final CANSparkMax tiltLead = new CANSparkMax(CANIds.TILT_LEAD_ID, MotorType.kBrushless);
   private final CANSparkMax tiltFollow = new CANSparkMax(CANIds.TILT_FOLLOW_ID, MotorType.kBrushless); 
   private final RelativeEncoder encoder;
@@ -135,7 +131,7 @@ public class ArmTilt extends SubsystemBase {
     tab.addDouble("Arm Tilt", () -> encoder.getPosition());
     tab.addDouble("arm absolute", () -> absoluteEncoder.getPosition() - 90);
     tab.addDouble("tilt ff", () -> kFF);
-    tab.addDouble("tilt ff math", () -> kFF * (Math.cos(Math.toRadians(getAngle())) * (extend.getDistanceFromBalance() / extend.maxExtendMinusBalance)));
+    tab.addDouble("tilt ff math", () -> kFF * (Math.cos(Math.toRadians(getAngle())) * (ArmExtend.getInstance().getDistanceFromBalance() / ArmExtend.getInstance().maxExtendMinusBalance)));
     tab.addDouble("arm output", () -> tiltLead.getAppliedOutput());
     // SmartDashboard.putNumber("kff", kFF);
   }
@@ -208,7 +204,7 @@ public class ArmTilt extends SubsystemBase {
   // }
 
   public double getFeedForward() {
-    return kFF * 12.0 * (Math.cos(Math.toRadians(getAngle())) * (extend.getDistanceFromBalance() / extend.maxExtendMinusBalance));
+    return kFF * 12.0 * (Math.cos(Math.toRadians(getAngle())) * (ArmExtend.getInstance().getDistanceFromBalance() / ArmExtend.getInstance().maxExtendMinusBalance));
   }
 
   public void smartTilt(double inputAngle) {

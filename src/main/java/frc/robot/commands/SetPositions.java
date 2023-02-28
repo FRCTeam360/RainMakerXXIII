@@ -21,8 +21,11 @@ public class SetPositions extends CommandBase {
   private double extendDistance;
   private double turretAngle;
 
+  private boolean checkAlliance = false;
+
   /** Creates a new SetPositions. */
   public SetPositions(double tiltAngle, double extendDistance, double turretAngle, boolean checkAlliance) {
+    this.checkAlliance = checkAlliance;
     addRequirements(tilt, extend, turret);
     this.tiltAngle = tiltAngle;
     this.extendDistance = extendDistance;
@@ -41,12 +44,12 @@ public class SetPositions extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println(this.getClass().getSimpleName() + " started");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("setting positions");
     // if(Math.abs(extend.getExtendDistance() - extendDistance) <= 0.3){
     tilt.setAngle(tiltAngle);
     // }
@@ -57,7 +60,7 @@ public class SetPositions extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("ending positoins");
+    System.out.println(this.getClass().getSimpleName() + " finished");
   }
 
   // Returns true when the command should end.

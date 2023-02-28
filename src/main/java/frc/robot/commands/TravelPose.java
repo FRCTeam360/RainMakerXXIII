@@ -11,17 +11,16 @@ import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Turret;
 
-public class Homing extends CommandBase {
+public class TravelPose extends CommandBase {
   private final ArmTilt tilt = ArmTilt.getInstance();
   private final ArmExtend extend = ArmExtend.getInstance();
-  private final Turret turret = Turret.getInstance();
 
   private final XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
 
   /** Creates a new Homing. */
-  public Homing() {
+  public TravelPose() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(tilt, extend, turret);
+    addRequirements(tilt, extend);
   }
 
   // Called when the command is initially scheduled.
@@ -35,9 +34,6 @@ public class Homing extends CommandBase {
   public void execute() {
     tilt.setAngle(90);
     extend.setPosition(0.1);
-    if (extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 10) {
-      turret.setPosition(0);
-    }
   }
 
   // Called once the command ends or is interrupted.
@@ -49,7 +45,6 @@ public class Homing extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 2
-        && Math.abs(turret.getAngleRelativeToRobot() - 0) < 2;
+    return extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 2;
   }
 }

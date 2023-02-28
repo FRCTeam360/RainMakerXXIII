@@ -8,20 +8,19 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Claw;
 
-public class OpenClawCube extends CommandBase {
+public class OpenClawToHoldCube extends CommandBase {
   private final Claw claw = Claw.getInstance();
 
   boolean shouldEnd;
-  
 
   /** Creates a new OpenClaw. */
-  public OpenClawCube(boolean shouldEnd) {
+  public OpenClawToHoldCube(boolean shouldEnd) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(claw);
     this.shouldEnd = shouldEnd;
   }
 
-  public OpenClawCube() {
+  public OpenClawToHoldCube() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(claw);
     this.shouldEnd = true;
@@ -30,6 +29,7 @@ public class OpenClawCube extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println(this.getClass().getSimpleName() + " started");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,7 +41,8 @@ public class OpenClawCube extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-      claw.stopClaw();
+    claw.stopClaw();
+    System.out.println(this.getClass().getSimpleName() + " finished");
   }
 
   // Returns true when the command should end.

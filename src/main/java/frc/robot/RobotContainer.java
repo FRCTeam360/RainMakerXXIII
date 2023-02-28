@@ -114,7 +114,7 @@ public class RobotContainer {
     operatorController.b().whileTrue(new GroundPickup(false));
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
 
-    operatorController.back().whileTrue(new OpenClawCube());
+    operatorController.back().whileTrue(new OpenClawToHoldCube());
     operatorController.start().whileTrue(new OpenClawConeSubstation());
 
     operatorController.pov(0).whileTrue(homing);
