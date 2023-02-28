@@ -40,14 +40,15 @@ public class SetPositions extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     System.out.println("setting positions");
     // if(Math.abs(extend.getExtendDistance() - extendDistance) <= 0.3){
-      tilt.setAngle(tiltAngle);
+    tilt.setAngle(tiltAngle);
     // }
     extend.setPosition(extendDistance);
     turret.angleTurn(turretAngle);
@@ -62,6 +63,8 @@ public class SetPositions extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(tilt.getAngle() - tiltAngle) < 2 && Math.abs(turret.getAngleRelativeToRobot() - turret.getNearestTurretAngle(turretAngle)) < 1 && Math.abs(extend.getExtendDistance() - extendDistance) < 0.02;
+    return Math.abs(tilt.getAngle() - tiltAngle) < 2
+        && Math.abs(turret.getAngleRelativeToRobot() - turret.getNearestTurretAngle(turretAngle)) < 1
+        && Math.abs(extend.getExtendDistance() - extendDistance) < 0.02;
   }
 }

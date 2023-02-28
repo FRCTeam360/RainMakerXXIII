@@ -173,11 +173,9 @@ public class Limelight{
       periodicCycles = 10;
       Rotation3d r = new Rotation3d(botposeArray[3], botposeArray[4], botposeArray[5]);
       Translation3d tempPose = new Translation3d(botposeArray[0], botposeArray[1], botposeArray[2]);
-      System.out.println(tempPose);
       if(poses.isEmpty() || !tempPose.equals(poses.getFirst())) {
         poses.addFirst(tempPose);
       }
-      System.out.println("pose.size: " + poses.size());
       if(poses.size()>8) {
         poses.removeLast();
       }

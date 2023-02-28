@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -133,6 +134,9 @@ public class Claw extends SubsystemBase {
   @Override
   public void periodic() {
     checkGamePieceMode();
+    if(DriverStation.isDisabled()){
+      
+    }
     // This method will be called once per scheduler run
   }
 }

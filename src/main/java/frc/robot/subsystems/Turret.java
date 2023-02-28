@@ -68,17 +68,17 @@ public class Turret extends SubsystemBase {
     motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     pidController = motor.getPIDController();
-    pidController.setP(0.03);
-    pidController.setD(0.00); 
-    pidController.setI(0.0);
-    pidController.setFF(0.0);
-    pidController.setOutputRange(-0.7, 0.7); //TODO TUNE
+    pidController.setP(0.03, 0);
+    pidController.setD(0.00, 0); 
+    pidController.setI(0.0, 0);
+    pidController.setFF(0.0, 0);
+    pidController.setOutputRange(-0.9, 0.9, 0); //TODO TUNE
 
     pidController.setP(0.03, 1);
     pidController.setOutputRange(-0.5, 0.5, 1); //TODO TUNE
 
     pidController.setP(0.03, 2);
-    pidController.setOutputRange(-0.3, 0.3); //TODO TUNE
+    pidController.setOutputRange(-0.3, 0.3, 2); //TODO TUNE
     encoder = motor.getEncoder();
 
     tab.addDouble("Turret Angle", () -> encoder.getPosition());
@@ -121,13 +121,13 @@ public class Turret extends SubsystemBase {
   }
 
   public void setPosition(double inputAngle) {
-    double distance = ArmExtend.getInstance().getExtendDistance() * Math.abs(Math.cos(ArmTilt.getInstance().getAngle()));
+    double distance = 0;// ArmExtend.getInstance().getExtendDistance() * Math.abs(Math.cos(ArmTilt.getInstance().getAngle()));
     if(distance > 0.8){
       pidController.setReference(inputAngle, ControlType.kPosition, 2);
     } else if (distance > 0.4){
       pidController.setReference(inputAngle, ControlType.kPosition, 1);
     } else {
-      pidController.setReference(inputAngle, ControlType.kPosition);
+      pidController.setReference(inputAngle, ControlType.kPosition, 0);
     }
   }
 

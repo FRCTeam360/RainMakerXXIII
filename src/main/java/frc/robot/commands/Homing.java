@@ -33,7 +33,9 @@ public class Homing extends CommandBase {
   public void execute() {
     tilt.setAngle(90);
     extend.setPosition(0.1);
-    turret.setPosition(0);
+    if(extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 10){
+      turret.setPosition(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
