@@ -5,14 +5,18 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.DriverStation.MatchType;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.CANIds;
 import frc.robot.subsystems.Lights;
 import frc.robot.utils.ArmPoseCalculator;
 
@@ -31,6 +35,8 @@ public class Robot extends TimedRobot {
 
   private boolean wasOnFMS = false;
   private ArmPoseCalculator calculator = new ArmPoseCalculator();
+
+  private PowerDistribution pdh = new PowerDistribution(CANIds.PDH_ID, ModuleType.kRev);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -68,6 +74,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putData(pdh);
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic

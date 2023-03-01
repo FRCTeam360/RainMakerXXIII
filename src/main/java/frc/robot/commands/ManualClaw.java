@@ -31,11 +31,11 @@ public class ManualClaw extends CommandBase {
       if(claw.getCurrent() > 15){
         hitLimit= true;
       }
-      if(hitLimit){
-        claw.adjustsClaw(-0.05);
-      } else {
+      // if(hitLimit){
+      //   claw.adjustsClaw(-0.05);
+      // } else {
         claw.adjustsClaw(operatorCont.getLeftTriggerAxis() * -0.3);
-      }
+      // }
     } else if (Math.abs(operatorCont.getRightTriggerAxis()) > 0.1) { //open
       claw.adjustsClaw(operatorCont.getRightTriggerAxis() *0.3);
       hitLimit = false;

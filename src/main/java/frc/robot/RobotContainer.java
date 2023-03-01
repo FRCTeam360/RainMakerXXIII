@@ -110,7 +110,8 @@ public class RobotContainer {
 
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     driverController.y().whileTrue(new AutoEngage());
-    operatorController.a().whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.7), true));
+    operatorController.a().whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawCube()));
+    
     operatorController.b().whileTrue(new GroundPickup(false));
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
 
