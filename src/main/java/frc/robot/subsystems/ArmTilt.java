@@ -44,27 +44,27 @@ public class ArmTilt extends SubsystemBase {
 
   private double kMaxRampRate = 0.5; //TODO TUNE
 
-  private double kP = 0.05; //3
+  private double kP = 0.02; //3
   private double kI = 0;
-  private double kD = 0;
+  private double kD = 0.000005;
   private double kIz = 0;
   public double kFF = 0.035; //0.01 retracted 0.05 extended
-  private double kMaxOutput = 0.5;
-  private double kMinOutput = -0.5;
+  private double kMaxOutput = 0.9;
+  private double kMinOutput = -0.9;
 
-  private double kP2 = 0.05; //3
+  private double kP2 = 0.02; //3
   private double kI2 = 0;
   private double kD2 = 0.5;
   private double kIz2 = 0;
-  private double kMaxOutput2 = 0.35;
-  private double kMinOutput2 = -0.35;
+  private double kMaxOutput2 = 0.65;
+  private double kMinOutput2 = -0.65;
 
-  private double kP3 = 0.05; //3
+  private double kP3 = 0.02; //3
   private double kI3 = 0;
   private double kD3 = 0;
   private double kIz3 = 0;
-  private double kMaxOutput3 = 0.2;
-  private double kMinOutput3 = -0.2;
+  private double kMaxOutput3 = 0.4;
+  private double kMinOutput3 = -0.4;
 
   // private TrapezoidProfile profile = new TrapezoidProfile(null, null);
   // private double previousSetpoint = 10000;
@@ -92,8 +92,8 @@ public class ArmTilt extends SubsystemBase {
     tiltFollow.setIdleMode(IdleMode.kBrake);
     tiltFollow.follow(tiltLead);
 
-    tiltLead.setSoftLimit(SoftLimitDirection.kForward,220.0f);
-    tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -30.0f);
+    tiltLead.setSoftLimit(SoftLimitDirection.kForward,220.0f + 90f);
+    tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -30.0f + 90f);
     tiltLead.enableSoftLimit(SoftLimitDirection.kForward, true);
     tiltLead.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
@@ -130,7 +130,7 @@ public class ArmTilt extends SubsystemBase {
     pidController.setIZone(kIz3, 2);
     pidController.setOutputRange(kMinOutput3, kMaxOutput3, 2);
 
-    pidController.setFeedbackDevice(encoder);
+    pidController.setFeedbackDevice(absoluteEncoder);
 
     tab.addDouble("Arm Tilt", () -> encoder.getPosition());
     tab.addDouble("arm absolute", () -> absoluteEncoder.getPosition() - 90);
@@ -166,7 +166,7 @@ public class ArmTilt extends SubsystemBase {
 
   public void setAngle(double inputAngle) {
     // System.out.println("angle set"+ inputAngle);
-    // inputAngle = inputAngle + 90;
+    inputAngle = inputAngle + 90;
     if(ArmExtend.getInstance().getExtendDistance() >= 0.8){
       pidController.setReference(inputAngle, ControlType.kPosition, 2, getFeedForward()); //was , getFeedForward()
     } else if(ArmExtend.getInstance().getExtendDistance() >= 0.4){

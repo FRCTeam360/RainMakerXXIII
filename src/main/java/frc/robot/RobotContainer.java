@@ -123,6 +123,8 @@ public class RobotContainer {
 
     operatorController.rightBumper().whileTrue(runIntake);
     operatorController.leftBumper().whileTrue(runIntakeReversed);
+
+    operatorController.pov(180).whileTrue(new InstantCommand(() -> turret.setPosition(0)));
   }
 
   /**
