@@ -124,11 +124,13 @@ public final class Autos {
                         /* not working yet */
                         new SetPositions(-68, 0.6, 180, true)),
                         new OpenClawCube())))
+        .andThen(new PrintCommand("pathTSLA1 done"))
         .andThen(
             new ParallelRaceGroup((new WaitCommand(.25)), (new RunIntake()), (new OpenClawCube(false))))
         .andThen(
             pathTSLA2.alongWith(new Homing())// .raceWith(new CloseClaw())
         )
+        .andThen(new PrintCommand("pathTSLA2 done"))
         .andThen(new SetPositions(42, 1.05, 15, true))
         .andThen(
             new ParallelRaceGroup(new OpenClawCube(false), new RunIntakeReversed(), new WaitCommand(1)))
