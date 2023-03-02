@@ -69,15 +69,20 @@ public final class Autos {
   public Autos() {
     autoChooser = new SendableChooser<>();
     // add auto options to chooser here
-    autoChooser.addOption("chop suey!", example);
-    autoChooser.addOption("lets go brandon", notExample);
-    autoChooser.addOption("tsla stock is good", getMyAuto());
-    autoChooser.addOption("mario broskito", getMyMarioAuto());
-    autoChooser.addOption("anywhere left", getAnywhereLeft());
-    autoChooser.addOption("anywhere right", getAnywhereRight());
-    autoChooser.addOption("engage from wall", getEngageFromWall());
-    autoChooser.addOption("engage from loading", getEngageFromLoading());
-    autoChooser.addOption("new 2 piece", getNew2Piece());
+    // autoChooser.addOption("chop suey!", example);
+    // autoChooser.addOption("lets go brandon", notExample);
+    // autoChooser.addOption("tsla stock is good", getMyAuto());
+    autoChooser.addOption("coop mgeg", getMyMarioAuto());
+    autoChooser.addOption("wall mgeg", getEngageFromWall());
+    autoChooser.addOption("loading mgeg", getEngageFromLoading());
+    autoChooser.addOption("loading 2 piece", getNew2Piece());
+    autoChooser.addOption("mobility left", getAnywhereLeft());
+    autoChooser.addOption("mobility right", getAnywhereRight());
+    autoChooser.addOption("loading 1.5 piece mgeg", getEngagePlusPiece());
+    autoChooser.addOption("cable 0 piece mgeg", getCable0PieceEngage());
+    autoChooser.addOption("score left", getScoreLeft());
+    autoChooser.addOption("score right", getScoreRight());
+    autoChooser.addOption("do nothing", null);
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -102,6 +107,10 @@ public final class Autos {
         .andThen(segment1);
   }
 
+  private Command getScoreRight(){
+    return new SetPositions(42, 1.1, 15, false).andThen(new OpenClawCubeGround()).andThen(new Homing());
+  }
+
   private Command getAnywhereLeft() {
     PathPlannerTrajectory path = PathPlanner.loadPath("anywhere", 2, 2);
 
@@ -111,6 +120,10 @@ public final class Autos {
 
     return setPose.andThen(new SetPositions(42, 1.1, -15, false)).andThen(new OpenClawCubeGround())
         .andThen(new Homing()).andThen(segment1);
+  }
+
+  private Command getScoreLeft() {
+    return new SetPositions(42, 1.1, -15, false).andThen(new OpenClawCubeGround()).andThen(new Homing());
   }
 
   private Command getEngageFromWall() {
@@ -133,6 +146,16 @@ public final class Autos {
 
     return setPose.andThen(new SetPositions(42, 1.1, -15, true)).andThen(new OpenClawCubeGround()).andThen(new Homing())
         .andThen(segment1).andThen(new AutoEngage());
+  }
+
+  private Command getCable0PieceEngage(){
+    PathPlannerTrajectory path = PathPlanner.loadPath("engage from wall", 2, 2);
+
+    path = PathPlannerTrajectory.transformTrajectoryForAlliance(path, DriverStation.getAlliance());
+    Command setPose = autoBuilder.resetPose(path);
+    Command segment1 = autoBuilder.followPath(path);
+
+    return setPose.andThen(segment1).andThen(new AutoEngage());
   }
 
   private Command getMyMarioAuto() {
@@ -198,7 +221,7 @@ public final class Autos {
     );
   }
 
-  private Command getNew2Piece() {
+  private Command getEngagePlusPiece() {
     List<PathPlannerTrajectory> epicPathGroupInitial = PathPlanner.loadPathGroup("new 2 piece",
         new PathConstraints(2, 3));
     // for(int i = 0; i<epicPathGroup.size(); i++){
@@ -241,6 +264,42 @@ public final class Autos {
       )
     )
     .andThen(new Homing())
+    );
+  }
+
+  private Command getNew2Piece() {
+    List<PathPlannerTrajectory> epicPathGroupInitial = PathPlanner.loadPathGroup("new 2 piece",
+        new PathConstraints(2, 3));
+    // for(int i = 0; i<epicPathGroup.size(); i++){
+    // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
+    // Alliance.Red);
+    // }
+    List<PathPlannerTrajectory> epicPathGroup = mirrorPathsForAlliance(epicPathGroupInitial);
+    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
+    Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
+    Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
+
+    return (stockMarketCrash
+    .andThen(new SetPositions(42, 1.05, -15, true))
+    .andThen(new OpenClawCubeGround(true))
+    .andThen(new Homing())
+    .andThen(new ParallelCommandGroup(
+      part1, 
+      new SetPositions(0, 0.15, 180, true)
+      .andThen(new SetPositions(-25, 0.6, 180))
+    ))
+    .andThen(new ParallelRaceGroup(
+      part2, 
+      new RunIntake(),
+      new OpenClawCubeGround(false)
+    ))
+    .andThen(
+      new ParallelCommandGroup(
+        part3,
+        new Homing()
+      )
+    ).andThen(new AutoEngage())
     );
   }
 
