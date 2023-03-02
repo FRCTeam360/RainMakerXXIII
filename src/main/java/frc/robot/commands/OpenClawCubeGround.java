@@ -8,20 +8,20 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Claw;
 
-public class OpenClawCube extends CommandBase {
+public class OpenClawCubeGround extends CommandBase {
   private final Claw claw = Claw.getInstance();
 
   boolean shouldEnd;
   
 
   /** Creates a new OpenClaw. */
-  public OpenClawCube(boolean shouldEnd) {
+  public OpenClawCubeGround(boolean shouldEnd) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(claw);
     this.shouldEnd = shouldEnd;
   }
 
-  public OpenClawCube() {
+  public OpenClawCubeGround() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(claw);
     this.shouldEnd = true;

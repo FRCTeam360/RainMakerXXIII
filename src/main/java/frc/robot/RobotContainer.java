@@ -110,13 +110,17 @@ public class RobotContainer {
 
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     driverController.y().whileTrue(new AutoEngage());
-    operatorController.a().whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawCube()));
+
+    //while start held, set to cone intake, else set to cube
+    operatorController.a().and(operatorController.start().negate()).whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawCubeSubstation()));
+    operatorController.a().and(operatorController.start()).whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawConeSubstation()));
     
-    operatorController.b().whileTrue(new GroundPickup(false));
+    operatorController.b().and(operatorController.start().negate()).whileTrue(new GroundPickup(false));
+    operatorController.b().and(operatorController.start()).whileTrue(new GroundPickup(true));
+
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
 
-    operatorController.back().whileTrue(new OpenClawCube());
-    operatorController.start().whileTrue(new OpenClawConeSubstation());
+    operatorController.back().whileTrue(new CloseClaw());
 
     operatorController.pov(0).whileTrue(homing);
     operatorController.pov(90).whileTrue(new SetPositions(40, 1.05, 15));

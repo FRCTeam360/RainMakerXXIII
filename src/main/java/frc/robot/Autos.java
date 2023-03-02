@@ -53,7 +53,7 @@ public final class Autos {
       put("tsla halt", new WaitCommand(20));
       put("engage", new AutoEngage());
 
-      put("Open Claw", new OpenClawCube());
+      put("Open Claw", new OpenClawCubeGround());
       put("Close Claw", new CloseClaw());
       put("Set Point Arm Extension", new SetPointArmExtension());
       put("Set Point Arm Tilt", new SetPointArmTilt());
@@ -92,7 +92,7 @@ public final class Autos {
     Command coconutMall = autoBuilder.followPath(luigi.get(0));
     // Command DKJungle = autoBuilder.followPath(luigi.get(1));
     // Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
-    return rainbowRoad.andThen(new SetPositions(42, 1.1, 15, true).andThen(new OpenClawCube()))
+    return rainbowRoad.andThen(new SetPositions(42, 1.1, 15, true).andThen(new OpenClawCubeGround()))
         .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge);//.andThen(new
                                                                                   // AutoEngage());
   }
@@ -110,7 +110,7 @@ public final class Autos {
     Command pathTSLA2 = autoBuilder.followPath(epicPathGroup.get(1));
 
     return (new SetPositions(42, 1.05, -15, true))
-        .andThen(new OpenClawCube())
+        .andThen(new OpenClawCubeGround())
         .andThen(new Homing())
         .andThen(stockMarketCrash)
         .andThen(
@@ -123,17 +123,17 @@ public final class Autos {
                         // new WaitCommand(1),
                         /* not working yet */
                         new SetPositions(-68, 0.6, 180, true)),
-                        new OpenClawCube())))
+                        new OpenClawCubeGround())))
         .andThen(new PrintCommand("pathTSLA1 done"))
         .andThen(
-            new ParallelRaceGroup((new WaitCommand(.25)), (new RunIntake()), (new OpenClawCube(false))))
+            new ParallelRaceGroup((new WaitCommand(.25)), (new RunIntake()), (new OpenClawCubeGround(false))))
         .andThen(
             pathTSLA2.alongWith(new Homing())// .raceWith(new CloseClaw())
         )
         .andThen(new PrintCommand("pathTSLA2 done"))
         .andThen(new SetPositions(42, 1.05, 15, true))
         .andThen(
-            new ParallelRaceGroup(new OpenClawCube(false), new RunIntakeReversed(), new WaitCommand(1)))
+            new ParallelRaceGroup(new OpenClawCubeGround(false), new RunIntakeReversed(), new WaitCommand(1)))
         .andThen(new Homing());
   }
 
