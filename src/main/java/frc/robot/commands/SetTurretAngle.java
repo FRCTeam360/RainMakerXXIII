@@ -37,7 +37,7 @@ public class SetTurretAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    turret.setPosition(turretAngle);
+    turret.angleTurn(turretAngle);
   }
 
   // Called once the command ends or is interrupted.

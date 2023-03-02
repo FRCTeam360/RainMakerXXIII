@@ -108,8 +108,9 @@ public final class Autos {
     Command pathSegment2 = autoBuilder.followPath(mirroredPathGroup.get(1))
         .andThen(() -> System.out.println("finished path segment 2"));
 
-    return (resetBotPose.andThen(new SetPositions(42, 1.05, -15, true))
+    return (new SetPositions(42, 1.05, -15, true)
         .andThen(new OpenClawToHoldCube())
+        .andThen(resetBotPose)
         .andThen(
             pathSegment1
                 .raceWith(new SequentialCommandGroup(
@@ -122,7 +123,9 @@ public final class Autos {
                         // while running the intake and holding the claw at the correct position to pick
                         // up a cube
                         .alongWith(new RunIntake()).alongWith(new OpenClawToHoldCube(false)))))
+        .andThen(new SetArmPose(new Translation3d(0.3, 0, 0.05), false))
         .andThen(new ParallelRaceGroup(
+            new SetPositions(-30, 0.6, 180, true),
             new WaitCommand(.25),
             new RunIntake(),
             new OpenClawToHoldCube(false)))
