@@ -45,7 +45,8 @@ public class FieldOrientedDrive extends CommandBase {
                     getYWithDeadzone() * getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 0.8 * Math.signum(getYWithDeadzone()) * -1,
                     getXWithDeadzone() * getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 0.8 * Math.signum(getXWithDeadzone()) * -1,
                     getWithDeadzone(drivercont.getRightX()) * getWithDeadzone(drivercont.getRightX()) * DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Math.signum(drivercont.getRightX()) * -1,
-                        DriverStation.getAlliance() == Alliance.Red ? driveTrain.getGyroscopeRotation().minus(new Rotation2d(Math.PI)) : driveTrain.getGyroscopeRotation()
+                        //DriverStation.getAlliance() == Alliance.Red ? driveTrain.getGyroscopeRotation().minus(new Rotation2d(Math.PI)) : driveTrain.getGyroscopeRotation()
+                        driveTrain.getGyroscopeRotation()
                 )
         );
 

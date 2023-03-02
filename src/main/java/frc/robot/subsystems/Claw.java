@@ -128,6 +128,8 @@ public class Claw extends SubsystemBase {
     } else if(driverCont.getStartButton()){
       // gamePiece = GamePiece.CUBE;
       lights.setYellow();
+    } else {
+      lights.setShouldShowStatus();
     }
   }
 

@@ -22,6 +22,8 @@ public class Lights extends SubsystemBase {
 
   private final CANdle candle = new CANdle(CANIds.CANDLE_ID);
 
+  private boolean shouldShowStatus = true;
+
   /** Creates a new Lights. */
   public Lights() {
     candle.configLEDType(LEDStripType.GRB);
@@ -36,27 +38,37 @@ public class Lights extends SubsystemBase {
   }
 
   public void setIndividualRed(int index){
-    candle.setLEDs(0,0,0,0,0,1);
-    candle.setLEDs(0,0,0,0,3,2);
-    candle.setLEDs(0,0,0,0,7,1);
-    candle.setLEDs(254, 0, 0, 0, index, 1);
+    if(shouldShowStatus){
+      candle.setLEDs(0,0,0,0,0,1);
+      candle.setLEDs(0,0,0,0,3,2);
+      candle.setLEDs(0,0,0,0,7,1);
+      candle.setLEDs(254, 0, 0, 0, index, 1);
+    }
   }
 
   public void setINdividualGreen(int index){
-    candle.setLEDs(0,0,0,0,0,1);
-    candle.setLEDs(0,0,0,0,3,2);
-    candle.setLEDs(0,0,0,0,7,1);
-    candle.setLEDs(0, 254, 0, 0, index, 1);
+    if(shouldShowStatus){
+      candle.setLEDs(0,0,0,0,0,1);
+      candle.setLEDs(0,0,0,0,3,2);
+      candle.setLEDs(0,0,0,0,7,1);
+      candle.setLEDs(0, 254, 0, 0, index, 1);
+    }
   }
 
   public void setYellow(){
+    shouldShowStatus = false;
     candle.setLEDs(255, 200, 0); //239, 223, 13
   }
 
   public void setPurple(){
+    shouldShowStatus = false;
     candle.clearAnimation(0);
     candle.setLEDs(163, 23, 172);
     System.out.println("setting purple");
+  }
+
+  public void setShouldShowStatus() {
+    shouldShowStatus = true;
   }
 
   public void setOrange(){

@@ -23,4 +23,11 @@ public class GroundPickup extends ParallelCommandGroup {
       isCone ? new OpenClawConeGround() : new OpenClawCubeGround() 
     );
   }
+
+  public GroundPickup(boolean isCone, boolean reversed){
+    addCommands(
+      new SetArmPose(new Translation3d(reversed ? -0.3 : 0.3, 0, 0.05), false), 
+      isCone ? new OpenClawConeGround() : new OpenClawCubeGround() 
+    );
+  }
 }

@@ -45,7 +45,7 @@ public class ArmTilt extends SubsystemBase {
   private double kMaxRampRate = 0.5; //TODO TUNE
 
   private double kP = 0.02; //3
-  private double kI = 0;
+  private double kI = 0.00000000001;
   private double kD = 0.000005;
   private double kIz = 0;
   public double kFF = 0.035; //0.01 retracted 0.05 extended
@@ -216,7 +216,8 @@ public class ArmTilt extends SubsystemBase {
   }
 
   public double getAngle(){
-    return encoder.getPosition();
+    // return encoder.getPosition();
+    return absoluteEncoder.getPosition() - 90.0;
   }
 
   public double getVelocity(){

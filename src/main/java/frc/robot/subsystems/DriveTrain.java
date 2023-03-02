@@ -47,6 +47,8 @@ public class DriveTrain extends SubsystemBase {
   private final Lights lights = Lights.getInstance();
   public static final double MAX_VOLTAGE = 12.0;
 
+  public double futureAngle = 180;
+
   private static final double ADJUSTMENT_FACTOR = 0.1;
 
   private PIDController pitchController = new PIDController(0.1, 0, 0);
@@ -152,10 +154,22 @@ public class DriveTrain extends SubsystemBase {
   public void zeroGyroscope() {
     // FIXME Remove if you are using a Pigeon
     // m_pigeon.setFusedHeading(0.0);
-    m_pigeon.setYaw(0.0);
+    m_pigeon.setYaw(.0);
 
     // FIXME Uncomment if you are using a NavX
     // m_navx.zeroYaw();
+  }
+
+  public void setGyroPosition(double yaw) {
+    m_pigeon.setYaw(yaw);
+  }
+
+  public void setGyroOffset(double yaw){
+    futureAngle = yaw;
+  }
+
+  public Rotation2d getGyroWithOffset() {
+    return m_pigeon.getRotation2d().plus(new Rotation2d(Math.toRadians(futureAngle)));
   }
 
   public Rotation2d getGyroscopeRotation() {;
