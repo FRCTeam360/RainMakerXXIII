@@ -218,15 +218,29 @@ public final class Autos {
     .andThen(new ParallelCommandGroup(
       part1, 
       new SetPositions(0, 0.15, 180, true)
-      .andThen(new SetPositions(-28, 0.6, 180))
+      .andThen(new SetPositions(-25, 0.6, 180))
     ))
     .andThen(new ParallelRaceGroup(
       part2, 
-      new RunIntake()
+      new RunIntake(),
+      new OpenClawCubeGround(false)
     ))
     .andThen(
-      new Homing()
+      new ParallelCommandGroup(
+        part3,
+        new Homing()
+      )
     )
+    .andThen(
+      new SetPositions(42, 1.05, 15, true)
+    )
+    .andThen(
+      new ParallelRaceGroup(
+        new RunIntakeReversed(),
+        new WaitCommand(1)
+      )
+    )
+    .andThen(new Homing())
     );
   }
 
