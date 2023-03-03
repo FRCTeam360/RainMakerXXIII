@@ -47,8 +47,8 @@ public class AutoEngage extends CommandBase {
 
     pastAngle = currentAngle;
 
-    SmartDashboard.putNumber("error", currentAngle-pastAngle);
-    SmartDashboard.putNumber("current drivetrain angle", currentAngle);
+    // SmartDashboard.putNumber("error", currentAngle-pastAngle);
+    // SmartDashboard.putNumber("current drivetrain angle", currentAngle);
   }
 
   public double calculateAngle(double pitch, double roll){

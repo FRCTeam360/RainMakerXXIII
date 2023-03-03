@@ -160,6 +160,6 @@ public class ArmExtend extends SubsystemBase {
     // SmartDashboard.putNumber("arm extension", getExtendDistance());
     // SmartDashboard.putNumber("arm effort", leadMotor.getAppliedOutput());
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("extend ff", getFeedForward());
+    // SmartDashboard.putNumber("extend ff", getFeedForward());
     }
 }

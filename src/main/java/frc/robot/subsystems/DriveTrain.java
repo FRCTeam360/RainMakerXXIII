@@ -328,8 +328,8 @@ public class DriveTrain extends SubsystemBase {
     field.setRobotPose(odometry.getPoseMeters());
     SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
     SmartDashboard.putNumber("roll", m_pigeon.getRoll());
-    SmartDashboard.putNumber("X pose", getPose() == null ? 0.0 : getPose().getX());
-    SmartDashboard.putNumber("Y pose", getPose() == null ? 0.0 : getPose().getY());
+    // SmartDashboard.putNumber("X pose", getPose() == null ? 0.0 : getPose().getX());
+    // SmartDashboard.putNumber("Y pose", getPose() == null ? 0.0 : getPose().getY());
     ll.runVision();
     if(Objects.isNull(ll.getAveragePose())) {
       // pose = odometry.update(getGyroscopeRotation(), getModulePositions());
@@ -344,8 +344,8 @@ public class DriveTrain extends SubsystemBase {
     field.setRobotPose(pose);
 
     SmartDashboard.putData("field", field);
-    SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
-    SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
+    // SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
+    // SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
     // if(DriverStation.isDisabled()){
       checkEncoders();
     // }
@@ -353,8 +353,8 @@ public class DriveTrain extends SubsystemBase {
     // SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
     // SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("timestamp", ll.getTimestamp());
-    pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+    // SmartDashboard.putNumber("timestamp", ll.getTimestamp());
+    // pose = odometry.update(getGyroscopeRotation(), getModulePositions());
 
     if(DriverStation.isDisabled()){
       checkEncoders();
