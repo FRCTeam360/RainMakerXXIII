@@ -18,7 +18,7 @@ public final class Constants {
     DRAFT, PRACTICE, COMP
   }
 
-  public static final RobotType robotType = RobotType.PRACTICE;
+  public static final RobotType robotType = RobotType.COMP;
 
   public static RobotType getRobotType() {
     return robotType;

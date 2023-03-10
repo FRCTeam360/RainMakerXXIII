@@ -60,7 +60,7 @@
         "x": 5.9379694473674665,
         "y": 2.7818353350992417
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -82,7 +82,7 @@
         "y": 2.800919844696833
       },
       "nextControl": null,
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,

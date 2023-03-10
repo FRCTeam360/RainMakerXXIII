@@ -78,6 +78,8 @@ public final class Autos {
     autoChooser.addOption("engage from wall", getEngageFromWall());
     autoChooser.addOption("engage from loading", getEngageFromLoading());
     autoChooser.addOption("new 2 piece", getNew2Piece());
+    autoChooser.addOption("engage only", getEngageOnly());
+    autoChooser.addOption("null", null);
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -137,7 +139,7 @@ public final class Autos {
 
   private Command getMyMarioAuto() {
 
-    List<PathPlannerTrajectory> luigi = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(1, 3));
+    List<PathPlannerTrajectory> luigi = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(2, 3));
     luigi = mirrorPathsForAlliance(luigi);
     Command rainbowRoad = autoBuilder.resetPose(luigi.get(0));
     Command coconutMall = autoBuilder.followPath(luigi.get(0));
@@ -146,6 +148,19 @@ public final class Autos {
     return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
         .andThen(new SetPositions(42, 1.1, 15, true).andThen(new OpenClawCubeGround()))
         .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge).andThen(new
+                                                                                  // AutoEngage());
+  }
+
+  private Command getEngageOnly() {
+
+    List<PathPlannerTrajectory> luigi = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(1, 3));
+    luigi = mirrorPathsForAlliance(luigi);
+    Command rainbowRoad = autoBuilder.resetPose(luigi.get(0));
+    Command coconutMall = autoBuilder.followPath(luigi.get(0));
+    // Command DKJungle = autoBuilder.followPath(luigi.get(1));
+    // Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
+    return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
+        .andThen(coconutMall).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge).andThen(new
                                                                                   // AutoEngage());
   }
 
