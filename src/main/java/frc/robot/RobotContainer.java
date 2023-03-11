@@ -20,6 +20,7 @@ import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
+import frc.robot.utils.DynamicPaths;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -39,7 +40,7 @@ public class RobotContainer {
   private final DriveTrain driveTrain = DriveTrain.getInstance();
   private final Claw claw = Claw.getInstance();
 
-  private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive();
+  private final FieldOrientedDrive fieldDrive = new FieldOrientedDrive(); //auto
   private final RobotOrientedDrive robotDrive = new RobotOrientedDrive();
   private final CharacterizeDrivetrainCommand characterize = new CharacterizeDrivetrainCommand(driveTrain);
 
@@ -88,7 +89,10 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    
     driverController.b().whileTrue(driveTrain.xOutCommand());
+
+    driverController.y().toggleOnTrue(DynamicPaths.dynPaths());
   }
 
   /**
