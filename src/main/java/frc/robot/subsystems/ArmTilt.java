@@ -174,7 +174,7 @@ public class ArmTilt extends SubsystemBase {
     } else {
       pidController.setReference(inputAngle, ControlType.kPosition, 0, getFeedForward());
     }
-      SmartDashboard.putNumber("error", getAngle() - inputAngle);
+     // SmartDashboard.putNumber("error", getAngle() - inputAngle);
   }
 
   // public void trapezoidAngle(double inputAngle) {
@@ -244,8 +244,8 @@ public class ArmTilt extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("arm position", encoder.getPosition());
-    SmartDashboard.putNumber("arm absolute position", absoluteEncoder.getPosition());
+    //SmartDashboard.putNumber("arm position", encoder.getPosition());
+    //SmartDashboard.putNumber("arm absolute position", absoluteEncoder.getPosition());
     reseedMotorPosition();
     // kFF = SmartDashboard.getNumber("kFF", 0.0);
  }
