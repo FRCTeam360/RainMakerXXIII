@@ -50,7 +50,7 @@ public class ArmExtend extends SubsystemBase {
   private float forwardLimit = (float)(1.33);
   private float reverseLimit = (float)0.1;
 
-  private double balancePoint = -0.3; //TODO TUNE VALUE
+  private double balancePoint = -0.4; //TODO TUNE VALUE
   public double maxExtendMinusBalance = 1.33 - balancePoint; //TODO TUNE VALUE
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");

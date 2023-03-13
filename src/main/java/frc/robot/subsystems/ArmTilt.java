@@ -48,7 +48,7 @@ public class ArmTilt extends SubsystemBase {
   private double kI = 0.00000000001;
   private double kD = 0.000005;
   private double kIz = 0;
-  public double kFF = 0.035; //0.01 retracted 0.05 extended
+  public double kFF = 0.045; //0.01 retracted 0.05 extended
   private double kMaxOutput = 0.9;
   private double kMinOutput = -0.9;
 
@@ -88,7 +88,7 @@ public class ArmTilt extends SubsystemBase {
     tiltLead.setIdleMode(IdleMode.kBrake);
 
     tiltFollow.restoreFactoryDefaults(); 
-    tiltFollow.setInverted(false);
+    tiltFollow.setInverted(true);
     tiltFollow.setIdleMode(IdleMode.kBrake);
     tiltFollow.follow(tiltLead);
 
