@@ -53,6 +53,7 @@ public class RobotContainer {
 
   private final SetPointArmExtension pidExtend = new SetPointArmExtension();
   private final SetPointArmTilt pidTilt = new SetPointArmTilt();
+  private final SetPointClaw pidClaw = new SetPointClaw();
   private final SetPointTurret pidTurret = new SetPointTurret();
 
   private final TeleopArmPose teleopArmPose = new TeleopArmPose();

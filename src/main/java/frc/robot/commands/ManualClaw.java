@@ -16,7 +16,7 @@ public class ManualClaw extends CommandBase {
   private XboxController operatorCont = new XboxController(1);
   /** Creates a new ManualClaw. */
   public ManualClaw() {
-    addRequirements(claw);
+    addRequirements(claw);       
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

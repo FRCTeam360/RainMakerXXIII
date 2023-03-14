@@ -43,6 +43,10 @@ public class Claw extends SubsystemBase {
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
   
   private double kP = 0.02;
+  private double kI = 0;
+  private double kD = 0;
+  private double kIZone = 0;
+  private double kFF = 0;
   
   private boolean isComp;
 
@@ -72,6 +76,10 @@ public class Claw extends SubsystemBase {
 
     pidController = motor.getPIDController();
     pidController.setP(kP);
+    pidController.setI(kI);
+    pidController.setD(kD);
+    pidController.setIZone(kIZone);
+    pidController.setFF(kFF);
     pidController.setFeedbackDevice(absoluteEncoder);
 
     tab.addDouble("Claw position", () -> encoder.getPosition());

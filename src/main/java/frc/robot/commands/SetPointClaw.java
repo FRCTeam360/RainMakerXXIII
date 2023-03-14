@@ -4,32 +4,39 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Claw;
 
-public class RunIntakeReversed extends CommandBase {
-  private final Intake intake = Intake.getInstance();
-
-  /** Creates a new RunIntakeReversed. */
-  public RunIntakeReversed() {
+public class SetPointClaw extends CommandBase {
+  Claw claw = Claw.getInstance();
+  XboxController test = new XboxController(2);
+  /** Creates a new SetPointClaw. */
+  public SetPointClaw() {
+    addRequirements(claw);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    SmartDashboard.putNumber("Claw SetPoint", 0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.run(-1.0); //-.3
+    double setPoint = SmartDashboard.getNumber("ArmTilt SetPoint", 0);
+    claw.setPosition(setPoint);
+
+    SmartDashboard.putNumber("claw error", claw.getAbsoluteAngle() - setPoint);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stop();
+    claw.adjustsClaw(0);
   }
 
   // Returns true when the command should end.
