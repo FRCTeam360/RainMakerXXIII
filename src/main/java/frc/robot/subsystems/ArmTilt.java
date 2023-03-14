@@ -45,10 +45,10 @@ public class ArmTilt extends SubsystemBase {
 
   private double kMaxRampRate = 0.5; //TODO TUNE
 
-  private double kP = 0.02; //3
-  private double kI = 0.00000000001;
-  private double kD = 0.000005;
-  private double kIz = 0;
+  private double kP = 0.03; //3
+  private double kI = 0;//.00000000001;
+  private double kD = 0;//.000005;
+  private double kIz = 1.5;
   public double kFF = 0.05; //0.01 retracted 0.05 extended
   private double kMaxOutput = 0.9;
   private double kMinOutput = -0.9;
