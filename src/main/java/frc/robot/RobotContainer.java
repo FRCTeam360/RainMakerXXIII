@@ -71,13 +71,14 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
     configureDefaultCommands();
   }
 
   private void configureDefaultCommands() {
     turret.setDefaultCommand(manualTurret);
     extend.setDefaultCommand(manualExtend); 
-    tilt.setDefaultCommand(manualTilt); 
+    tilt.setDefaultCommand(pidTilt); 
     driveTrain.setDefaultCommand(fieldDrive);
     claw.setDefaultCommand(manualClaw);
   }

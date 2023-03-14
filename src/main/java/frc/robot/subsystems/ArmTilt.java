@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
@@ -48,7 +49,7 @@ public class ArmTilt extends SubsystemBase {
   private double kI = 0.00000000001;
   private double kD = 0.000005;
   private double kIz = 0;
-  public double kFF = 0.045; //0.01 retracted 0.05 extended
+  public double kFF = 0.05; //0.01 retracted 0.05 extended
   private double kMaxOutput = 0.9;
   private double kMinOutput = -0.9;
 
@@ -59,10 +60,10 @@ public class ArmTilt extends SubsystemBase {
   private double kMaxOutput2 = 0.65;
   private double kMinOutput2 = -0.65;
 
-  private double kP3 = 0.02; //3
-  private double kI3 = 0;
-  private double kD3 = 0;
-  private double kIz3 = 0;
+  private double kP3 = 0.02;//0.05; //3
+  private double kI3 = 0.00001;
+  private double kD3 = 0;//0.000005;
+  private double kIz3 = 1.5;
   private double kMaxOutput3 = 0.4;
   private double kMinOutput3 = -0.4;
 
@@ -88,9 +89,8 @@ public class ArmTilt extends SubsystemBase {
     tiltLead.setIdleMode(IdleMode.kBrake);
 
     tiltFollow.restoreFactoryDefaults(); 
-    tiltFollow.setInverted(true);
+    tiltFollow.follow(tiltLead, true);
     tiltFollow.setIdleMode(IdleMode.kBrake);
-    tiltFollow.follow(tiltLead);
 
     tiltLead.setSoftLimit(SoftLimitDirection.kForward,220.0f + 90f);
     tiltLead.setSoftLimit(SoftLimitDirection.kReverse, -30.0f + 90f);
