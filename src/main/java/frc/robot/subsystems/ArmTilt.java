@@ -54,9 +54,9 @@ public class ArmTilt extends SubsystemBase {
   private double kMinOutput = -0.9;
 
   private double kP2 = 0.02; //3
-  private double kI2 = 0;
-  private double kD2 = 0.5;
-  private double kIz2 = 0;
+  private double kI2 = 0.000005;
+  private double kD2 = 0;//.5;
+  private double kIz2 = 1.5;
   private double kMaxOutput2 = 0.65;
   private double kMinOutput2 = -0.65;
 
