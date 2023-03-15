@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.CANIds;
@@ -42,10 +43,10 @@ public class Claw extends SubsystemBase {
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
   
-  private double kP = 0.02;
-  private double kI = 0;
-  private double kD = 0;
-  private double kIZone = 0;
+  private double kP = 0.025;
+  private double kI = 0.000001;
+  private double kD = 0.0;
+  private double kIZone = 1.0;
   private double kFF = 0;
   
   private boolean isComp;
@@ -55,7 +56,6 @@ public class Claw extends SubsystemBase {
   public Claw() {
     isComp = Constants.getRobotType() == RobotType.COMP;
     
-
     // gamePiece = GamePiece.NONE;
 
     motor.restoreFactoryDefaults();
@@ -71,9 +71,9 @@ public class Claw extends SubsystemBase {
     // absoluteEncoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
     absoluteEncoder = motor.getAbsoluteEncoder(Type.kDutyCycle); //oops this is extremely bad, dont do this please but we kinda have to
     absoluteEncoder.setPositionConversionFactor(360);
-    absoluteEncoder.setZeroOffset(Constants.getRobotType() == RobotType.COMP ? 35 : 325); //325
     absoluteEncoder.setInverted(isComp);
-
+    absoluteEncoder.setZeroOffset(Constants.getRobotType() == RobotType.COMP ? 103.2 : 325); //325  COMP WAS 35
+    
     pidController = motor.getPIDController();
     pidController.setP(kP);
     pidController.setI(kI);
@@ -128,7 +128,7 @@ public class Claw extends SubsystemBase {
       System.out.println("position reset");
     }
   }
-
+//140.7
   private void checkGamePieceMode(){
     if(driverCont.getBackButton()){
       // gamePiece = GamePiece.CONE;
@@ -143,6 +143,7 @@ public class Claw extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Claw Angle", getAbsoluteAngle());
     checkGamePieceMode();
     if(DriverStation.isDisabled()){
       

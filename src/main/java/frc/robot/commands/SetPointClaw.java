@@ -21,13 +21,15 @@ public class SetPointClaw extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("Claw SetPoint", 0);
+    SmartDashboard.putNumber("Claw SetPoint", 71.0);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double setPoint = SmartDashboard.getNumber("ArmTilt SetPoint", 0);
+    
+    double setPoint = SmartDashboard.getNumber("Claw SetPoint", 71.0);
     claw.setPosition(setPoint);
 
     SmartDashboard.putNumber("claw error", claw.getAbsoluteAngle() - setPoint);

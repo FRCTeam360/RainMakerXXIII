@@ -79,7 +79,7 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     turret.setDefaultCommand(manualTurret);
     extend.setDefaultCommand(manualExtend); 
-    tilt.setDefaultCommand(pidTilt); 
+    tilt.setDefaultCommand(manualTilt); 
     driveTrain.setDefaultCommand(fieldDrive);
     claw.setDefaultCommand(manualClaw);
   }
