@@ -11,7 +11,7 @@ import frc.robot.subsystems.Claw;
 public class OpenClawCubeSubstation extends CommandBase {
   private final Claw claw = Claw.getInstance();
 
-  boolean shouldEnd;
+  private boolean shouldEnd;
   
 
   /** Creates a new OpenClaw. */
@@ -22,10 +22,14 @@ public class OpenClawCubeSubstation extends CommandBase {
   }
 
   public OpenClawCubeSubstation() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(claw);
-    this.shouldEnd = true;
+    this(true);
   }
+
+  // public OpenClawCubeSubstation() {
+  //   // Use addRequirements() here to declare subsystem dependencies.
+  //   addRequirements(claw);
+  //   this.shouldEnd = true;
+  // }
 
   // Called when the command is initially scheduled.
   @Override
@@ -47,6 +51,6 @@ public class OpenClawCubeSubstation extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(claw.getAbsoluteAngle() - 75.0) < 3;
+    return shouldEnd ?  Math.abs(claw.getAbsoluteAngle() - 75.0) < 3 : false;
   }
 }

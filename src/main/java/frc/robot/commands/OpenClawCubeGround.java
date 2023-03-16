@@ -11,7 +11,7 @@ import frc.robot.subsystems.Claw;
 public class OpenClawCubeGround extends CommandBase {
   private final Claw claw = Claw.getInstance();
 
-  boolean shouldEnd;
+  private boolean shouldEnd;
   
 
   /** Creates a new OpenClaw. */

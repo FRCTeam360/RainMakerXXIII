@@ -48,24 +48,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
-    DriveTrain.getInstance().setGyroPosition(180);
-
-
-    
-    // calculator.setRobotPose(new Pose3d(0.0, 0.0, 0.0, new Rotation3d(0, 0, 0)));
-    // calculator.setTargetPose(new Pose3d(1.0, 1.0, 1.0, new Rotation3d(0, 0, 0)));
-
-    calculator.setRobotTrans(new Translation3d(0,0,0));
-    calculator.setTargetTrans(new Translation3d(1,-1,1));
-
-    System.out.println("trans x: " + calculator.getX());
-    System.out.println("trans y: " + calculator.getY());
-    System.out.println("trans z: " + calculator.getZ());
-    System.out.println("2d distance: " + calculator.get2dDistance());
-    // System.out.println("elevation: "+ calculator.getElevationAngleDegrees());
-    System.out.println("turret rotation: " + calculator.getTurretRotation());
-    System.out.println("extension: " + calculator.getExtendDistance());
   }
 
   /**
