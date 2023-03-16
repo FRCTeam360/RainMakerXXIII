@@ -36,7 +36,7 @@ public class Turret extends SubsystemBase {
   private double relativeAngle;
 
   public static final double conversionFactorWoodBot = 1 / ((1.0 / 20.0) * (1.5 / 17.5) * (360.0 / 1.0)); //gearbox pulley teeth degrees
-  public static final double conversionFactorPractice = (1.0 / 16.0) * (24.0 / 300.0) * (360.0 / 1.0); //same as comp
+  public static final double conversionFactorPractice = (1.0 / 15.0) * (24.0 / 300.0) * (360.0 / 1.0); //same as comp WAS 1/16.0 changed to 1/15 for comp
 
   public static final float softLimitForwardPractice = 270.0f;
   public static final float softLimitReversePractice = -180.0f;
@@ -69,8 +69,9 @@ public class Turret extends SubsystemBase {
 
     pidController = motor.getPIDController();
     pidController.setP(0.03, 0);
-    pidController.setD(0.00, 0); 
-    pidController.setI(0.0, 0);
+    pidController.setD(0.0, 0); 
+    pidController.setI(0.00001, 0);
+    pidController.setIZone(1.0);
     pidController.setFF(0.0, 0);
     pidController.setOutputRange(-0.9, 0.9, 0); //TODO TUNE
 
