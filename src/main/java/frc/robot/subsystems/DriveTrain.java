@@ -100,6 +100,8 @@ public class DriveTrain extends SubsystemBase {
     return instance;
   }
 
+  ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
+
   /** Creates a new DriveTrain. */
   public DriveTrain() {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -151,6 +153,8 @@ public class DriveTrain extends SubsystemBase {
     // SmartDashboard.putData("Field", field);
 
     setGyroPosition(180);
+
+    tab.addDouble("gyro angle", () -> getGyroscopeRotation().getDegrees());
   }
 
   public void zeroGyroscope() {

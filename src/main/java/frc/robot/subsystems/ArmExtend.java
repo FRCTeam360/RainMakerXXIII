@@ -40,8 +40,8 @@ public class ArmExtend extends SubsystemBase {
   private final double kD = 0;
   private final double kIz = 0.03;
   private final double kFF = 0.05;
-  private final double kMaxOutput = 0.5;
-  private final double kMinOutput = -0.45;
+  private final double kMaxOutput = 0.9;
+  private final double kMinOutput = -0.5;
   private final double kMaxRampRate = 0.3; //TODO TUNE
   private final double maxRPM = 5700;
 

@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.utils.Setpoints;
 import frc.robot.Autos;
 
 import com.swervedrivespecialties.swervelib.DriveController;
@@ -114,7 +115,8 @@ public class RobotContainer {
 
     //while start held, set to cone intake, else set to cube
     operatorController.a().and(operatorController.start().negate()).whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawCubeSubstation()));
-    operatorController.a().and(operatorController.start()).whileTrue((new SetPositions(180, 0.4, 0)).alongWith(new OpenClawConeSubstation()));
+    // operatorController.a().and(operatorController.start()).whileTrue((new SetPositions(180, 0.4, 0)).alongWith(new OpenClawConeSubstation()));
+    operatorController.a().and(operatorController.start()).whileTrue(Setpoints.coneSingle());
     
     operatorController.b().and(operatorController.start().negate()).whileTrue(new GroundPickup(false));
     operatorController.b().and(operatorController.start()).whileTrue(new GroundPickup(true));
@@ -124,8 +126,8 @@ public class RobotContainer {
     operatorController.back().whileTrue(new CloseClaw());
 
     operatorController.pov(0).whileTrue(homing);
-    operatorController.pov(90).whileTrue(new SetPositions(40, 1.05, 15));
-    operatorController.pov(270).whileTrue(new SetPositions(40, 1.05, -15));
+    operatorController.pov(90).whileTrue(Setpoints.scoreLeft());
+    operatorController.pov(270).whileTrue(Setpoints.scoreRight());
 
     operatorController.rightBumper().whileTrue(runIntake);
     operatorController.leftBumper().whileTrue(runIntakeReversed);
