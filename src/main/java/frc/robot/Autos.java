@@ -63,18 +63,22 @@ public final class Autos {
   public Autos() {
     autoChooser = new SendableChooser<>();
     // add auto options to chooser here
-    autoChooser.addOption("chop suey!", AutoMode.CHOP_SUEY);
-    autoChooser.addOption("lets go brandon", AutoMode.LETS_GO_BRANDON);
-    autoChooser.addOption("tsla stock is good", AutoMode.TSLA_STOCK_IS_GOOD);
-    autoChooser.addOption("mario broskito", AutoMode.MARIO_BROSKITO);
-    autoChooser.addOption("anywhere left", AutoMode.ANYWHERE_LEFT);
-    autoChooser.addOption("anywhere right", AutoMode.ANYWHERE_RIGHT);
-    autoChooser.addOption("engage from wall", AutoMode.ENGAGE_FROM_WALL);
-    autoChooser.addOption("engage from loading", AutoMode.ENGAGE_FROM_LOADING);
-    autoChooser.addOption("new 2 piece", AutoMode.NEW_2_PIECE);
-    autoChooser.addOption("engage only", AutoMode.ENGAGE_ONLY);
+    autoChooser.addOption("coop mgeg", AutoMode.MARIO_BROSKITO);
+    autoChooser.addOption("wall mgeg", AutoMode.ENGAGE_FROM_WALL);
+    autoChooser.addOption("loading mgeg", AutoMode.ENGAGE_FROM_LOADING);
+    
+    autoChooser.addOption("loading 2 piece", AutoMode.TSLA_STOCK_IS_GOOD);
+
+    autoChooser.addOption("mobility left", AutoMode.ANYWHERE_LEFT);
+    autoChooser.addOption("mobility right", AutoMode.ANYWHERE_RIGHT);
+
+    autoChooser.addOption("loading 2 piece", AutoMode.NEW_2_PIECE);
+
+    autoChooser.addOption("coop 0 piece mgeg", AutoMode.ENGAGE_ONLY);
+
     autoChooser.addOption("null", AutoMode.NULL);
 
+    
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
