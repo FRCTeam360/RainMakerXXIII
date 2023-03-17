@@ -40,32 +40,33 @@ public class ArmTilt extends SubsystemBase {
   private static ArmTilt instance;
   private SparkMaxPIDController pidController;
 
-  private double motorRotationsToArmDegrees = 360.0/(5.0*5.0*4.0*3.0);
-  private double practiceMotorRotationsToArmDegrees = 360.0/(6.0*6.0*(64.0/12.0)); //7, 5
+  private final double motorRotationsToArmDegrees = 360.0/(5.0*5.0*4.0*3.0);
+  private final double practiceMotorRotationsToArmDegrees = 360.0/(6.0*6.0*(64.0/12.0)); //7, 5
 
-  private double kMaxRampRate = 0.5; //TODO TUNE
+  private final double kMaxRampRate = 0.5; //TODO TUNE
 
-  private double kP = 0.03; //3
-  private double kI = 0;//.00000000001;
-  private double kD = 0;//.000005;
-  private double kIz = 1.5;
-  public double kFF = 0.05; //0.01 retracted 0.05 extended
-  private double kMaxOutput = 0.9;
-  private double kMinOutput = -0.9;
+  private final double kFF = 0.05; //0.01 retracted 0.05 extended
 
-  private double kP2 = 0.02; //3
-  private double kI2 = 0.000005;
-  private double kD2 = 0;//.5;
-  private double kIz2 = 1.5;
-  private double kMaxOutput2 = 0.65;
-  private double kMinOutput2 = -0.65;
+  private final double kP = 0.03; //3
+  private final double kI = 0;//.00000000001;
+  private final double kD = 0;//.000005;
+  private final double kIz = 1.5;
+  private final double kMaxOutput = 0.9;
+  private final double kMinOutput = -0.9;
 
-  private double kP3 = 0.02;//0.05; //3
-  private double kI3 = 0.00001;
-  private double kD3 = 0;//0.000005;
-  private double kIz3 = 1.5;
-  private double kMaxOutput3 = 0.4;
-  private double kMinOutput3 = -0.4;
+  private final double kP2 = 0.02; //3
+  private final double kI2 = 0.000005;
+  private final double kD2 = 0;//.5;
+  private final double kIz2 = 1.5;
+  private final double kMaxOutput2 = 0.65;
+  private final double kMinOutput2 = -0.65;
+
+  private final double kP3 = 0.02;//0.05; //3
+  private final double kI3 = 0.00001;
+  private final double kD3 = 0;//0.000005;
+  private final double kIz3 = 1.5;
+  private final double kMaxOutput3 = 0.4;
+  private final double kMinOutput3 = -0.4;
 
   // private TrapezoidProfile profile = new TrapezoidProfile(null, null);
   // private double previousSetpoint = 10000;
@@ -73,7 +74,7 @@ public class ArmTilt extends SubsystemBase {
   // private double maxAccel = 5; //degress per second squared
   // private Timer timer = new Timer();
 
-  private double maxRPM = 5700;
+  private final double maxRPM = 5700;
 
   private int iterations = 0;
 

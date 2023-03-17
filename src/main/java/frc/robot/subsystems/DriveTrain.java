@@ -149,6 +149,8 @@ public class DriveTrain extends SubsystemBase {
     new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01),
     new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.3, 0.3, 0.9));
     // SmartDashboard.putData("Field", field);
+
+    setGyroPosition(180);
   }
 
   public void zeroGyroscope() {

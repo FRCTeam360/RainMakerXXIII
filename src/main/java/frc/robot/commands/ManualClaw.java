@@ -11,7 +11,7 @@ import frc.robot.subsystems.Claw;
 public class ManualClaw extends CommandBase {
   private Claw claw = Claw.getInstance();
 
-  boolean hitLimit = false;
+  private boolean hitLimit = false;
 
   private XboxController operatorCont = new XboxController(1);
   /** Creates a new ManualClaw. */

@@ -35,25 +35,25 @@ public class ArmExtend extends SubsystemBase {
 
   private final double pivotToClawRetracted = 0.0254 * 20.5; 
 
-  private double kP = 2.5;
-  private double kI = 0.001;
-  private double kD = 0;
-  private double kIz = 0.03;
-  private double kFF = 0.05;
-  private double kMaxOutput = 0.5;
-  private double kMinOutput = -0.45;
-  private double kMaxRampRate = 0.3; //TODO TUNE
-  private double maxRPM = 5700;
+  private final double kP = 2.5;
+  private final double kI = 0.001;
+  private final double kD = 0;
+  private final double kIz = 0.03;
+  private final double kFF = 0.05;
+  private final double kMaxOutput = 0.5;
+  private final double kMinOutput = -0.45;
+  private final double kMaxRampRate = 0.3; //TODO TUNE
+  private final double maxRPM = 5700;
 
   // private TrapezoidProfile profile = new TrapezoidProfile(new Constraints(0.25, 0.25), null);
 
-  private float forwardLimit = (float)(1.33);
-  private float reverseLimit = (float)0.1;
+  private final float forwardLimit = (float)(1.33);
+  private final float reverseLimit = (float)0.1;
 
-  private double balancePoint = -0.4; //TODO TUNE VALUE
-  public double maxExtendMinusBalance = 1.33 - balancePoint; //TODO TUNE VALUE
+  private final double balancePoint = -0.4; //TODO TUNE VALUE
+  public final double maxExtendMinusBalance = 1.33 - balancePoint; //TODO TUNE VALUE
 
-  ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
+  private ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
 
   /** Creates a new Extend. */
   public ArmExtend() {

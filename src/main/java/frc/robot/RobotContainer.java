@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Autos auto = new Autos();
   private final ArmExtend extend = ArmExtend.getInstance();
   private final ArmTilt tilt = ArmTilt.getInstance();
