@@ -8,9 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.SetClaw;
 import frc.robot.commands.SetPositions;
+import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.DriveTrain;
 
 /** Add your docs here. */
 public class Setpoints {
+    DriveTrain driveTrain = DriveTrain.getInstance();
     public static Command scoreLeft(){
         return new SetPositions(42, 1.1, 15, false);
     }
@@ -19,17 +22,21 @@ public class Setpoints {
         return new SetPositions(42, 1.1, -15, false);
     }
 
-    public static Command coneSingle(){
+    public static Command coneSingleStation(){
         return new ParallelCommandGroup(
-            new SetPositions(130, 0, 0), 
+            new SetPositions(130, 0, 90, true, true), 
             new SetClaw(115)
         );
     }
 
-    public static Command cubeSingle(){
+    public static Command cubeSingleStation(){
         return new ParallelCommandGroup(
-            new SetPositions(0, 0, 0),
+            new SetPositions(0, 0, 0, true, true),
             new SetClaw(0)
         );
+    }
+
+    public static Command singleStation(){
+        return Claw.getInstance().isConeMode() ? coneSingleStation() : cubeSingleStation();
     }
 }

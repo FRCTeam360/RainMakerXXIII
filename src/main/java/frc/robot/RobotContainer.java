@@ -116,7 +116,7 @@ public class RobotContainer {
     //while start held, set to cone intake, else set to cube
     operatorController.a().and(operatorController.start().negate()).whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawCubeSubstation()));
     // operatorController.a().and(operatorController.start()).whileTrue((new SetPositions(180, 0.4, 0)).alongWith(new OpenClawConeSubstation()));
-    operatorController.a().and(operatorController.start()).whileTrue(Setpoints.coneSingle());
+    operatorController.a().and(operatorController.start()).whileTrue(Setpoints.singleStation());
     
     operatorController.b().and(operatorController.start().negate()).whileTrue(new GroundPickup(false));
     operatorController.b().and(operatorController.start()).whileTrue(new GroundPickup(true));

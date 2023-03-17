@@ -31,9 +31,9 @@ public class Claw extends SubsystemBase {
   private final SparkMaxPIDController pidController;
   private static Claw instance;
 
-  // enum GamePiece {CONE, CUBE, NONE};
+  enum GamePiece {CONE, CUBE, NONE};
 
-  // private GamePiece gamePiece = GamePiece.NONE;
+  private GamePiece gamePiece = GamePiece.NONE;
 
   private Lights lights = Lights.getInstance();
 
@@ -131,22 +131,26 @@ public class Claw extends SubsystemBase {
 //140.7
   private void checkGamePieceMode(){
     if(driverCont.getBackButton()){
-      // gamePiece = GamePiece.CONE;
+      gamePiece = GamePiece.CONE;
       lights.setPurple();
     } else if(driverCont.getStartButton()){
-      // gamePiece = GamePiece.CUBE;
+      gamePiece = GamePiece.CUBE;
       lights.setYellow();
     } else {
-      lights.setShouldShowStatus();
+      // lights.setShouldShowStatus();
     }
+  }
+
+  public boolean isConeMode(){
+    return gamePiece == GamePiece.CONE;
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Claw Angle", getAbsoluteAngle());
+    SmartDashboard.putBoolean("Mode", isConeMode());
     checkGamePieceMode();
     if(DriverStation.isDisabled()){
-      
     }
     // This method will be called once per scheduler run
   }

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
 
 public class SetPositions extends CommandBase {
@@ -21,12 +22,15 @@ public class SetPositions extends CommandBase {
   private double extendDistance;
   private double turretAngle;
 
+  private boolean fieldRelTurret;
+
   /** Creates a new SetPositions. */
   public SetPositions(double tiltAngle, double extendDistance, double turretAngle, boolean checkAlliance) {
     addRequirements(tilt, extend, turret);
     this.tiltAngle = tiltAngle;
     this.extendDistance = extendDistance;
     this.turretAngle = checkAlliance && DriverStation.getAlliance() == Alliance.Red ? -turretAngle : turretAngle;
+    this.fieldRelTurret = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -35,6 +39,16 @@ public class SetPositions extends CommandBase {
     this.tiltAngle = tiltAngle;
     this.extendDistance = extendDistance;
     this.turretAngle = turretAngle;
+    this.fieldRelTurret = false;
+    // Use addRequirements() here to declare subsystem dependencies.
+  }
+
+  public SetPositions(double tiltAngle, double extendDistance, double turretAngle, boolean checkAlliance, boolean fieldRelTurret) {
+    addRequirements(tilt, extend, turret);
+    this.tiltAngle = tiltAngle;
+    this.extendDistance = extendDistance;
+    this.turretAngle = checkAlliance && DriverStation.getAlliance() == Alliance.Red ? -turretAngle : turretAngle;
+    this.fieldRelTurret = fieldRelTurret;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -51,7 +65,11 @@ public class SetPositions extends CommandBase {
     tilt.setAngle(tiltAngle);
     // }
     extend.setPosition(extendDistance);
-    turret.angleTurn(turretAngle);
+    if(fieldRelTurret){
+      turret.fieldOrientedTurret(turretAngle);
+    }else{
+      turret.angleTurn(turretAngle);
+    }
   }
 
   // Called once the command ends or is interrupted.
