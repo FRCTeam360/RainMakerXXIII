@@ -69,17 +69,19 @@ public class Turret extends SubsystemBase {
 
     pidController = motor.getPIDController();
     pidController.setP(0.03, 0);
-    pidController.setD(0.0, 0); 
+    pidController.setD(0.0, 0);
     pidController.setI(0.00001, 0);
     pidController.setIZone(1.0);
     pidController.setFF(0.0, 0);
-    pidController.setOutputRange(-0.9, 0.9, 0); //TODO TUNE
+    pidController.setOutputRange(-1.0, 1.0, 0); //TODO TUNE
 
     pidController.setP(0.03, 1);
-    pidController.setOutputRange(-0.5, 0.5, 1); //TODO TUNE
+    pidController.setOutputRange(-0.6, 0.6, 1); //TODO TUNE
 
     pidController.setP(0.03, 2);
-    pidController.setOutputRange(-0.3, 0.3, 2); //TODO TUNE
+    pidController.setI(0.00001, 2);
+    pidController.setIZone(1.0, 2);
+    pidController.setOutputRange(-0.4, 0.4, 2); //TODO TUNE
     encoder = motor.getEncoder();
 
     tab.addDouble("Turret Angle", () -> encoder.getPosition());
@@ -122,7 +124,7 @@ public class Turret extends SubsystemBase {
   }
 
   public void setPosition(double inputAngle) {
-    double distance = 0;// ArmExtend.getInstance().getExtendDistance() * Math.abs(Math.cos(ArmTilt.getInstance().getAngle()));
+    double distance = ArmExtend.getInstance().getExtendDistance() * Math.abs(Math.cos(ArmTilt.getInstance().getAngle()));
     if(distance > 0.8){
       pidController.setReference(inputAngle, ControlType.kPosition, 2);
     } else if (distance > 0.4){
@@ -192,6 +194,8 @@ public class Turret extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("distance of adjacent", ArmExtend.getInstance().getExtendDistance() * Math.abs(Math.cos(Math.toRadians(ArmTilt.getInstance().getAngle()))));
+    
     // SmartDashboard.putNumber("turret angle", getAngleRelativeToRobot());
     // SmartDashboard.putNumber("relative position", getNearestTurretAngle(40.5));
     // tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());

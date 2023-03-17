@@ -28,6 +28,9 @@ public class SetPointArmExtension extends CommandBase {
   public void execute() {
     double setPosition = SmartDashboard.getNumber("ArmExtendSetPoint", 0);
     extend.setPosition(setPosition);
+
+    SmartDashboard.putNumber("extend error", extend.getExtendDistance() - setPosition);
+    
   }
 
   // Called once the command ends or is interrupted.
