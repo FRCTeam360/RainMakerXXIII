@@ -26,7 +26,10 @@ public class SetPointTurret extends CommandBase {
   @Override
   public void execute() {
     double setPoint = SmartDashboard.getNumber("Turret SetPoint", 0);
-    turret.angleTurn(setPoint);
+    turret.setPosition(setPoint);
+
+    SmartDashboard.putNumber("Turret error", turret.getAngleRelativeToRobot() - setPoint);
+  
   }
 
   // Called once the command ends or is interrupted.
