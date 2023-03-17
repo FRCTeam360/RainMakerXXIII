@@ -62,6 +62,8 @@ public class RobotContainer {
   private final FieldOrientedTurret fieldOrientedTurret = new FieldOrientedTurret();
   private final Homing homing = new Homing();
 
+  private final Setpoints setpoints = new Setpoints();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
       new CommandXboxController(XboxConstants.DRIVER_CONTROLLER_PORT);
@@ -116,12 +118,16 @@ public class RobotContainer {
     driverController.y().whileTrue(new AutoEngage());
 
     //while start held, set to cone intake, else set to cube
-    operatorController.a().and(operatorController.start().negate()).whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawCubeSubstation())); //ground pickup?
+    // operatorController.a().and(operatorController.start().negate()).whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawCubeSubstation())); //ground pickup?
     // operatorController.a().and(operatorController.start()).whileTrue((new SetPositions(180, 0.4, 0)).alongWith(new OpenClawConeSubstation()));
-    operatorController.a().whileTrue(
-      new ParallelCommandGroup (
-        new PrintCommand("ROBO CONTAINER"),
-        Setpoints.singleStation()));
+    // if(Claw.getInstance().isConeMode()){
+    //   operatorController.a().whileTrue(Setpoints.coneSingleStation());
+    // }else{
+    //   operatorController.a().whileTrue(Setpoints.cubeSingleStation());
+    // }
+  //  operatorController.a().whileTrue(new Setpoints().singleStation());
+  operatorController.a().and(() -> claw.isConeMode()).whileTrue(Setpoints.coneSingleStation());
+  operatorController.a().and(() -> !claw.isConeMode()).whileTrue(Setpoints.cubeSingleStation());
     
     operatorController.b().and(operatorController.start().negate()).whileTrue(new GroundPickup(false));
     operatorController.b().and(operatorController.start()).whileTrue(new GroundPickup(true));
