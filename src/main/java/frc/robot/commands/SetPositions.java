@@ -60,7 +60,7 @@ public class SetPositions extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("setting positions");
+    //System.out.println("setting positions");
     // if(Math.abs(extend.getExtendDistance() - extendDistance) <= 0.3){
     tilt.setAngle(tiltAngle);
     // }
@@ -75,7 +75,7 @@ public class SetPositions extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("ending positoins");
+    //System.out.println("ending positoins");
   }
 
   // Returns true when the command should end.

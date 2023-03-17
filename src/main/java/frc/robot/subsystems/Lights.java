@@ -64,7 +64,6 @@ public class Lights extends SubsystemBase {
     shouldShowStatus = false;
     candle.clearAnimation(0);
     candle.setLEDs(163, 23, 172);
-    System.out.println("setting purple");
   }
 
   public void setShouldShowStatus() {

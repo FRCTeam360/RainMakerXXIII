@@ -23,20 +23,23 @@ public class Setpoints {
     }
 
     public static Command coneSingleStation(){
+        System.out.println("CONE SUBSTAION");
         return new ParallelCommandGroup(
-            new SetPositions(130, 0, 90, true, true), 
-            new SetClaw(115)
+            new SetPositions(130, 0, 90, true, false)
+            //new SetClaw(115)
         );
     }
 
     public static Command cubeSingleStation(){
+        System.out.println("CUBE SUBATATIONS");
         return new ParallelCommandGroup(
-            new SetPositions(0, 0, 0, true, true),
-            new SetClaw(0)
+            new SetPositions(0, 0, 0, true, false)
+            //new SetClaw(0)
         );
     }
 
     public static Command singleStation(){
+        System.out.println("UR SINGLE");
         return Claw.getInstance().isConeMode() ? coneSingleStation() : cubeSingleStation();
     }
 }

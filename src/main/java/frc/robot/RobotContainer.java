@@ -15,6 +15,8 @@ import com.swervedrivespecialties.swervelib.DriveController;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -114,25 +116,28 @@ public class RobotContainer {
     driverController.y().whileTrue(new AutoEngage());
 
     //while start held, set to cone intake, else set to cube
-    operatorController.a().and(operatorController.start().negate()).whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawCubeSubstation()));
+    operatorController.a().and(operatorController.start().negate()).whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawCubeSubstation())); //ground pickup?
     // operatorController.a().and(operatorController.start()).whileTrue((new SetPositions(180, 0.4, 0)).alongWith(new OpenClawConeSubstation()));
-    operatorController.a().and(operatorController.start()).whileTrue(Setpoints.singleStation());
+    operatorController.a().whileTrue(
+      new ParallelCommandGroup (
+        new PrintCommand("ROBO CONTAINER"),
+        Setpoints.singleStation()));
     
     operatorController.b().and(operatorController.start().negate()).whileTrue(new GroundPickup(false));
     operatorController.b().and(operatorController.start()).whileTrue(new GroundPickup(true));
 
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
 
-    operatorController.back().whileTrue(new CloseClaw());
+    // operatorController.back().whileTrue(new CloseClaw());
 
     operatorController.pov(0).whileTrue(homing);
     operatorController.pov(90).whileTrue(Setpoints.scoreLeft());
+    operatorController.pov(180).whileTrue(new InstantCommand(() -> turret.setPosition(0)));
+
     operatorController.pov(270).whileTrue(Setpoints.scoreRight());
 
     operatorController.rightBumper().whileTrue(runIntake);
-    operatorController.leftBumper().whileTrue(runIntakeReversed);
-
-    operatorController.pov(180).whileTrue(new InstantCommand(() -> turret.setPosition(0)));
+    operatorController.leftBumper().whileTrue(runIntakeReversed);  
   }
 
   /**

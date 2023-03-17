@@ -38,6 +38,7 @@ public class Claw extends SubsystemBase {
   private Lights lights = Lights.getInstance();
 
   private XboxController driverCont = new XboxController(0);
+  private XboxController operatorCont = new XboxController(1);
 
   private int iterations = 0;
 
@@ -130,12 +131,12 @@ public class Claw extends SubsystemBase {
   }
 //140.7
   private void checkGamePieceMode(){
-    if(driverCont.getBackButton()){
+    if(driverCont.getBackButton() || operatorCont.getBackButton()){
       gamePiece = GamePiece.CONE;
-      lights.setPurple();
-    } else if(driverCont.getStartButton()){
-      gamePiece = GamePiece.CUBE;
       lights.setYellow();
+    } else if(driverCont.getStartButton() || operatorCont.getStartButton()){
+      gamePiece = GamePiece.CUBE;
+      lights.setPurple();
     } else {
       // lights.setShouldShowStatus();
     }
