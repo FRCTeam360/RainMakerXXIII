@@ -44,9 +44,9 @@ public class Claw extends SubsystemBase {
 
   ShuffleboardTab tab = Shuffleboard.getTab("Diagnostics");
   
-  private double kP = 0.025;
+  private double kP = 0.01;
   private double kI = 0.000001;
-  private double kD = 0.0;
+  private double kD = 0.01;
   private double kIZone = 1.0;
   private double kFF = 0;
   

@@ -37,6 +37,22 @@ public class Setpoints {
         return new SetPositions(35, 0.7, -15, false);
     }
 
+    public static Command scoreSubCone(){
+        return new SetPositions(42, 1.15, -15, true);
+    }
+
+    public static Command scoreWallCone(){
+        return new SetPositions(42, 1.15, 15, true);
+    }
+
+    public static Command scoreSubCube(){
+        return new SetPositions(35, 0.7, -15, true);
+    }
+
+    public static Command scoreWallCube(){
+        return new SetPositions(35, 0.7, 15, true);
+    }
+
 
     public static Command coneSingleStation(){
         System.out.println("CONE SUBSTAION");
@@ -70,6 +86,10 @@ public class Setpoints {
             new SetClaw(15), 
             new RunIntake()
         );
+    }
+
+    public static Command groundCube(){
+        return new SetPositions(-27, 0.65, 180);
     }
 
     // public class SingleStation extends CommandBase{

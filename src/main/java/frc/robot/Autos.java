@@ -5,12 +5,14 @@
 package frc.robot;
 
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.utils.Setpoints;
 import frc.robot.commands.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.ctre.phoenix.platform.can.AutocacheState;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -18,6 +20,7 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -67,7 +70,7 @@ public final class Autos {
     autoChooser.addOption("wall mgeg", AutoMode.ENGAGE_FROM_WALL);
     autoChooser.addOption("loading mgeg", AutoMode.ENGAGE_FROM_LOADING);
     
-    autoChooser.addOption("loading 2 piece", AutoMode.TSLA_STOCK_IS_GOOD);
+    autoChooser.addOption("wall 2 piece", AutoMode.NEW_2_PIECE_WALL);
 
     autoChooser.addOption("mobility left", AutoMode.ANYWHERE_LEFT);
     autoChooser.addOption("mobility right", AutoMode.ANYWHERE_RIGHT);
@@ -232,26 +235,84 @@ public final class Autos {
     Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
-    Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
+    // Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
 
     return (stockMarketCrash
-        .andThen(new SetPositions(42, 1.05, -15, true))
-        .andThen(new OpenClawCubeGround(true))
+        .andThen(new ParallelRaceGroup(
+          Setpoints.scoreSubCone(), 
+          driveTrain.zeroModulesCommand()
+        ))
+        // .andThen(new OpenClawCubeGround(true))
+        .andThen(new ParallelRaceGroup(
+          new RunIntake(),
+          new WaitCommand(0.2)
+        ))
         .andThen(new Homing())
         .andThen(new ParallelCommandGroup(
             part1,
             new SetPositions(0, 0.15, 180, true)
-                .andThen(new SetPositions(-26, 0.65, 180))))
-        .andThen(new ParallelRaceGroup(
-            part2,
-            new RunIntake(),
-            new OpenClawCubeGround(false)))
+            .andThen(Setpoints.groundCube())).raceWith(new OpenClawCubeGround(false).raceWith(new RunIntake())))
+                // .andThen(new SetPositions(-27, 0.65, 180))))
+        // .andThen(new ParallelRaceGroup(
+        //     part2,
+        //     new RunIntake(),
+        //     new OpenClawCubeGround(false)))
         .andThen(
             new ParallelCommandGroup(
-                part3,
-                new Homing()))
+                part2,
+                new Homing()).raceWith(new RunIntake()))
         .andThen(
-            new SetPositions(42, 1.05, 15, true))
+            new SetPositions(35, 0.8, 15, true))
+        .andThen(
+            new ParallelRaceGroup(
+                new RunIntakeReversed(),
+                new WaitCommand(1)))
+        .andThen(new Homing()));
+  }
+
+  private Command getNew2PieceWall() {
+    // List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
+    //     ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece wall red",
+    //         new PathConstraints(2, 3)))
+    //     : PathPlanner.loadPathGroup("new 2 piece wall blue",
+    //     new PathConstraints(2, 3));
+    List<PathPlannerTrajectory> epicPathGroup = mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece wall red",
+            new PathConstraints(2, 3)));
+    // for(int i = 0; i<epicPathGroup.size(); i++){
+    // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
+    // Alliance.Red);
+    // }
+    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
+    Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
+    // Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
+
+    return (stockMarketCrash
+        .andThen(new ParallelRaceGroup(
+          Setpoints.scoreWallCone(), 
+          driveTrain.zeroModulesCommand()
+        ))
+        // .andThen(new OpenClawCubeGround(true))
+        .andThen(new ParallelRaceGroup(
+          new RunIntake(),
+          new WaitCommand(0.2)
+        ))
+        .andThen(new Homing())
+        .andThen(new ParallelCommandGroup(
+            part1,
+            new SetPositions(0, 0.15, 180, true)
+            .andThen(Setpoints.groundCube())).raceWith(new OpenClawCubeGround(false).raceWith(new RunIntake())))
+                // .andThen(new SetPositions(-27, 0.65, 180))))
+        // .andThen(new ParallelRaceGroup(
+        //     part2,
+        //     new RunIntake(),
+        //     new OpenClawCubeGround(false)))
+        .andThen(
+            new ParallelCommandGroup(
+                part2,
+                new Homing()).raceWith(new RunIntake()))
+        .andThen(
+            new SetPositions(35, 0.8, -15, true))
         .andThen(
             new ParallelRaceGroup(
                 new RunIntakeReversed(),
@@ -265,7 +326,7 @@ public final class Autos {
       driveTrain::setPose,
       driveTrain.m_kinematics,
       new PIDConstants(5, 0, 0),
-      new PIDConstants(1.5, 0, 0),
+      new PIDConstants(2.5, 0, 0),
       driveTrain::setStates,
       eventMap,
       false,
@@ -291,6 +352,8 @@ public final class Autos {
         return getEngageFromLoading();
       case NEW_2_PIECE:
         return getNew2Piece();
+      case NEW_2_PIECE_WALL:
+        return getNew2PieceWall();
       case ENGAGE_ONLY:
         return getEngageOnly();
       case NULL:
@@ -301,6 +364,6 @@ public final class Autos {
 
   private enum AutoMode {
     CHOP_SUEY, LETS_GO_BRANDON, TSLA_STOCK_IS_GOOD, MARIO_BROSKITO, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
-    ENGAGE_FROM_LOADING, NEW_2_PIECE, ENGAGE_ONLY, NULL
+    ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NULL
   }
 }

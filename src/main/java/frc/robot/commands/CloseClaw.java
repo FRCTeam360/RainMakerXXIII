@@ -30,7 +30,7 @@ public class CloseClaw extends CommandBase {
       hitLimit= true;
     }
     if(hitLimit){
-      claw.adjustsClaw(-0.1);
+      claw.adjustsClaw(-0.05);
     } else {
       claw.adjustsClaw(-0.3);
     }

@@ -27,7 +27,7 @@ public class RunIntakeReversed extends CommandBase {
     if(Claw.getInstance().isConeMode()){
       intake.run(1.0);
     } else {
-      intake.run(-1.0); // .5
+      intake.run(-0.5); // .5
     }
   }
 

@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmExtend;
@@ -74,6 +75,9 @@ public class SetPositions extends CommandBase {
     }else{
       turret.angleTurn(turretAngle);
     }
+    SmartDashboard.putBoolean("tilt in position", Math.abs(tilt.getAngle() - tiltAngle) < 2);
+    SmartDashboard.putBoolean("turret in position",  Math.abs(turret.getAngleRelativeToRobot() - turret.getNearestTurretAngle(turretAngle)) < 1);
+    SmartDashboard.putBoolean("extend in position", Math.abs(extend.getExtendDistance() - extendDistance) < 0.02);
   }
 
   // Called once the command ends or is interrupted.

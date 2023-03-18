@@ -303,6 +303,17 @@ public class DriveTrain extends SubsystemBase {
     m_backRightModule.set(0, Math.toRadians(45));
   }
 
+  public void zeroModules(){
+    m_frontLeftModule.set(0, Math.toRadians(0));
+    m_frontRightModule.set(0, Math.toRadians(0));
+    m_backLeftModule.set(0, Math.toRadians(0));
+    m_backRightModule.set(0, Math.toRadians(0));
+  }
+
+  public CommandBase zeroModulesCommand(){
+    return run(() -> zeroModules());
+  }
+
   private void checkEncoders(){
     if(Math.abs(m_frontRightModule.getSteerAngle() - m_frontRightModule.getSteerEncoder().getAbsoluteAngle()) < 0.5){
       lights.setINdividualGreen(1);
