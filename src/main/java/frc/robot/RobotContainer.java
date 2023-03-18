@@ -137,8 +137,8 @@ public class RobotContainer {
     // operatorController.b().and(operatorController.start().negate()).whileTrue(new GroundPickup(false));
     // operatorController.b().and(operatorController.start()).whileTrue(new GroundPickup(true));
 
-    operatorController.b().and(() -> claw.isConeMode()).whileTrue(new GroundPickup(true));
-    operatorController.b().and(() -> !claw.isConeMode()).whileTrue(new GroundPickup(false));
+    operatorController.b().and(() -> claw.isConeMode()).whileTrue(Setpoints.groundCone());
+    operatorController.b().and(() -> !claw.isConeMode()).whileTrue(Setpoints.groundCube());
 
 
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));

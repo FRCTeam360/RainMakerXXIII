@@ -55,7 +55,7 @@ public final class Autos {
       put("tsla halt", new WaitCommand(20));
       put("engage", new AutoEngage());
 
-      put("Open Claw", new OpenClawCubeGround());
+      // put("Open Claw", new OpenClawCubeGround());
       put("Close Claw", new CloseClaw());
       put("Set Point Arm Extension", new SetPointArmExtension());
       put("Set Point Arm Tilt", new SetPointArmTilt());
@@ -109,8 +109,11 @@ public final class Autos {
     Command setPose = autoBuilder.resetPose(path);
     Command segment1 = autoBuilder.followPath(path);
 
-    return setPose.andThen(new SetPositions(42, 1.1, 15, false)).andThen(new OpenClawCubeGround()).andThen(new Homing())
-        .andThen(segment1);
+    // return setPose.andThen(new SetPositions(42, 1.1, 15, false)).andThen(new OpenClawCubeGround()).andThen(new Homing())
+    //     .andThen(segment1);
+
+    return setPose.andThen(Setpoints.scoreRightCone()).andThen(new RunIntake()).andThen(new Homing())
+    .andThen(segment1);
   }
 
   private Command getAnywhereLeft() {
@@ -120,8 +123,11 @@ public final class Autos {
     Command setPose = autoBuilder.resetPose(path);
     Command segment1 = autoBuilder.followPath(path);
 
-    return setPose.andThen(new SetPositions(42, 1.1, -15, false)).andThen(new OpenClawCubeGround())
-        .andThen(new Homing()).andThen(segment1);
+    // return setPose.andThen(new SetPositions(42, 1.1, -15, false)).andThen(new OpenClawCubeGround())
+    //     .andThen(new Homing()).andThen(segment1);
+
+    return setPose.andThen(Setpoints.scoreLeftCone()).andThen(new RunIntake()).andThen(new Homing())
+    .andThen(segment1);
   }
 
   private Command getEngageFromWall() {
@@ -131,8 +137,11 @@ public final class Autos {
     Command setPose = autoBuilder.resetPose(path);
     Command segment1 = autoBuilder.followPath(path);
 
-    return setPose.andThen(new SetPositions(42, 1.1, 15, true)).andThen(new OpenClawCubeGround()).andThen(new Homing())
-        .andThen(segment1).andThen(new AutoEngage());
+    // return setPose.andThen(new SetPositions(42, 1.1, 15, true)).andThen(new OpenClawCubeGround()).andThen(new Homing())
+    //     .andThen(segment1).andThen(new AutoEngage());
+
+    return setPose.andThen(Setpoints.scoreWallCone()).andThen(new RunIntake()).andThen(new Homing())
+    .andThen(segment1).andThen(new AutoEngage());
   }
 
   private Command getEngageFromLoading() {
@@ -142,8 +151,10 @@ public final class Autos {
     Command setPose = autoBuilder.resetPose(path);
     Command segment1 = autoBuilder.followPath(path);
 
-    return setPose.andThen(new SetPositions(42, 1.1, -15, true)).andThen(new OpenClawCubeGround()).andThen(new Homing())
-        .andThen(segment1).andThen(new AutoEngage());
+    // return setPose.andThen(new SetPositions(42, 1.1, -15, true)).andThen(new OpenClawCubeGround()).andThen(new Homing())
+    //     .andThen(segment1).andThen(new AutoEngage());
+    return setPose.andThen(Setpoints.scoreSubCone()).andThen(new RunIntake()).andThen(new Homing())
+    .andThen(segment1).andThen(new AutoEngage());
   }
 
   private Command getMyMarioAuto() {
@@ -154,10 +165,14 @@ public final class Autos {
     Command coconutMall = autoBuilder.followPath(luigi.get(0));
     // Command DKJungle = autoBuilder.followPath(luigi.get(1));
     // Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
-    return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
-        .andThen(new SetPositions(42, 1.1, 15, true).andThen(new OpenClawCubeGround()))
-        .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge).andThen(new
+    // return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
+    //     .andThen(new SetPositions(42, 1.1, 15, true).andThen(new OpenClawCubeGround()))
+    //     .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge).andThen(new
                                                                                   // AutoEngage());
+                                                                                  
+        return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
+        .andThen(Setpoints.scoreWallCone()).andThen(new RunIntake())
+        .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());
   }
 
   private Command getEngageOnly() {
@@ -171,55 +186,6 @@ public final class Autos {
     return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
         .andThen(coconutMall).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge).andThen(new
                                                         // AutoEngage());
-  }
-
-  private Command getMyAuto() {
-    List<PathPlannerTrajectory> epicPathGroupInitial = PathPlanner.loadPathGroup("tsla stock is good",
-        new PathConstraints(2, 3));
-    // for(int i = 0; i<epicPathGroup.size(); i++){
-    // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
-    // Alliance.Red);
-    // }
-    List<PathPlannerTrajectory> epicPathGroup = mirrorPathsForAlliance(epicPathGroupInitial);
-    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
-    Command pathTSLA1 = autoBuilder.followPath(epicPathGroup.get(0));
-    Command pathTSLA2 = autoBuilder.followPath(epicPathGroup.get(1));
-
-    // return (stockMarketCrash
-    // .andThen(new SetPositions(42, 1.05, -15, true)))
-    // .andThen(new OpenClawCubeGround())
-    // .andThen(new Homing())
-    // .andThen(
-    // new ParallelRaceGroup(
-    // pathTSLA1,
-    // new RunIntake(),
-    // new SequentialCommandGroup(/* new SetPositions(90, 0.1, -180), */
-    // new SetPositions(0, 0.15, 180, true),
-    // // new WaitCommand(1),
-    // /* not working yet */
-    // new SetPositions(-25, 0.6, 180, true)),
-    // new OpenClawCubeGround()))
-    // .andThen(new PrintCommand("pathTSLA1 done"))
-    // .andThen(
-    // new ParallelRaceGroup((new WaitCommand(.25)), (new RunIntake()), (new
-    // OpenClawCubeGround(false))))
-    // .andThen(
-    // pathTSLA2.alongWith(new Homing())// .raceWith(new CloseClaw())
-    // )
-    // .andThen(new PrintCommand("pathTSLA2 done"))
-    // .andThen(new SetPositions(42, 1.05, 15, true))
-    // .andThen(
-    // new ParallelRaceGroup(new OpenClawCubeGround(false), new RunIntakeReversed(),
-    // new WaitCommand(1)))
-    // .andThen(new Homing());
-
-    return (stockMarketCrash
-        .andThen(new SetPositions(42, 1.05, -15, true))
-        .andThen(new OpenClawCubeGround(true))
-        .andThen(new Homing())
-        .andThen(new ParallelCommandGroup(
-            pathTSLA1,
-            new SetPositions(0, 0.15, 180, true))));
   }
 
   private Command getNew2Piece() {
@@ -248,10 +214,10 @@ public final class Autos {
           new WaitCommand(0.2)
         ))
         .andThen(
-          new ParallelCommandGroup(
+          new ParallelRaceGroup(
             (new SetTurret(-180, true, true)
             .andThen(
-              Setpoints.groundCube().raceWith(new OpenClawCubeGround(false).raceWith(new RunIntake()))
+              Setpoints.groundCube()
             )
             ),
             (new SetExtend(0.15, true)
@@ -319,10 +285,10 @@ public final class Autos {
           new WaitCommand(0.2)
         ))
         .andThen(new Homing())
-        .andThen(new ParallelCommandGroup(
+        .andThen(new ParallelRaceGroup(
             part1,
             new SetPositions(0, 0.15, 180, true)
-            .andThen(Setpoints.groundCube())).raceWith(new OpenClawCubeGround(false).raceWith(new RunIntake())))
+            .andThen(Setpoints.groundCube())))
                 // .andThen(new SetPositions(-27, 0.65, 180))))
         // .andThen(new ParallelRaceGroup(
         //     part2,
@@ -359,8 +325,8 @@ public final class Autos {
         return getExample();
       case LETS_GO_BRANDON:
         return getNotExample();
-      case TSLA_STOCK_IS_GOOD:
-        return getMyAuto();
+      // case TSLA_STOCK_IS_GOOD:
+      //   return getMyAuto();
       case MARIO_BROSKITO:
         return getMyMarioAuto();
       case ANYWHERE_LEFT:

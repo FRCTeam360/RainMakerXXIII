@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.commands.CloseClaw;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunIntakeReversed;
@@ -89,7 +90,19 @@ public class Setpoints {
     }
 
     public static Command groundCube(){
-        return new SetPositions(-27, 0.65, 180);
+        return new ParallelCommandGroup(
+            new SetPositions(-27, 0.65, 180),
+            new SetClaw(85),
+            new RunIntake()
+        );
+    }
+
+    public static Command groundCone(){
+        return new ParallelCommandGroup(
+            new SetPositions(0, 0, 0),
+            new SetClaw(85),
+            new RunIntake()
+        );
     }
 
     // public class SingleStation extends CommandBase{
