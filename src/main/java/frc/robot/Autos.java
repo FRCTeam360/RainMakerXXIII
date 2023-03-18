@@ -247,16 +247,37 @@ public final class Autos {
           new RunIntake(),
           new WaitCommand(0.2)
         ))
-        .andThen(new Homing())
-        .andThen(new ParallelCommandGroup(
-            part1,
-            new SetPositions(0, 0.15, 180, true)
-            .andThen(Setpoints.groundCube())).raceWith(new OpenClawCubeGround(false).raceWith(new RunIntake())))
-                // .andThen(new SetPositions(-27, 0.65, 180))))
-        // .andThen(new ParallelRaceGroup(
-        //     part2,
-        //     new RunIntake(),
-        //     new OpenClawCubeGround(false)))
+        .andThen(
+          new ParallelCommandGroup(
+            (new SetTurret(-180, true, true)
+            .andThen(
+              Setpoints.groundCube().raceWith(new OpenClawCubeGround(false).raceWith(new RunIntake()))
+            )
+            ),
+            (new SetExtend(0.15, true)
+            .andThen(
+              part1
+              .alongWith(new SetTilt(0, true))
+              .alongWith(new SetExtend(0.15, true))
+            )
+            )
+          )
+        )
+
+
+
+
+        // .andThen(new Homing())
+        // .andThen(new ParallelCommandGroup(
+        //     new SetTurret(180, true, true),
+        //     part1,
+        //     // new SetPositions(0, 0.15, 180, true)
+        //     .andThen(Setpoints.groundCube())).raceWith(new OpenClawCubeGround(false).raceWith(new RunIntake())))
+        //         // .andThen(new SetPositions(-27, 0.65, 180))))
+        // // .andThen(new ParallelRaceGroup(
+        // //     part2,
+        // //     new RunIntake(),
+        // //     new OpenClawCubeGround(false)))
         .andThen(
             new ParallelCommandGroup(
                 part2,

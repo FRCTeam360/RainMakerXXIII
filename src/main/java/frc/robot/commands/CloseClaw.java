@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Claw;
 
@@ -11,6 +12,8 @@ public class CloseClaw extends CommandBase {
   private Claw claw = Claw.getInstance();
 
   private boolean hitLimit;
+
+  private Timer timer = new Timer();
   
   /** Creates a new CloseClaw. */
   public CloseClaw() {
@@ -20,7 +23,10 @@ public class CloseClaw extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer.start();
+    hitLimit = false;
+  }
 
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -29,7 +35,7 @@ public class CloseClaw extends CommandBase {
     if(claw.getCurrent() > 15){
       hitLimit= true;
     }
-    if(hitLimit){
+    if(hitLimit || timer.get() > 1){
       claw.adjustsClaw(-0.05);
     } else {
       claw.adjustsClaw(-0.3);
@@ -40,6 +46,8 @@ public class CloseClaw extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     claw.stopClaw();
+    timer.stop();
+    timer.reset();
   }
 
   // Returns true when the command should end.
