@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Intake;
 
 public class RunIntake extends CommandBase {
@@ -23,7 +24,11 @@ public class RunIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.run(1.0); // .5
+    if(Claw.getInstance().isConeMode()){
+      intake.run(-1.0);
+    } else {
+      intake.run(1.0); // .5
+    }
   }
 
   // Called once the command ends or is interrupted.

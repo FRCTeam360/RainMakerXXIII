@@ -155,6 +155,7 @@ public class Turret extends SubsystemBase {
     Rotation2d driveRotation = DriveTrain.getInstance().getGyroscopeRotation();
     double drivetrainAngle = driveRotation.getDegrees();
     relativeAngle = angle - drivetrainAngle;
+    relativeAngle = getNearestActualTurretAngle(relativeAngle);
     pidController.setReference(relativeAngle, ControlType.kPosition, 1);
   }
 

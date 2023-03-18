@@ -9,19 +9,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.XboxConstants;
 import frc.robot.subsystems.ArmExtend;
 import frc.robot.subsystems.ArmTilt;
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Turret;
 
 public class Homing extends CommandBase {
   private final ArmTilt tilt = ArmTilt.getInstance();
   private final ArmExtend extend = ArmExtend.getInstance();
   private final Turret turret = Turret.getInstance();
+  private Claw claw = Claw.getInstance();
+
+  private boolean hitLimit;
 
   private final XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
 
   /** Creates a new Homing. */
   public Homing() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(tilt, extend, turret);
+    addRequirements(tilt, extend, turret, claw);
   }
 
   // Called when the command is initially scheduled.
@@ -35,6 +39,15 @@ public class Homing extends CommandBase {
     extend.setPosition(0.1);
     if(extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 10){
       turret.setPosition(0);
+    }
+
+    if(claw.getCurrent() > 15){
+      hitLimit= true;
+    }
+    if(hitLimit){
+      claw.adjustsClaw(-0.1);
+    } else {
+      claw.adjustsClaw(-0.3);
     }
   }
 

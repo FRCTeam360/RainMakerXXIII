@@ -126,21 +126,33 @@ public class RobotContainer {
     //   operatorController.a().whileTrue(Setpoints.cubeSingleStation());
     // }
   //  operatorController.a().whileTrue(new Setpoints().singleStation());
-  operatorController.a().and(() -> claw.isConeMode()).whileTrue(Setpoints.coneSingleStation());
-  operatorController.a().and(() -> !claw.isConeMode()).whileTrue(Setpoints.cubeSingleStation());
+  operatorController.a().and(() -> claw.isConeMode()).and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleStation());
+  operatorController.a().and(() -> !claw.isConeMode()).and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleStation());
+
+  operatorController.x().and(() -> claw.isConeMode()).whileTrue(Setpoints.coneDouble());
+
+  operatorController.back().and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleTurret());
+  operatorController.start().and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleTurret());
     
-    operatorController.b().and(operatorController.start().negate()).whileTrue(new GroundPickup(false));
-    operatorController.b().and(operatorController.start()).whileTrue(new GroundPickup(true));
+    // operatorController.b().and(operatorController.start().negate()).whileTrue(new GroundPickup(false));
+    // operatorController.b().and(operatorController.start()).whileTrue(new GroundPickup(true));
+
+    operatorController.b().and(() -> claw.isConeMode()).whileTrue(new GroundPickup(true));
+    operatorController.b().and(() -> !claw.isConeMode()).whileTrue(new GroundPickup(false));
+
 
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
 
     // operatorController.back().whileTrue(new CloseClaw());
 
     operatorController.pov(0).whileTrue(homing);
-    operatorController.pov(90).whileTrue(Setpoints.scoreLeft());
+    operatorController.pov(90).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreLeftCone());
+    operatorController.pov(90).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreLeftCube());
+
     operatorController.pov(180).whileTrue(new InstantCommand(() -> turret.setPosition(0)));
 
-    operatorController.pov(270).whileTrue(Setpoints.scoreRight());
+    operatorController.pov(270).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreRightCone());
+    operatorController.pov(270).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreRightCube());
 
     operatorController.rightBumper().whileTrue(runIntake);
     operatorController.leftBumper().whileTrue(runIntakeReversed);  

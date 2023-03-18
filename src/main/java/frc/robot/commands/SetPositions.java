@@ -23,6 +23,7 @@ public class SetPositions extends CommandBase {
   private double turretAngle;
 
   private boolean fieldRelTurret;
+  private boolean shouldEnd;
 
   /** Creates a new SetPositions. */
   public SetPositions(double tiltAngle, double extendDistance, double turretAngle, boolean checkAlliance) {
@@ -31,6 +32,7 @@ public class SetPositions extends CommandBase {
     this.extendDistance = extendDistance;
     this.turretAngle = checkAlliance && DriverStation.getAlliance() == Alliance.Red ? -turretAngle : turretAngle;
     this.fieldRelTurret = false;
+    this.shouldEnd = true;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -40,15 +42,17 @@ public class SetPositions extends CommandBase {
     this.extendDistance = extendDistance;
     this.turretAngle = turretAngle;
     this.fieldRelTurret = false;
+    this.shouldEnd = true;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  public SetPositions(double tiltAngle, double extendDistance, double turretAngle, boolean checkAlliance, boolean fieldRelTurret) {
+  public SetPositions(double tiltAngle, double extendDistance, double turretAngle, boolean checkAlliance, boolean shouldEnd, boolean fieldRelTurret) {
     addRequirements(tilt, extend, turret);
     this.tiltAngle = tiltAngle;
     this.extendDistance = extendDistance;
     this.turretAngle = checkAlliance && DriverStation.getAlliance() == Alliance.Red ? -turretAngle : turretAngle;
     this.fieldRelTurret = fieldRelTurret;
+    this.shouldEnd = shouldEnd;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -81,8 +85,9 @@ public class SetPositions extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(tilt.getAngle() - tiltAngle) < 2
+    return shouldEnd ? Math.abs(tilt.getAngle() - tiltAngle) < 2
         && Math.abs(turret.getAngleRelativeToRobot() - turret.getNearestTurretAngle(turretAngle)) < 1
-        && Math.abs(extend.getExtendDistance() - extendDistance) < 0.02;
+        && Math.abs(extend.getExtendDistance() - extendDistance) < 0.02
+        : false;
   }
 }
