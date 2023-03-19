@@ -213,34 +213,16 @@ public final class Autos {
           new RunIntake(),
           new WaitCommand(0.2)
           ))
-        .andThen(
-          new ParallelRaceGroup(
-            (new SetTurret(-180, true, true)
-            .andThen(
-              Setpoints.groundCube()
-            )
-            ),
-            (new SetExtend(0.15, true)
-              .andThen(
-                part1
-                .alongWith(new SetTilt(0, true))
-                .alongWith(new SetExtend(0.15, true))
-              )
-            )
-          )
-        )
-
-        // .andThen(new Homing())
-        // .andThen(new ParallelCommandGroup(
-        //     new SetTurret(180, true, true),
-        //     part1,
-        //     // new SetPositions(0, 0.15, 180, true)
-        //     .andThen(Setpoints.groundCube())).raceWith(new OpenClawCubeGround(false).raceWith(new RunIntake())))
-        //         // .andThen(new SetPositions(-27, 0.65, 180))))
-        // // .andThen(new ParallelRaceGroup(
-        // //     part2,
-        // //     new RunIntake(),
-        // //     new OpenClawCubeGround(false)))
+          .andThen(new Homing())
+          .andThen(new ParallelCommandGroup(
+              part1,
+              new SetPositions(0, 0.15, 180, true)
+              .andThen(Setpoints.groundCube())).raceWith(Setpoints.groundCube().raceWith(new RunIntake())))
+                  // .andThen(new SetPositions(-27, 0.65, 180))))
+          // .andThen(new ParallelRaceGroup(
+          //     part2,
+          //     new RunIntake(),
+          //     new OpenClawCubeGround(false)))
         .andThen(
             new ParallelCommandGroup(
                 part2,
@@ -310,6 +292,65 @@ public final class Autos {
         .andThen(new Homing()));
   }
   
+  
+  private Command get2PieceAndBalance() {
+    List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
+        ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece",
+            new PathConstraints(2, 3)))
+        : PathPlanner.loadPathGroup("new 2 piece blue",
+            new PathConstraints(2, 3));
+    // for(int i = 0; i<epicPathGroup.size(); i++){
+    // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
+    // Alliance.Red);
+    // }
+    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
+    Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
+    // Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
+
+    return (stockMarketCrash
+        .andThen(new ParallelRaceGroup(
+            Setpoints.scoreSubCone(),
+            driveTrain.zeroModulesCommand()))
+        // .andThen(new OpenClawCubeGround(true))
+        .andThen(new ParallelRaceGroup(
+            new RunIntake(),
+            new WaitCommand(0.2)))
+        .andThen(
+            new ParallelRaceGroup(
+                (new SetTurret(-180, true, true)
+                    .andThen(
+                        Setpoints.groundCube())),
+                (new SetExtend(0.15, true)
+                    .andThen(
+                        part1
+                            .alongWith(new SetTilt(0, true))
+                            .alongWith(new SetExtend(0.15, true))))))
+
+        // .andThen(new Homing())
+        // .andThen(new ParallelCommandGroup(
+        // new SetTurret(180, true, true),
+        // part1,
+        // // new SetPositions(0, 0.15, 180, true)
+        // .andThen(Setpoints.groundCube())).raceWith(new
+        // OpenClawCubeGround(false).raceWith(new RunIntake())))
+        // // .andThen(new SetPositions(-27, 0.65, 180))))
+        // // .andThen(new ParallelRaceGroup(
+        // // part2,
+        // // new RunIntake(),
+        // // new OpenClawCubeGround(false)))
+        .andThen(
+            new ParallelCommandGroup(
+                part2,
+                new Homing()).raceWith(new RunIntake()))
+        .andThen(
+            new SetPositions(35, 0.8, 15, true))
+        .andThen(
+            new ParallelRaceGroup(
+                new RunIntakeReversed(),
+                new WaitCommand(1)))
+        .andThen(new Homing()));
+  }
 
   private static SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       driveTrain::getPose,
