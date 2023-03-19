@@ -167,6 +167,7 @@ public class Turret extends SubsystemBase {
   //accounts for soft limits by wraping impossible angles by 90 degrees
   private double getNearestActualTurretAngle(double angle){
     angle = getNearestTurretAngle(angle);
+    // System.out.println("tangle: " + angle);
 
     if(angle > softLimitForward){ 
       return getNearestActualTurretAngle(angle - 360.0);

@@ -55,27 +55,27 @@ public class Setpoints {
 
 
     public static Command scoreMidConeLeft() {
-        return null;
+        return new SetPositions(45, 0.4, -20, false);
     }
 
     public static Command scoreMidConeRight() {
-        return null;
+        return new SetPositions(45, 0.4, 20, false);
     }
 
     public static Command scoreMidCubeLeft() {
-        return null;
+        return new SetPositions(23, 0.4, -42, false);
     }
 
     public static Command scoreMidCubeRight() {
-        return null;
+        return new SetPositions(23, 0.4, 42, false);
     }
 
     public static Command scoreSubCubeMid() {
-        return null;
+        return new SetPositions(23, 0.4, 42, true);
     }
 
     public static Command scoreWallCubeMid() {
-        return null;
+        return new SetPositions(23, 0.4, 42, true);
     }
 
 

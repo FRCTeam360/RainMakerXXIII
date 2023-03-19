@@ -139,11 +139,11 @@ public class RobotContainer {
     operatorController.pov(270).and(operatorController.leftStick().negate()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreRightCube()); //dpad left + NO back left paddle
 
     //MID SETPOINTS
-    operatorController.pov(90).and(operatorController.leftStick()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreMidConeLeft());
-    operatorController.pov(90).and(operatorController.leftStick()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreMidCubeLeft());
+    operatorController.pov(90).and(operatorController.leftStick()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreMidConeRight());
+    operatorController.pov(90).and(operatorController.leftStick()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreMidCubeRight());
 
-    operatorController.pov(270).and(operatorController.leftStick()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreMidConeRight()); //dpad left + NO back left paddle
-    operatorController.pov(270).and(operatorController.leftStick()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreMidCubeRight()); //dpad left + NO back left paddle
+    operatorController.pov(270).and(operatorController.leftStick()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreMidConeLeft()); //dpad left + NO back left paddle
+    operatorController.pov(270).and(operatorController.leftStick()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreMidCubeLeft()); //dpad left + NO back left paddle
 
 
     operatorController.rightBumper().whileTrue(runIntake);
