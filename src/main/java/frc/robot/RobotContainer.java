@@ -109,50 +109,39 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-    // driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
-    // operatorController.leftTrigger().whileTrue(new CloseClaw());
-    // operatorController.rightTrigger().whileTrue(new OpenClaw());
 
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     driverController.y().whileTrue(new AutoEngage());
 
-    //while start held, set to cone intake, else set to cube
-    // operatorController.a().and(operatorController.start().negate()).whileTrue(new SetArmPose(new Translation3d(-0.25, 0, 0.85), true).alongWith(new OpenClawCubeSubstation())); //ground pickup?
-    // operatorController.a().and(operatorController.start()).whileTrue((new SetPositions(180, 0.4, 0)).alongWith(new OpenClawConeSubstation()));
-    // if(Claw.getInstance().isConeMode()){
-    //   operatorController.a().whileTrue(Setpoints.coneSingleStation());
-    // }else{
-    //   operatorController.a().whileTrue(Setpoints.cubeSingleStation());
-    // }
-  //  operatorController.a().whileTrue(new Setpoints().singleStation());
-  operatorController.a().and(() -> claw.isConeMode()).and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleStation());
-  operatorController.a().and(() -> !claw.isConeMode()).and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleStation());
-
-  operatorController.x().and(() -> claw.isConeMode()).whileTrue(Setpoints.coneDouble());
-
-  operatorController.back().and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleTurret());
-  operatorController.start().and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleTurret());
-    
-    // operatorController.b().and(operatorController.start().negate()).whileTrue(new GroundPickup(false));
-    // operatorController.b().and(operatorController.start()).whileTrue(new GroundPickup(true));
+    operatorController.a().and(() -> claw.isConeMode()).and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleStation());
+    operatorController.a().and(() -> !claw.isConeMode()).and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleStation());
 
     operatorController.b().and(() -> claw.isConeMode()).whileTrue(new GroundPickup(true));
     operatorController.b().and(() -> !claw.isConeMode()).whileTrue(new GroundPickup(false));
 
-
+    operatorController.x().and(() -> claw.isConeMode()).whileTrue(Setpoints.coneDouble());
+    
     operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
 
-    // operatorController.back().whileTrue(new CloseClaw());
-
+    operatorController.back().and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleTurret());
+    operatorController.start().and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleTurret());
+    
     operatorController.pov(0).whileTrue(homing);
-    operatorController.pov(90).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreLeftCone());
-    operatorController.pov(90).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreLeftCube());
+
+    operatorController.pov(90).and(operatorController.leftStick().negate()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreLeftCone()); //dpad right + NO back left paddle
+    operatorController.pov(90).and(operatorController.leftStick().negate()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreLeftCube()); //dpad right + NO back left paddle
 
     operatorController.pov(180).whileTrue(new InstantCommand(() -> turret.setPosition(0)));
 
-    operatorController.pov(270).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreRightCone());
-    operatorController.pov(270).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreRightCube());
+    operatorController.pov(270).and(operatorController.leftStick().negate()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreRightCone()); //dpad left + NO back left paddle
+    operatorController.pov(270).and(operatorController.leftStick().negate()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreRightCube()); //dpad left + NO back left paddle
+
+    operatorController.pov(90).and(operatorController.leftStick()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreMidConeLeft());
+    operatorController.pov(90).and(operatorController.leftStick()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreMidCubeLeft());
+
+    operatorController.pov(270).and(operatorController.leftStick()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreMidConeRight()); //dpad left + NO back left paddle
+    operatorController.pov(270).and(operatorController.leftStick()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreMidCubeRight()); //dpad left + NO back left paddle
+
 
     operatorController.rightBumper().whileTrue(runIntake);
     operatorController.leftBumper().whileTrue(runIntakeReversed);  

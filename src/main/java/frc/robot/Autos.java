@@ -246,26 +246,23 @@ public final class Autos {
         .andThen(new ParallelRaceGroup(
           new RunIntake(),
           new WaitCommand(0.2)
-        ))
+          ))
         .andThen(
           new ParallelCommandGroup(
             (new SetTurret(-180, true, true)
-            .andThen(
+              .andThen(
               Setpoints.groundCube().raceWith(new OpenClawCubeGround(false).raceWith(new RunIntake()))
-            )
+              )
             ),
             (new SetExtend(0.15, true)
-            .andThen(
-              part1
-              .alongWith(new SetTilt(0, true))
-              .alongWith(new SetExtend(0.15, true))
-            )
+              .andThen(
+                part1
+                .alongWith(new SetTilt(0, true))
+                .alongWith(new SetExtend(0.15, true))
+              )
             )
           )
         )
-
-
-
 
         // .andThen(new Homing())
         // .andThen(new ParallelCommandGroup(
@@ -281,14 +278,20 @@ public final class Autos {
         .andThen(
             new ParallelCommandGroup(
                 part2,
-                new Homing()).raceWith(new RunIntake()))
+                new Homing()).raceWith(new RunIntake()
+            )
+        )
         .andThen(
-            new SetPositions(35, 0.8, 15, true))
+            new SetPositions(35, 0.8, 15, true)
+        )
         .andThen(
             new ParallelRaceGroup(
                 new RunIntakeReversed(),
-                new WaitCommand(1)))
-        .andThen(new Homing()));
+                new WaitCommand(1)
+            )
+        )
+        .andThen(new Homing())
+      );
   }
 
   private Command getNew2PieceWall() {

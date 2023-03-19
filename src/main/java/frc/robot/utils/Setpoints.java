@@ -54,6 +54,23 @@ public class Setpoints {
     }
 
 
+    public static Command scoreMidConeLeft() {
+        return null;
+    }
+
+    public static Command scoreMidConeRight() {
+        return null;
+    }
+
+    public static Command scoreMidCubeLeft() {
+        return null;
+    }
+
+    public static Command scoreMidCubeRight() {
+        return null;
+    }
+
+
     public static Command coneSingleStation(){
         System.out.println("CONE SUBSTAION");
         return new ParallelCommandGroup(
