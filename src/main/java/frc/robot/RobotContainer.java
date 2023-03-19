@@ -113,6 +113,7 @@ public class RobotContainer {
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     driverController.y().whileTrue(new AutoEngage());
 
+
     operatorController.a().and(() -> claw.isConeMode()).and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleStation());
     operatorController.a().and(() -> !claw.isConeMode()).and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleStation());
 
@@ -128,14 +129,16 @@ public class RobotContainer {
     
     operatorController.pov(0).whileTrue(homing);
 
-    operatorController.pov(90).and(operatorController.leftStick().negate()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreLeftCone()); //dpad right + NO back left paddle
-    operatorController.pov(90).and(operatorController.leftStick().negate()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreLeftCube()); //dpad right + NO back left paddle
-
     operatorController.pov(180).whileTrue(new InstantCommand(() -> turret.setPosition(0)));
+
+    //HIGH SETPOINTS
+    operatorController.pov(90).and(operatorController.leftStick().negate()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreLeftCone());
+    operatorController.pov(90).and(operatorController.leftStick().negate()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreLeftCube());
 
     operatorController.pov(270).and(operatorController.leftStick().negate()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreRightCone()); //dpad left + NO back left paddle
     operatorController.pov(270).and(operatorController.leftStick().negate()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreRightCube()); //dpad left + NO back left paddle
 
+    //MID SETPOINTS
     operatorController.pov(90).and(operatorController.leftStick()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreMidConeLeft());
     operatorController.pov(90).and(operatorController.leftStick()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreMidCubeLeft());
 

@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.commands.CloseClaw;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunIntakeReversed;
@@ -68,6 +67,14 @@ public class Setpoints {
     }
 
     public static Command scoreMidCubeRight() {
+        return null;
+    }
+
+    public static Command scoreSubCubeMid() {
+        return null;
+    }
+
+    public static Command scoreWallCubeMid() {
         return null;
     }
 
