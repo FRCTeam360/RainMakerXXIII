@@ -113,7 +113,7 @@ public class Setpoints {
         );
     }
 
-    public static Command groundCube(){
+    public static Command groundCubeAuto(){
         return new ParallelCommandGroup(
             new SetPositions(-27, 0.65, 180),
             new SetClaw(85),
@@ -121,7 +121,15 @@ public class Setpoints {
         );
     }
 
-    public static Command groundCone(){
+    public static Command groundCubeTele(){
+        return new ParallelCommandGroup(
+            new SetPositions(-27, 0.65, 0),
+            new SetClaw(85),
+            new RunIntake()
+        );
+    }
+
+    public static Command groundConeTele(){
         return new ParallelCommandGroup(
             new SetPositions(0, 0, 0),
             new SetClaw(85),

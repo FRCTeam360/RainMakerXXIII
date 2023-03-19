@@ -73,7 +73,7 @@ public class Claw extends SubsystemBase {
     absoluteEncoder = motor.getAbsoluteEncoder(Type.kDutyCycle); //oops this is extremely bad, dont do this please but we kinda have to
     absoluteEncoder.setPositionConversionFactor(360);
     absoluteEncoder.setInverted(isComp);
-    absoluteEncoder.setZeroOffset(Constants.getRobotType() == RobotType.COMP ? 95 : 325); //325  COMP WAS 35, COMP worked at 103.2 for pid tuning
+    absoluteEncoder.setZeroOffset(Constants.getRobotType() == RobotType.COMP ? 95 : 75); //325  COMP WAS 35, COMP worked at 103.2 for pid tuning
     
     pidController = motor.getPIDController();
     pidController.setP(kP);
