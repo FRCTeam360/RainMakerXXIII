@@ -63,11 +63,11 @@ public class Setpoints {
     }
 
     public static Command scoreMidCubeLeft() {
-        return new SetPositions(23, 0.4, -42, false);
+        return new SetPositions(23, 0.1, -14, false);
     }
 
     public static Command scoreMidCubeRight() {
-        return new SetPositions(23, 0.4, 42, false);
+        return new SetPositions(23, 0.1, 14, false);
     }
 
     public static Command scoreSubCubeMid() {
@@ -126,6 +126,13 @@ public class Setpoints {
             new SetPositions(0, 0, 0),
             new SetClaw(85),
             new RunIntake()
+        );
+    }
+
+    public static Command setShoot() {
+        return new ParallelCommandGroup(
+            new SetPositions(40, 0.1, 0),
+            new SetClaw(69)
         );
     }
 

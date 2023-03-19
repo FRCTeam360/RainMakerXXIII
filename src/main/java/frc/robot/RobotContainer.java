@@ -64,6 +64,8 @@ public class RobotContainer {
 
   private final Setpoints setpoints = new Setpoints();
 
+  private final Shoot shoot = new Shoot();
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController =
       new CommandXboxController(XboxConstants.DRIVER_CONTROLLER_PORT);
@@ -122,7 +124,9 @@ public class RobotContainer {
 
     operatorController.x().and(() -> claw.isConeMode()).whileTrue(Setpoints.coneDouble());
     
-    operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
+    //operatorController.y().whileTrue(new SetArmPose(new Translation3d(1.1, 0, 1.2)));
+    operatorController.y().and(operatorController.leftBumper().negate()).whileTrue(Setpoints.setShoot());
+    operatorController.y().and(operatorController.leftBumper()).whileTrue(shoot);
 
     operatorController.back().and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleTurret());
     operatorController.start().and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleTurret());
@@ -147,7 +151,7 @@ public class RobotContainer {
 
 
     operatorController.rightBumper().whileTrue(runIntake);
-    operatorController.leftBumper().whileTrue(runIntakeReversed);  
+    operatorController.leftBumper().and(operatorController.y().negate()).whileTrue(runIntakeReversed);  
   }
 
   /**
