@@ -116,8 +116,8 @@ public class RobotContainer {
     operatorController.a().and(() -> claw.isConeMode()).and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleStation());
     operatorController.a().and(() -> !claw.isConeMode()).and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleStation());
 
-    operatorController.b().and(() -> claw.isConeMode()).whileTrue(new GroundPickup(true));
-    operatorController.b().and(() -> !claw.isConeMode()).whileTrue(new GroundPickup(false));
+    operatorController.b().and(() -> claw.isConeMode()).whileTrue(Setpoints.groundCone());
+    operatorController.b().and(() -> !claw.isConeMode()).whileTrue(Setpoints.groundCube());
 
     operatorController.x().and(() -> claw.isConeMode()).whileTrue(Setpoints.coneDouble());
     
