@@ -12,7 +12,9 @@ import frc.robot.commands.CloseClaw;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunIntakeReversed;
 import frc.robot.commands.SetClaw;
+import frc.robot.commands.SetExtend;
 import frc.robot.commands.SetPositions;
+import frc.robot.commands.SetTilt;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveTrain;
 
@@ -116,6 +118,15 @@ public class Setpoints {
     public static Command groundCubeAuto(){
         return new ParallelCommandGroup(
             new SetPositions(-27, 0.65, 180),
+            new SetClaw(85),
+            new RunIntake()
+        );
+    }
+
+    public static Command groundCubeAutoNoTurret(){
+        return new ParallelCommandGroup(
+            new SetTilt(-27),
+            new SetExtend(0.65, false),
             new SetClaw(85),
             new RunIntake()
         );

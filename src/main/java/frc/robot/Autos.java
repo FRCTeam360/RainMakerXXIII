@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Turret;
 import frc.robot.utils.Setpoints;
 import frc.robot.commands.*;
 
@@ -34,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public final class Autos {
 
@@ -78,6 +80,8 @@ public final class Autos {
     autoChooser.addOption("loading 2 piece", AutoMode.NEW_2_PIECE);
 
     autoChooser.addOption("coop 0 piece mgeg", AutoMode.ENGAGE_ONLY);
+
+    autoChooser.addOption("loading 2 piece mgeg", AutoMode.NEW_2_PIECE_BALANCE);
 
     autoChooser.addOption("null", AutoMode.NULL);
 
@@ -335,15 +339,30 @@ public final class Autos {
             new RunIntake(),
             new WaitCommand(0.2)))
         .andThen(
-            new ParallelRaceGroup(
-                (new SetTurret(-180, true, true)
-                    .andThen(
-                        Setpoints.groundCubeAuto())),
-                (new SetExtend(0.15, true)
-                    .andThen(
-                        part1
-                            .alongWith(new SetTilt(0, true))
-                            .alongWith(new SetExtend(0.15, true))))))
+            // new ParallelRaceGroup(
+            //     (new SetTurret(-180, true, true)
+            //         .andThen(
+            //             Setpoints.groundCubeAuto())),
+            //     (new SetExtend(0.15, true)
+            //         .andThen(
+            //             part1
+            //                 .alongWith(new SetTilt(0, true))
+            //                 .alongWith(new SetExtend(0.15, true))))))
+            new ParallelCommandGroup(
+              // new SetExtend(0.15, true)
+              //   .andThen(
+                  new ParallelRaceGroup(
+                    part1,
+                    new ParallelCommandGroup(
+                      new SetExtend(0.15, true),
+                      new SetTurret(-180, true, true))
+                      // new WaitUntilCommand(() -> Math.abs(Turret.getInstance().getAngleRelativeToRobot() + 180) <= 3))
+                    .andThen(Setpoints.groundCubeAutoNoTurret())
+                    // )
+                  )//,
+                  // new SetTurret(-180, true, true)
+                )
+            )
 
         // .andThen(new Homing())
         // .andThen(new ParallelCommandGroup(
@@ -405,6 +424,8 @@ public final class Autos {
         return getNew2PieceWall();
       case ENGAGE_ONLY:
         return getEngageOnly();
+      case NEW_2_PIECE_BALANCE:
+        return get2PieceAndBalance();
       case NULL:
       default:
         return null;
@@ -413,6 +434,6 @@ public final class Autos {
 
   private enum AutoMode {
     CHOP_SUEY, LETS_GO_BRANDON, TSLA_STOCK_IS_GOOD, MARIO_BROSKITO, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
-    ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NULL
+    ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NEW_2_PIECE_BALANCE, NULL
   }
 }
