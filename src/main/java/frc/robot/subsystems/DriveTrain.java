@@ -46,7 +46,6 @@ public class DriveTrain extends SubsystemBase {
   private static DriveTrain instance;
   private final Lights lights = Lights.getInstance();
   public static final double MAX_VOLTAGE = 12.0;
-  private boolean isWithinMidRed;
 
   public double futureAngle = 180;
 
@@ -107,16 +106,16 @@ public class DriveTrain extends SubsystemBase {
   public DriveTrain() {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
     m_frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
-        tab.getLayout("Front Left Module", BuiltInLayouts.kList)
-            .withSize(2, 4)
-            .withPosition(0, 0),
-        Mk4iSwerveModuleHelper.GearRatio.L1,
-        CANivore.FRONT_LEFT_MODULE_DRIVE_MOTOR,
-        CANivore.FRONT_LEFT_MODULE_STEER_MOTOR,
-        CANivore.FRONT_LEFT_MODULE_STEER_ENCODER,
-        SwerveConstants.getFrontLeftModuleSteerOffset());
-    System.out.println("module: " + m_frontLeftModule.toString());
-    m_frontRightModule = Mk4iSwerveModuleHelper.createFalcon500(
+      tab.getLayout("Front Left Module", BuiltInLayouts.kList)
+          .withSize(2, 4)
+          .withPosition(0, 0),
+      Mk4iSwerveModuleHelper.GearRatio.L1,
+      CANivore.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+      CANivore.FRONT_LEFT_MODULE_STEER_MOTOR,
+      CANivore.FRONT_LEFT_MODULE_STEER_ENCODER,
+      SwerveConstants.getFrontLeftModuleSteerOffset());
+      System.out.println("module: " + m_frontLeftModule.toString());
+      m_frontRightModule = Mk4iSwerveModuleHelper.createFalcon500(
         tab.getLayout("Front Right Module", BuiltInLayouts.kList)
             .withSize(2, 4)
             .withPosition(2, 0),
@@ -149,8 +148,9 @@ public class DriveTrain extends SubsystemBase {
     odometry = new SwerveDriveOdometry(m_kinematics, m_pigeon.getRotation2d(), getModulePositions());
 
     estimator = new SwerveDrivePoseEstimator(m_kinematics, getGyroscopeRotation(), getModulePositions(), new Pose2d(),
-        new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01),
-        new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.3, 0.3, 0.9));
+    new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.02, 0.02, 0.01),
+    new MatBuilder<>(Nat.N3(), Nat.N1()).fill(0.3, 0.3, 0.9));
+    // SmartDashboard.putData("Field", field);
 
     setGyroPosition(180);
 
@@ -170,7 +170,7 @@ public class DriveTrain extends SubsystemBase {
     m_pigeon.setYaw(yaw);
   }
 
-  public void setGyroOffset(double yaw) {
+  public void setGyroOffset(double yaw){
     futureAngle = yaw;
   }
 
@@ -178,8 +178,7 @@ public class DriveTrain extends SubsystemBase {
     return m_pigeon.getRotation2d().plus(new Rotation2d(Math.toRadians(futureAngle)));
   }
 
-  public Rotation2d getGyroscopeRotation() {
-    ;
+  public Rotation2d getGyroscopeRotation() {;
     return m_pigeon.getRotation2d();
   }
 
@@ -304,37 +303,37 @@ public class DriveTrain extends SubsystemBase {
     m_backRightModule.set(0, Math.toRadians(45));
   }
 
-  public void zeroModules() {
+  public void zeroModules(){
     m_frontLeftModule.set(0, Math.toRadians(0));
     m_frontRightModule.set(0, Math.toRadians(0));
     m_backLeftModule.set(0, Math.toRadians(0));
     m_backRightModule.set(0, Math.toRadians(0));
   }
 
-  public CommandBase zeroModulesCommand() {
+  public CommandBase zeroModulesCommand(){
     return run(() -> zeroModules());
   }
 
-  private void checkEncoders() {
-    if (Math.abs(m_frontRightModule.getSteerAngle() - m_frontRightModule.getSteerEncoder().getAbsoluteAngle()) < 0.5) {
+  private void checkEncoders(){
+    if(Math.abs(m_frontRightModule.getSteerAngle() - m_frontRightModule.getSteerEncoder().getAbsoluteAngle()) < 0.5){
       lights.setINdividualGreen(1);
     } else {
       lights.setIndividualRed(1);
     }
 
-    if (Math.abs(m_backRightModule.getSteerAngle() - m_backRightModule.getSteerEncoder().getAbsoluteAngle()) < 0.5) {
+    if(Math.abs(m_backRightModule.getSteerAngle() - m_backRightModule.getSteerEncoder().getAbsoluteAngle()) < 0.5){
       lights.setINdividualGreen(2);
     } else {
       lights.setIndividualRed(2);
     }
 
-    if (Math.abs(m_backLeftModule.getSteerAngle() - m_backLeftModule.getSteerEncoder().getAbsoluteAngle()) < 0.5) {
+    if(Math.abs(m_backLeftModule.getSteerAngle() - m_backLeftModule.getSteerEncoder().getAbsoluteAngle()) < 0.5){
       lights.setINdividualGreen(5);
     } else {
       lights.setIndividualRed(5);
     }
 
-    if (Math.abs(m_frontLeftModule.getSteerAngle() - m_frontLeftModule.getSteerEncoder().getAbsoluteAngle()) < 0.5) {
+    if(Math.abs(m_frontLeftModule.getSteerAngle() - m_frontLeftModule.getSteerEncoder().getAbsoluteAngle()) < 0.5){
       lights.setINdividualGreen(6);
     } else {
       lights.setIndividualRed(6);
@@ -343,26 +342,44 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // ll.runVision();
-    // Translation2d limelightPose = ll.getTrans();
-    // if (!Objects.isNull(limelightPose)/* && limelightPose.getDistance(pose.getTranslation()) <= 1 */) {
-    //   estimator.addVisionMeasurement(new Pose2d(limelightPose, getGyroscopeRotation()),
-    //       Timer.getFPGATimestamp() - (ll.getTL() / 1000) - (ll.getCL() / 1000));
-    // }
+    field.setRobotPose(odometry.getPoseMeters());
+    // SmartDashboard.putNumber("pitch", m_pigeon.getPitch());
+    // SmartDashboard.putNumber("roll", m_pigeon.getRoll());
+    // SmartDashboard.putNumber("X pose", getPose() == null ? 0.0 : getPose().getX());
+    // SmartDashboard.putNumber("Y pose", getPose() == null ? 0.0 : getPose().getY());
+    ll.runVision();
+    if(Objects.isNull(ll.getAveragePose())) {
+      // pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+    } else {
+      // pose = this.setPose(ll.getAveragePose());
+      // estimator.addVisionMeasurement((new Pose3d(ll.getTrans(), new Rotation3d(0, 0, getGyroscopeRotation().getRadians())).toPose2d()), Timer.getFPGATimestamp());
+      estimator.addVisionMeasurement(new Pose2d(ll.getTrans(), getGyroscopeRotation()), Timer.getFPGATimestamp());
+      
+    }
     estimator.update(getGyroscopeRotation(), getModulePositions());
     pose = estimator.getEstimatedPosition();
     field.setRobotPose(pose);
-    // SmartDashboard.putData("Field", field);
 
-    // if (pose.getX() <= 15 && pose.getX() > 13.9 && pose.getY() > 1.88 && pose.getY() < 3.62) {
-    //   isWithinMidRed = true;
-    // } else {
-    //   isWithinMidRed = false;
+   // SmartDashboard.putData("field", field);
+   // SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
+    //SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
+    // if(DriverStation.isDisabled()){
+      checkEncoders();
     // }
-    // SmartDashboard.putBoolean("Is Within Mid Red", isWithinMidRed);
 
-    if (DriverStation.isDisabled()) {
+    // SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
+    // SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
+    // This method will be called once per scheduler run
+    //SmartDashboard.putNumber("timestamp", ll.getTimestamp());
+    pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+
+    if(DriverStation.isDisabled()){
       checkEncoders();
     }
+
+    // SmartDashboard.putNumber("x pos", odometry.getPoseMeters().getX());
+    // SmartDashboard.putNumber("y pos", odometry.getPoseMeters().getY());
+    // This method will be called once per scheduler run
+
   }
 }
