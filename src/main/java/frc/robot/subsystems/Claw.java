@@ -31,7 +31,7 @@ public class Claw extends SubsystemBase {
   private final SparkMaxPIDController pidController;
   private static Claw instance;
 
-  enum GamePiece {CONE, CUBE, NONE};
+  public enum GamePiece {CONE, CUBE, NONE};
 
   private GamePiece gamePiece = GamePiece.NONE;
 

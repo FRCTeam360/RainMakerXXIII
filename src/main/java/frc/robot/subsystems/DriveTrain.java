@@ -105,6 +105,7 @@ public class DriveTrain extends SubsystemBase {
   /** Creates a new DriveTrain. */
   public DriveTrain() {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+    ShuffleboardTab diagnostics = Shuffleboard.getTab("Diagnostics");
     m_frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
       tab.getLayout("Front Left Module", BuiltInLayouts.kList)
           .withSize(2, 4)
@@ -154,7 +155,7 @@ public class DriveTrain extends SubsystemBase {
 
     setGyroPosition(180);
 
-    tab.addDouble("gyro angle", () -> getGyroscopeRotation().getDegrees());
+    diagnostics.addDouble("gyro angle", () -> getGyroscopeRotation().getDegrees());
   }
 
   public void zeroGyroscope() {
@@ -347,17 +348,18 @@ public class DriveTrain extends SubsystemBase {
     // SmartDashboard.putNumber("roll", m_pigeon.getRoll());
     // SmartDashboard.putNumber("X pose", getPose() == null ? 0.0 : getPose().getX());
     // SmartDashboard.putNumber("Y pose", getPose() == null ? 0.0 : getPose().getY());
-    ll.runVision();
-    if(Objects.isNull(ll.getAveragePose())) {
-      // pose = odometry.update(getGyroscopeRotation(), getModulePositions());
-    } else {
-      // pose = this.setPose(ll.getAveragePose());
-      // estimator.addVisionMeasurement((new Pose3d(ll.getTrans(), new Rotation3d(0, 0, getGyroscopeRotation().getRadians())).toPose2d()), Timer.getFPGATimestamp());
-      estimator.addVisionMeasurement(new Pose2d(ll.getTrans(), getGyroscopeRotation()), Timer.getFPGATimestamp());
+    // ll.runVision();
+    // if(Objects.isNull(ll.getAveragePose())) {
+    //   // pose = odometry.update(getGyroscopeRotation(), getModulePositions());
+    // } else {
+    //   // pose = this.setPose(ll.getAveragePose());
+    //   // estimator.addVisionMeasurement((new Pose3d(ll.getTrans(), new Rotation3d(0, 0, getGyroscopeRotation().getRadians())).toPose2d()), Timer.getFPGATimestamp());
+    //   estimator.addVisionMeasurement(new Pose2d(ll.getTrans(), getGyroscopeRotation()), Timer.getFPGATimestamp());
       
-    }
+    // }
+    pose = odometry.update(getGyroscopeRotation(), getModulePositions());
     estimator.update(getGyroscopeRotation(), getModulePositions());
-    pose = estimator.getEstimatedPosition();
+    // pose = estimator.getEstimatedPosition();
     field.setRobotPose(pose);
 
    // SmartDashboard.putData("field", field);

@@ -4,16 +4,26 @@
 
 package frc.robot.commands;
 
+import java.util.Objects;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Claw.GamePiece;
 
 public class RunIntakeReversed extends CommandBase {
   private final Intake intake = Intake.getInstance();
+  private final Claw claw = Claw.getInstance();
+  private Claw.GamePiece autoPieceType;
 
   /** Creates a new RunIntakeReversed. */
   public RunIntakeReversed() {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intake);
+  }
+
+  public RunIntakeReversed(Claw.GamePiece pieceType) {
+    autoPieceType = pieceType;
     addRequirements(intake);
   }
 
@@ -24,6 +34,13 @@ public class RunIntakeReversed extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(!Objects.isNull(autoPieceType)) {
+      if(autoPieceType == GamePiece.CONE) {
+        intake.run(1.0);
+      } else {
+        intake.run(-.5);
+      }
+    }
     if(Claw.getInstance().isConeMode()){
       intake.run(1.0);
     } else {

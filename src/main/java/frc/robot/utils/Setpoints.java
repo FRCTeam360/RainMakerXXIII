@@ -115,6 +115,14 @@ public class Setpoints {
         );
     }
 
+    /**
+     * Opens the claw only for picking up cubes
+     * @return
+     */
+    public static Command openClawCubeGround(){
+        return new SetClaw(85, false);
+    }
+
     public static Command groundCubeAuto(){
         return new ParallelCommandGroup(
             new SetPositions(-27, 0.65, 180),

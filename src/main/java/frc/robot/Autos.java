@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Claw.GamePiece;
 import frc.robot.utils.Setpoints;
 import frc.robot.commands.*;
 
@@ -68,10 +69,10 @@ public final class Autos {
   public Autos() {
     autoChooser = new SendableChooser<>();
     // add auto options to chooser here
-    autoChooser.addOption("coop mgeg", AutoMode.MARIO_BROSKITO);
+    autoChooser.addOption("coop mgeg", AutoMode.ONE_PIECE_MGEG);
     autoChooser.addOption("wall mgeg", AutoMode.ENGAGE_FROM_WALL);
     autoChooser.addOption("loading mgeg", AutoMode.ENGAGE_FROM_LOADING);
-    
+
     autoChooser.addOption("wall 2 piece", AutoMode.NEW_2_PIECE_WALL);
 
     autoChooser.addOption("mobility left", AutoMode.ANYWHERE_LEFT);
@@ -85,7 +86,6 @@ public final class Autos {
 
     autoChooser.addOption("null", AutoMode.NULL);
 
-    
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
@@ -113,11 +113,12 @@ public final class Autos {
     Command setPose = autoBuilder.resetPose(path);
     Command segment1 = autoBuilder.followPath(path);
 
-    // return setPose.andThen(new SetPositions(42, 1.1, 15, false)).andThen(new OpenClawCubeGround()).andThen(new Homing())
-    //     .andThen(segment1);
+    // return setPose.andThen(new SetPositions(42, 1.1, 15, false)).andThen(new
+    // OpenClawCubeGround()).andThen(new Homing())
+    // .andThen(segment1);
 
     return setPose.andThen(Setpoints.scoreRightCone()).andThen(new RunIntake()).andThen(new Homing())
-    .andThen(segment1);
+        .andThen(segment1);
   }
 
   private Command getAnywhereLeft() {
@@ -127,11 +128,13 @@ public final class Autos {
     Command setPose = autoBuilder.resetPose(path);
     Command segment1 = autoBuilder.followPath(path);
 
-    // return setPose.andThen(new SetPositions(42, 1.1, -15, false)).andThen(new OpenClawCubeGround())
-    //     .andThen(new Homing()).andThen(segment1);
+    // return setPose.andThen(new SetPositions(42, 1.1, -15, false)).andThen(new
+    // OpenClawCubeGround())
+    // .andThen(new Homing()).andThen(segment1);
 
-    return setPose.andThen(Setpoints.scoreLeftCone()).andThen(new RunIntake()).andThen(new Homing())
-    .andThen(segment1);
+    return setPose.andThen(Setpoints.scoreLeftCone()).andThen(new RunIntake().raceWith(new WaitCommand(.2))).andThen(new Homing())
+        .andThen(segment1);
+   
   }
 
   private Command getEngageFromWall() {
@@ -141,11 +144,12 @@ public final class Autos {
     Command setPose = autoBuilder.resetPose(path);
     Command segment1 = autoBuilder.followPath(path);
 
-    // return setPose.andThen(new SetPositions(42, 1.1, 15, true)).andThen(new OpenClawCubeGround()).andThen(new Homing())
-    //     .andThen(segment1).andThen(new AutoEngage());
+    // return setPose.andThen(new SetPositions(42, 1.1, 15, true)).andThen(new
+    // OpenClawCubeGround()).andThen(new Homing())
+    // .andThen(segment1).andThen(new AutoEngage());
 
     return setPose.andThen(Setpoints.scoreWallCone()).andThen(new RunIntake()).andThen(new Homing())
-    .andThen(segment1).andThen(new AutoEngage());
+        .andThen(segment1).andThen(new AutoEngage());
   }
 
   private Command getEngageFromLoading() {
@@ -155,27 +159,30 @@ public final class Autos {
     Command setPose = autoBuilder.resetPose(path);
     Command segment1 = autoBuilder.followPath(path);
 
-    // return setPose.andThen(new SetPositions(42, 1.1, -15, true)).andThen(new OpenClawCubeGround()).andThen(new Homing())
-    //     .andThen(segment1).andThen(new AutoEngage());
+    // return setPose.andThen(new SetPositions(42, 1.1, -15, true)).andThen(new
+    // OpenClawCubeGround()).andThen(new Homing())
+    // .andThen(segment1).andThen(new AutoEngage());
     return setPose.andThen(Setpoints.scoreSubCone()).andThen(new RunIntake()).andThen(new Homing())
-    .andThen(segment1).andThen(new AutoEngage());
+        .andThen(segment1).andThen(new AutoEngage());
   }
 
-  private Command getMyMarioAuto() {
-
+  private Command get1PieceMgeg() {
     List<PathPlannerTrajectory> luigi = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(2, 3));
     luigi = mirrorPathsForAlliance(luigi);
     Command rainbowRoad = autoBuilder.resetPose(luigi.get(0));
     Command coconutMall = autoBuilder.followPath(luigi.get(0));
     // Command DKJungle = autoBuilder.followPath(luigi.get(1));
     // Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
-    // return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
-    //     .andThen(new SetPositions(42, 1.1, 15, true).andThen(new OpenClawCubeGround()))
-    //     .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge).andThen(new
-                                                                                  // AutoEngage());
-                                                                                  
-        return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
-        .andThen(Setpoints.scoreWallCone()).andThen(new RunIntake())
+    // return rainbowRoad.andThen(new InstantCommand(() ->
+    // driveTrain.setGyroOffset(180)))
+    // .andThen(new SetPositions(42, 1.1, 15, true).andThen(new
+    // OpenClawCubeGround()))
+    // .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());//
+    // .andThen(DKJungle).andThen(ShroomRidge).andThen(new
+    // AutoEngage());
+
+    return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
+        .andThen(Setpoints.scoreWallCone()).andThen(new RunIntake(GamePiece.CONE).raceWith(new WaitCommand(1.0)))
         .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());
   }
 
@@ -192,12 +199,12 @@ public final class Autos {
                                                         // AutoEngage());
   }
 
-  private Command getNew2Piece() {
+  private Command getLoading2Piece() {
     List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
         ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece",
             new PathConstraints(2, 3)))
         : PathPlanner.loadPathGroup("new 2 piece blue",
-        new PathConstraints(2, 3));
+            new PathConstraints(2, 3));
     // for(int i = 0; i<epicPathGroup.size(); i++){
     // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
     // Alliance.Red);
@@ -209,69 +216,52 @@ public final class Autos {
 
     return (stockMarketCrash
         .andThen(new ParallelRaceGroup(
-          Setpoints.scoreSubCone(), 
-          driveTrain.zeroModulesCommand()
-        ))
+            Setpoints.scoreSubCone(),
+            driveTrain.zeroModulesCommand()))
         // .andThen(new OpenClawCubeGround(true))
         .andThen(new ParallelRaceGroup(
-          new RunIntake(),
-          new WaitCommand(0.2)
-          ))
-        .andThen(
-          new ParallelRaceGroup(
-            (new SetTurret(-180, true, true)
-            .andThen(
-              Setpoints.groundCubeAuto()
-            )
-            ),
-            (new SetExtend(0.15, true)
-              .andThen(
-                part1
-                .alongWith(new SetTilt(0, true))
-                .alongWith(new SetExtend(0.15, true))
-              )
-            )
-          )
-        )
+            new RunIntake(),
+            new WaitCommand(0.2)))
+        .andThen(new Homing())
+        .andThen(new ParallelCommandGroup(
+            part1,
+            new SetPositions(0, 0.15, 180, true)
+                .andThen(Setpoints.groundCubeAuto())))
 
         // .andThen(new Homing())
         // .andThen(new ParallelCommandGroup(
-        //     new SetTurret(180, true, true),
-        //     part1,
-        //     // new SetPositions(0, 0.15, 180, true)
-        //     .andThen(Setpoints.groundCube())).raceWith(new OpenClawCubeGround(false).raceWith(new RunIntake())))
-        //         // .andThen(new SetPositions(-27, 0.65, 180))))
+        // new SetTurret(180, true, true),
+        // part1,
+        // // new SetPositions(0, 0.15, 180, true)
+        // .andThen(Setpoints.groundCube())).raceWith(new
+        // OpenClawCubeGround(false).raceWith(new RunIntake())))
+        // // .andThen(new SetPositions(-27, 0.65, 180))))
         // // .andThen(new ParallelRaceGroup(
-        // //     part2,
-        // //     new RunIntake(),
-        // //     new OpenClawCubeGround(false)))
+        // // part2,
+        // // new RunIntake(),
+        // // new OpenClawCubeGround(false)))
         .andThen(
             new ParallelCommandGroup(
                 part2,
-                new Homing()).raceWith(new RunIntake()
-            )
-        )
+                new Homing()).raceWith(new RunIntake()))
         .andThen(
-            new SetPositions(35, 0.8, 15, true)
-        )
+            new SetPositions(35, 0.8, 15, true))
         .andThen(
             new ParallelRaceGroup(
                 new RunIntakeReversed(),
-                new WaitCommand(1)
-            )
-        )
-        .andThen(new Homing())
-      );
+                new WaitCommand(1)))
+        .andThen(new Homing()));
   }
 
   private Command getNew2PieceWall() {
-    // List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
-    //     ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece wall red",
-    //         new PathConstraints(2, 3)))
-    //     : PathPlanner.loadPathGroup("new 2 piece wall blue",
-    //     new PathConstraints(2, 3));
+    // List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() ==
+    // Alliance.Red
+    // ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece wall red",
+    // new PathConstraints(2, 3)))
+    // : PathPlanner.loadPathGroup("new 2 piece wall blue",
+    // new PathConstraints(2, 3));
     List<PathPlannerTrajectory> epicPathGroup = mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece wall red",
-            new PathConstraints(2, 3)));
+        new PathConstraints(2, 3)));
     // for(int i = 0; i<epicPathGroup.size(); i++){
     // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
     // Alliance.Red);
@@ -283,24 +273,22 @@ public final class Autos {
 
     return (stockMarketCrash
         .andThen(new ParallelRaceGroup(
-          Setpoints.scoreWallCone(), 
-          driveTrain.zeroModulesCommand()
-        ))
+            Setpoints.scoreWallCone(),
+            driveTrain.zeroModulesCommand()))
         // .andThen(new OpenClawCubeGround(true))
         .andThen(new ParallelRaceGroup(
-          new RunIntake(),
-          new WaitCommand(0.2)
-        ))
+            new RunIntake(),
+            new WaitCommand(0.2)))
         .andThen(new Homing())
         .andThen(new ParallelRaceGroup(
             part1,
             new SetPositions(0, 0.15, 180, true)
-            .andThen(Setpoints.groundCubeAuto())))
-                // .andThen(new SetPositions(-27, 0.65, 180))))
+                .andThen(Setpoints.groundCubeAuto())))
+        // .andThen(new SetPositions(-27, 0.65, 180))))
         // .andThen(new ParallelRaceGroup(
-        //     part2,
-        //     new RunIntake(),
-        //     new OpenClawCubeGround(false)))
+        // part2,
+        // new RunIntake(),
+        // new OpenClawCubeGround(false)))
         .andThen(
             new ParallelCommandGroup(
                 part2,
@@ -313,8 +301,7 @@ public final class Autos {
                 new WaitCommand(1)))
         .andThen(new Homing()));
   }
-  
-  
+
   private Command get2PieceAndBalance() {
     List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
         ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece",
@@ -340,29 +327,29 @@ public final class Autos {
             new WaitCommand(0.2)))
         .andThen(
             // new ParallelRaceGroup(
-            //     (new SetTurret(-180, true, true)
-            //         .andThen(
-            //             Setpoints.groundCubeAuto())),
-            //     (new SetExtend(0.15, true)
-            //         .andThen(
-            //             part1
-            //                 .alongWith(new SetTilt(0, true))
-            //                 .alongWith(new SetExtend(0.15, true))))))
+            // (new SetTurret(-180, true, true)
+            // .andThen(
+            // Setpoints.groundCubeAuto())),
+            // (new SetExtend(0.15, true)
+            // .andThen(
+            // part1
+            // .alongWith(new SetTilt(0, true))
+            // .alongWith(new SetExtend(0.15, true))))))
             new ParallelCommandGroup(
-              // new SetExtend(0.15, true)
-              //   .andThen(
-                  new ParallelRaceGroup(
+                // new SetExtend(0.15, true)
+                // .andThen(
+                new ParallelRaceGroup(
                     part1,
                     new ParallelCommandGroup(
-                      new SetExtend(0.15, true),
-                      new SetTurret(-180, true, true))
-                      // new WaitUntilCommand(() -> Math.abs(Turret.getInstance().getAngleRelativeToRobot() + 180) <= 3))
-                    .andThen(Setpoints.groundCubeAutoNoTurret())
-                    // )
-                  )//,
-                  // new SetTurret(-180, true, true)
-                )
-            )
+                        new SetExtend(0.15, true),
+                        new SetTurret(-180, true, true))
+                        // new WaitUntilCommand(() ->
+                        // Math.abs(Turret.getInstance().getAngleRelativeToRobot() + 180) <= 3))
+                        .andThen(Setpoints.groundCubeAutoNoTurret())
+                // )
+                )// ,
+                 // new SetTurret(-180, true, true)
+            ))
 
         // .andThen(new Homing())
         // .andThen(new ParallelCommandGroup(
@@ -408,8 +395,8 @@ public final class Autos {
         return getNotExample();
       // case TSLA_STOCK_IS_GOOD:
       //   return getMyAuto();
-      case MARIO_BROSKITO:
-        return getMyMarioAuto();
+      case ONE_PIECE_MGEG:
+        return get1PieceMgeg();
       case ANYWHERE_LEFT:
         return getAnywhereLeft();
       case ANYWHERE_RIGHT:
@@ -419,7 +406,7 @@ public final class Autos {
       case ENGAGE_FROM_LOADING:
         return getEngageFromLoading();
       case NEW_2_PIECE:
-        return getNew2Piece();
+        return getLoading2Piece();
       case NEW_2_PIECE_WALL:
         return getNew2PieceWall();
       case ENGAGE_ONLY:
@@ -433,7 +420,7 @@ public final class Autos {
   }
 
   private enum AutoMode {
-    CHOP_SUEY, LETS_GO_BRANDON, TSLA_STOCK_IS_GOOD, MARIO_BROSKITO, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
+    CHOP_SUEY, LETS_GO_BRANDON, TSLA_STOCK_IS_GOOD, ONE_PIECE_MGEG, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
     ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NEW_2_PIECE_BALANCE, NULL
   }
 }
