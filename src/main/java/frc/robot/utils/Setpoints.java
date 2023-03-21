@@ -4,24 +4,16 @@
 
 package frc.robot.utils;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.CloseClaw;
 import frc.robot.commands.RunIntake;
-import frc.robot.commands.RunIntakeReversed;
 import frc.robot.commands.SetClaw;
 import frc.robot.commands.SetExtend;
 import frc.robot.commands.SetPositions;
 import frc.robot.commands.SetTilt;
-import frc.robot.subsystems.Claw;
-import frc.robot.subsystems.DriveTrain;
 
 /** Add your docs here. */
 public class Setpoints {
-    private DriveTrain driveTrain = DriveTrain.getInstance();
-    private Claw claw = Claw.getInstance();
 
     public static Command scoreLeftCone(){
         return new SetPositions(42, 1.1, 15, false);
