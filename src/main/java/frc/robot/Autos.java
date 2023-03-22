@@ -98,7 +98,7 @@ public final class Autos {
     return newTrajectory;
   }
 
-  private Command getAnywhereRight() {
+  private Command getMobilityRight() {
     PathPlannerTrajectory path = PathPlanner.loadPath("anywhere", 2, 2);
 
     path = PathPlannerTrajectory.transformTrajectoryForAlliance(path, DriverStation.getAlliance());
@@ -109,7 +109,7 @@ public final class Autos {
     // OpenClawCubeGround()).andThen(new Homing())
     // .andThen(segment1);
 
-    return setPose.andThen(Setpoints.scoreRightCone()).andThen(new RunIntake()).andThen(new Homing())
+    return setPose.andThen(Setpoints.scoreLeftCone()).andThen(new RunIntake()).andThen(new Homing())
         .andThen(segment1);
   }
 
@@ -124,7 +124,7 @@ public final class Autos {
     // OpenClawCubeGround())
     // .andThen(new Homing()).andThen(segment1);
 
-    return setPose.andThen(Setpoints.scoreLeftCone()).andThen(new RunIntake().raceWith(new WaitCommand(.2))).andThen(new Homing())
+    return setPose.andThen(Setpoints.scoreRightCone()).andThen(new RunIntake().raceWith(new WaitCommand(.2))).andThen(new Homing())
         .andThen(segment1);
    
   }
@@ -393,7 +393,7 @@ public final class Autos {
       case ANYWHERE_LEFT:
         return getAnywhereLeft();
       case ANYWHERE_RIGHT:
-        return getAnywhereRight();
+        return getMobilityRight();
       case ENGAGE_FROM_WALL:
         return getEngageFromWall();
       case ENGAGE_FROM_LOADING:
