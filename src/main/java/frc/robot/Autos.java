@@ -140,7 +140,7 @@ public final class Autos {
     // OpenClawCubeGround()).andThen(new Homing())
     // .andThen(segment1).andThen(new AutoEngage());
 
-    return setPose.andThen(Setpoints.scoreWallCone()).andThen(new RunIntake()).andThen(new Homing())
+    return setPose.andThen(Setpoints.scoreWallCone()).andThen(new RunIntake().raceWith(new WaitCommand(1.0))).andThen(new Homing())
         .andThen(segment1).andThen(new AutoEngage());
   }
 
@@ -154,7 +154,7 @@ public final class Autos {
     // return setPose.andThen(new SetPositions(42, 1.1, -15, true)).andThen(new
     // OpenClawCubeGround()).andThen(new Homing())
     // .andThen(segment1).andThen(new AutoEngage());
-    return setPose.andThen(Setpoints.scoreSubCone()).andThen(new RunIntake()).andThen(new Homing())
+    return setPose.andThen(Setpoints.scoreSubCone()).andThen(new RunIntake().raceWith(new WaitCommand(1.0))).andThen(new Homing())
         .andThen(segment1).andThen(new AutoEngage());
   }
 
