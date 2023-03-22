@@ -109,11 +109,11 @@ public final class Autos {
     // OpenClawCubeGround()).andThen(new Homing())
     // .andThen(segment1);
 
-    return setPose.andThen(Setpoints.scoreLeftCone()).andThen(new RunIntake()).andThen(new Homing())
+    return setPose.andThen(Setpoints.scoreLeftCone()).andThen(new RunIntake().raceWith(new WaitCommand(.2))).andThen(new Homing())
         .andThen(segment1);
   }
 
-  private Command getAnywhereLeft() {
+  private Command getMobilityLeft() {
     PathPlannerTrajectory path = PathPlanner.loadPath("anywhere", 2, 2);
 
     path = PathPlannerTrajectory.transformTrajectoryForAlliance(path, DriverStation.getAlliance());
@@ -391,7 +391,7 @@ public final class Autos {
       case ONE_PIECE_MGEG:
         return get1PieceMgeg();
       case ANYWHERE_LEFT:
-        return getAnywhereLeft();
+        return getMobilityLeft();
       case ANYWHERE_RIGHT:
         return getMobilityRight();
       case ENGAGE_FROM_WALL:
