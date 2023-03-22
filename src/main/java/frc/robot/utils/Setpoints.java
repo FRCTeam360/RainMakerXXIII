@@ -6,6 +6,7 @@ package frc.robot.utils;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.SetClaw;
 import frc.robot.commands.SetExtend;

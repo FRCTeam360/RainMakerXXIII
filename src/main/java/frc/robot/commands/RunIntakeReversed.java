@@ -38,14 +38,14 @@ public class RunIntakeReversed extends CommandBase {
       if(autoPieceType == GamePiece.CONE) {
         intake.run(1.0);
       } else {
-        intake.run(-.5);
+        intake.run(-1.0);
       }
     }
-    
+
     if(Claw.getInstance().isConeMode()){
       intake.run(1.0);
     } else {
-      intake.run(-0.5); // .5
+      intake.run(-1.0); // .5
     }
   }
 

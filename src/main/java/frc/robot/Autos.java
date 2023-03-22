@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Claw.GamePiece;
 import frc.robot.utils.Setpoints;
 import frc.robot.commands.*;
@@ -74,9 +76,11 @@ public final class Autos {
 
     autoChooser.addOption("coop 0 piece mgeg", AutoMode.ENGAGE_ONLY);
 
-    autoChooser.addOption("loading 2 piece mgeg", AutoMode.NEW_2_PIECE_BALANCE);
+    autoChooser.addOption("loading 2 piece 180 start", AutoMode.NEW_180_2_PIECE_LOADING);
 
     autoChooser.addOption("null", AutoMode.NULL);
+
+    autoChooser.addOption("loading two piece and balance", AutoMode.NEW_180_2_PIECE_BALANCE_LOADING);
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -109,7 +113,8 @@ public final class Autos {
     // OpenClawCubeGround()).andThen(new Homing())
     // .andThen(segment1);
 
-    return setPose.andThen(Setpoints.scoreLeftCone()).andThen(new RunIntake().raceWith(new WaitCommand(.2))).andThen(new Homing())
+    return setPose.andThen(Setpoints.scoreLeftCone()).andThen(new RunIntake().raceWith(new WaitCommand(.2)))
+        .andThen(new Homing())
         .andThen(segment1);
   }
 
@@ -124,9 +129,10 @@ public final class Autos {
     // OpenClawCubeGround())
     // .andThen(new Homing()).andThen(segment1);
 
-    return setPose.andThen(Setpoints.scoreRightCone()).andThen(new RunIntake().raceWith(new WaitCommand(.2))).andThen(new Homing())
+    return setPose.andThen(Setpoints.scoreRightCone()).andThen(new RunIntake().raceWith(new WaitCommand(.2)))
+        .andThen(new Homing())
         .andThen(segment1);
-   
+
   }
 
   private Command getEngageFromWall() {
@@ -140,7 +146,8 @@ public final class Autos {
     // OpenClawCubeGround()).andThen(new Homing())
     // .andThen(segment1).andThen(new AutoEngage());
 
-    return setPose.andThen(Setpoints.scoreWallCone()).andThen(new RunIntake().raceWith(new WaitCommand(1.0))).andThen(new Homing())
+    return setPose.andThen(Setpoints.scoreWallCone()).andThen(new RunIntake().raceWith(new WaitCommand(1.0)))
+        .andThen(new Homing())
         .andThen(segment1).andThen(new AutoEngage());
   }
 
@@ -154,7 +161,8 @@ public final class Autos {
     // return setPose.andThen(new SetPositions(42, 1.1, -15, true)).andThen(new
     // OpenClawCubeGround()).andThen(new Homing())
     // .andThen(segment1).andThen(new AutoEngage());
-    return setPose.andThen(Setpoints.scoreSubCone()).andThen(new RunIntake().raceWith(new WaitCommand(1.0))).andThen(new Homing())
+    return setPose.andThen(Setpoints.scoreSubCone()).andThen(new RunIntake().raceWith(new WaitCommand(1.0)))
+        .andThen(new Homing())
         .andThen(segment1).andThen(new AutoEngage());
   }
 
@@ -295,12 +303,13 @@ public final class Autos {
         .andThen(new Homing()));
   }
 
-  private Command get2PieceAndBalance() {
+  private Command get180StartTwoPieceLoading() {
     List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
-        ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece",
+        ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece mgeg red",
             new PathConstraints(2, 3)))
-        : PathPlanner.loadPathGroup("new 2 piece blue",
+        : PathPlanner.loadPathGroup("2 piece mgeg blue",
             new PathConstraints(2, 3));
+
     // for(int i = 0; i<epicPathGroup.size(); i++){
     // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
     // Alliance.Red);
@@ -308,65 +317,113 @@ public final class Autos {
     Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
-    // Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
+    Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
 
-    return (stockMarketCrash
+    return (stockMarketCrash.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
         .andThen(new ParallelRaceGroup(
-            Setpoints.scoreSubCone(),
+            new SetPositions(146.861282, 1.122, 195.2666).raceWith(new WaitCommand(1.02)),
             driveTrain.zeroModulesCommand()))
         // .andThen(new OpenClawCubeGround(true))
         .andThen(new ParallelRaceGroup(
-            new RunIntake(),
-            new WaitCommand(0.2)))
-        .andThen(
-            // new ParallelRaceGroup(
-            // (new SetTurret(-180, true, true)
-            // .andThen(
-            // Setpoints.groundCubeAuto())),
-            // (new SetExtend(0.15, true)
-            // .andThen(
-            // part1
-            // .alongWith(new SetTilt(0, true))
-            // .alongWith(new SetExtend(0.15, true))))))
-            new ParallelCommandGroup(
-                // new SetExtend(0.15, true)
-                // .andThen(
-                new ParallelRaceGroup(
-                    part1,
-                    new ParallelCommandGroup(
-                        new SetExtend(0.15, true),
-                        new SetTurret(-180, true, true))
-                        // new WaitUntilCommand(() ->
-                        // Math.abs(Turret.getInstance().getAngleRelativeToRobot() + 180) <= 3))
-                        .andThen(Setpoints.groundCubeAutoNoTurret())
-                // )
-                )// ,
-                 // new SetTurret(-180, true, true)
-            ))
-
-        // .andThen(new Homing())
-        // .andThen(new ParallelCommandGroup(
-        // new SetTurret(180, true, true),
-        // part1,
-        // // new SetPositions(0, 0.15, 180, true)
-        // .andThen(Setpoints.groundCube())).raceWith(new
-        // OpenClawCubeGround(false).raceWith(new RunIntake())))
-        // // .andThen(new SetPositions(-27, 0.65, 180))))
-        // // .andThen(new ParallelRaceGroup(
-        // // part2,
-        // // new RunIntake(),
-        // // new OpenClawCubeGround(false)))
-        .andThen(
-            new ParallelCommandGroup(
-                part2,
-                new Homing()).raceWith(new RunIntake()))
-        .andThen(
-            new SetPositions(35, 0.8, 15, true))
-        .andThen(
-            new ParallelRaceGroup(
-                new RunIntakeReversed(),
-                new WaitCommand(1)))
+            new RunIntakeReversed(),
+            new WaitCommand(0.3)))
+        .andThen(new ParallelRaceGroup(new SetPositions(0, .1, 180)
+            .andThen(Setpoints.groundCubeAuto()), part1))
+        .andThen(new ParallelCommandGroup(part2, new Homing().andThen(Setpoints.scoreRightCube())))
+        .andThen(Setpoints.scoreRightCube().alongWith(new RunIntakeReversed().raceWith(new WaitCommand(.15))))
         .andThen(new Homing()));
+    // .andThen(
+    // new ParallelCommandGroup(
+    // // new SetExtend(0.15, true)
+    // // .andThen(
+    // new ParallelCommandGroup(
+    // part1,
+    // new SetPositions(0, .15, -180).raceWith(new WaitCommand(.2)).andThen(new
+    // SetPositions(-10, .15, -180)).andThen(Setpoints.groundCubeAutoNoTurret())
+    // )
+    // // new WaitUntilCommand(() ->
+    // // Math.abs(Turret.getInstance().getAngleRelativeToRobot() + 180) <= 3))
+
+    // // )
+    // )// ,
+    // // new SetTurret(-180, true, true)
+    // )
+    // .andThen(
+    // new ParallelCommandGroup(
+    // part2,
+    // new Homing()).raceWith(new RunIntake()))
+    // .andThen(
+    // new SetPositions(35, 0.8, 15, true))
+    // .andThen(
+    // new ParallelRaceGroup(
+    // new RunIntakeReversd(),
+    // new WaitCommand(1)))
+    // .andThen(new Homing())
+    // .andThen(part3)
+    // .andThen(new AutoEngage());
+  }
+
+  private Command get180StartTwoPieceBalanceLoading() {
+    List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
+        ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece mgeg red",
+            new PathConstraints(2.3, 3)))
+        : PathPlanner.loadPathGroup("2 piece mgeg blue",
+            new PathConstraints(2, 3));
+
+    // for(int i = 0; i<epicPathGroup.size(); i++){
+    // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
+    // Alliance.Red);
+    // }
+    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
+    Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
+    Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
+    
+
+    return (stockMarketCrash.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+        .andThen(new ParallelRaceGroup(
+            new SetPositions(146.861282, 1.122, 195.2666).raceWith(new WaitCommand(1.02)),
+            driveTrain.zeroModulesCommand()))
+        // .andThen(new OpenClawCubeGround(true))
+        .andThen(new ParallelRaceGroup(
+            new RunIntakeReversed(),
+            new WaitCommand(0.3)))
+        .andThen(new ParallelRaceGroup(new SetPositions(0, .1, 180)
+            .andThen(Setpoints.groundCubeAuto()), part1))
+        .andThen(new ParallelCommandGroup(part2, new Homing().andThen(Setpoints.scoreRightCube())))
+        .andThen(Setpoints.scoreRightCube()
+        .alongWith(new RunIntakeReversed().raceWith(new WaitCommand(.5))).alongWith(new InstantCommand(() -> Claw.getInstance().setPosition(85))))
+        .andThen(new Homing())
+        .andThen(part3).andThen(new AutoEngage()));
+    // .andThen(
+    // new ParallelCommandGroup(
+    // // new SetExtend(0.15, true)
+    // // .andThen(
+    // new ParallelCommandGroup(
+    // part1,
+    // new SetPositions(0, .15, -180).raceWith(new WaitCommand(.2)).andThen(new
+    // SetPositions(-10, .15, -180)).andThen(Setpoints.groundCubeAutoNoTurret())
+    // )
+    // // new WaitUntilCommand(() ->
+    // // Math.abs(Turret.getInstance().getAngleRelativeToRobot() + 180) <= 3))
+
+    // // )
+    // )// ,
+    // // new SetTurret(-180, true, true)
+    // )
+    // .andThen(
+    // new ParallelCommandGroup(
+    // part2,
+    // new Homing()).raceWith(new RunIntake()))
+    // .andThen(
+    // new SetPositions(35, 0.8, 15, true))
+    // .andThen(
+    // new ParallelRaceGroup(
+    // new RunIntakeReversd(),
+    // new WaitCommand(1)))
+    // .andThen(new Homing())
+    // .andThen(part3)
+    // .andThen(new AutoEngage());
   }
 
   private static SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
@@ -387,7 +444,7 @@ public final class Autos {
       case LETS_GO_BRANDON:
         return getNotExample();
       // case TSLA_STOCK_IS_GOOD:
-      //   return getMyAuto();
+      // return getMyAuto();
       case ONE_PIECE_MGEG:
         return get1PieceMgeg();
       case ANYWHERE_LEFT:
@@ -404,8 +461,10 @@ public final class Autos {
         return getNew2PieceWall();
       case ENGAGE_ONLY:
         return getEngageOnly();
-      case NEW_2_PIECE_BALANCE:
-        return get2PieceAndBalance();
+      case NEW_180_2_PIECE_LOADING:
+        return get180StartTwoPieceLoading();
+      case NEW_180_2_PIECE_BALANCE_LOADING:
+        return get180StartTwoPieceBalanceLoading();
       case NULL:
       default:
         return null;
@@ -414,6 +473,7 @@ public final class Autos {
 
   private enum AutoMode {
     CHOP_SUEY, LETS_GO_BRANDON, TSLA_STOCK_IS_GOOD, ONE_PIECE_MGEG, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
-    ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NEW_2_PIECE_BALANCE, NULL
+    ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NEW_180_2_PIECE_LOADING,
+    NEW_180_2_PIECE_BALANCE_LOADING, NULL
   }
 }

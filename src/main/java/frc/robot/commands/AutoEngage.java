@@ -13,7 +13,7 @@ import frc.robot.subsystems.DriveTrain;
 public class AutoEngage extends CommandBase {
   private final DriveTrain driveTrain = DriveTrain.getInstance();
 
-  private final double kP = 0.003;
+  private final double kP = 0.0026; //was .003
   private final double kI = 0;
   private final double kD = 0.00;
 
