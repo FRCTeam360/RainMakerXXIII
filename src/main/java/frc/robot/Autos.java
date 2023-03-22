@@ -388,13 +388,11 @@ public final class Autos {
         .andThen(new ParallelRaceGroup(
             new RunIntakeReversed(),
             new WaitCommand(0.3)))
-        .andThen(new ParallelRaceGroup(new SetPositions(0, .1, 180)
-            .andThen(Setpoints.groundCubeAuto()), part1))
+        .andThen(new ParallelRaceGroup((Setpoints.groundCubeAuto()), part1))
         .andThen(new ParallelCommandGroup(part2, new Homing().andThen(Setpoints.scoreRightCube())))
         .andThen(Setpoints.scoreRightCube()
         .alongWith(new RunIntakeReversed().raceWith(new WaitCommand(.5))).alongWith(new InstantCommand(() -> Claw.getInstance().setPosition(85))))
-        .andThen(new Homing())
-        .andThen(part3).andThen(new AutoEngage()));
+        .andThen(part3.alongWith(new Homing())).andThen(new AutoEngage()));
     // .andThen(
     // new ParallelCommandGroup(
     // // new SetExtend(0.15, true)
