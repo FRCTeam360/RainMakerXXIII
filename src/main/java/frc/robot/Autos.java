@@ -370,10 +370,6 @@ public final class Autos {
         : PathPlanner.loadPathGroup("2 piece mgeg blue",
             new PathConstraints(2, 3));
 
-    // for(int i = 0; i<epicPathGroup.size(); i++){
-    // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
-    // Alliance.Red);
-    // }
     Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
@@ -382,46 +378,17 @@ public final class Autos {
 
     return (stockMarketCrash.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
         .andThen(new ParallelRaceGroup(
-            new SetPositions(146.861282, 1.122, 195.2666).raceWith(new WaitCommand(1.02)),
+            Setpoints.score180SubCone().raceWith(new WaitCommand(1.02)),
             driveTrain.zeroModulesCommand()))
         // .andThen(new OpenClawCubeGround(true))
         .andThen(new ParallelRaceGroup(
             new RunIntakeReversed(),
             new WaitCommand(0.3)))
         .andThen(new ParallelRaceGroup((Setpoints.groundCubeAuto()), part1))
-        .andThen(new ParallelCommandGroup(part2, new Homing().andThen(Setpoints.scoreRightCube())))
-        .andThen(Setpoints.scoreRightCube()
+        .andThen(new ParallelCommandGroup(part2, new Homing().andThen(Setpoints.scoreWallCube())))
+        .andThen(Setpoints.scoreWallCube()
         .alongWith(new RunIntakeReversed().raceWith(new WaitCommand(.5))).alongWith(new InstantCommand(() -> Claw.getInstance().setPosition(85))))
         .andThen(part3.alongWith(new Homing())).andThen(new AutoEngage()));
-    // .andThen(
-    // new ParallelCommandGroup(
-    // // new SetExtend(0.15, true)
-    // // .andThen(
-    // new ParallelCommandGroup(
-    // part1,
-    // new SetPositions(0, .15, -180).raceWith(new WaitCommand(.2)).andThen(new
-    // SetPositions(-10, .15, -180)).andThen(Setpoints.groundCubeAutoNoTurret())
-    // )
-    // // new WaitUntilCommand(() ->
-    // // Math.abs(Turret.getInstance().getAngleRelativeToRobot() + 180) <= 3))
-
-    // // )
-    // )// ,
-    // // new SetTurret(-180, true, true)
-    // )
-    // .andThen(
-    // new ParallelCommandGroup(
-    // part2,
-    // new Homing()).raceWith(new RunIntake()))
-    // .andThen(
-    // new SetPositions(35, 0.8, 15, true))
-    // .andThen(
-    // new ParallelRaceGroup(
-    // new RunIntakeReversd(),
-    // new WaitCommand(1)))
-    // .andThen(new Homing())
-    // .andThen(part3)
-    // .andThen(new AutoEngage());
   }
 
   private static SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(

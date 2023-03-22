@@ -73,6 +73,10 @@ public class Setpoints {
         return new SetPositions(23, 0.4, 42, true);
     }
 
+    public static Command score180SubCone() {
+        return new SetPositions(146.861282, 1.122, -195.2666, true);
+    }
+
 
     public static Command coneSingleStation(){
         System.out.println("CONE SUBSTAION");
