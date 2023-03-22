@@ -192,6 +192,7 @@ public final class Autos {
   }
 
   private Command getLoading2Piece() {
+
     List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
         ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("new 2 piece",
             new PathConstraints(2, 3)))
@@ -215,7 +216,7 @@ public final class Autos {
             new RunIntake(),
             new WaitCommand(0.2)))
         .andThen(new Homing())
-        .andThen(new ParallelCommandGroup(
+        .andThen(new ParallelRaceGroup(
             part1,
             new SetPositions(0, 0.15, 180, true)
                 .andThen(Setpoints.groundCubeAuto())))

@@ -33,7 +33,7 @@ public class Claw extends SubsystemBase {
 
   public enum GamePiece {CONE, CUBE, NONE};
 
-  private GamePiece gamePiece = GamePiece.NONE;
+  private GamePiece gamePiece = GamePiece.CUBE;
 
   private Lights lights = Lights.getInstance();
 
