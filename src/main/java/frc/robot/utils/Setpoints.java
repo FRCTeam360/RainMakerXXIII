@@ -77,6 +77,10 @@ public class Setpoints {
         return new SetPositions(146.861282, 1.122, -195.2666, true);
     }
 
+    public static Command score180WallCone() {
+        return new SetPositions(146.861282, 1.122, 195.2666, true);
+    }
+
 
     public static Command coneSingleStation(){
         System.out.println("CONE SUBSTAION");
@@ -155,8 +159,15 @@ public class Setpoints {
 
     public static Command setShoot() {
         return new ParallelCommandGroup(
-            new SetPositions(40, 0.1, 0),
-            new SetClaw(69)
+            new SetPositions(40, 1.0, 0),
+            new SetClaw(69, true)
+        );
+    }
+
+    public static Command setShootAuto() {
+        return new ParallelCommandGroup(
+            new SetPositions(0, 1.0, 0),
+            new SetClaw(69, true)
         );
     }
 
