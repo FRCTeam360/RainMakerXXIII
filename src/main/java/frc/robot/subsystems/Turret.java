@@ -116,10 +116,6 @@ public class Turret extends SubsystemBase {
     return encoderPosition;
   }
 
-  public double getEncoderTick() {
-    return motor.getEncoder().getPosition();
-  }
-
   public void angleTurn(double inputAngle) {
     setPosition(getNearestActualTurretAngle(inputAngle));
   }
