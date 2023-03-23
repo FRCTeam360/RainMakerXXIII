@@ -24,6 +24,7 @@ public class CloseClaw extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println(this.getClass().getSimpleName() + "started");
     timer.start();
     hitLimit = false;
   }
@@ -45,6 +46,7 @@ public class CloseClaw extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println(this.getClass().getSimpleName() + "finished");
     claw.stopClaw();
     timer.stop();
     timer.reset();
