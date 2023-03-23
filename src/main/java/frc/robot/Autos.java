@@ -39,15 +39,9 @@ public final class Autos {
   // this is the auto chooser
   private static SendableChooser<AutoMode> autoChooser;
   // define autos here
-  private static List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("chop suey!",
-      new PathConstraints(4, 3));
-  private static List<PathPlannerTrajectory> notPathGroup = PathPlanner.loadPathGroup("lets go brandon",
-      new PathConstraints(4, 3));
-
   // create events of commands here
   private static HashMap<String, Command> eventMap = new HashMap<>() {
     {
-
       put("tsla yay", new PrintCommand("tsla stock is good rn"));
       put("tsla halt", new WaitCommand(20));
       put("engage", new AutoEngage());
@@ -86,14 +80,6 @@ public final class Autos {
     autoChooser.addOption("YOLO wall 1.5 piece mgeg 180 start", AutoMode.WALL_15_MGEG_YOLO);
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-  }
-
-  private Command getExample() {
-    return autoBuilder.fullAuto(pathGroup);
-  }
-
-  private Command getNotExample() {
-    return autoBuilder.fullAuto(notPathGroup);
   }
 
   private List<PathPlannerTrajectory> mirrorPathsForAlliance(List<PathPlannerTrajectory> mTrajectory) {
@@ -170,10 +156,10 @@ public final class Autos {
   }
 
   private Command get1PieceMgeg() {
-    List<PathPlannerTrajectory> luigi = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(2, 3));
-    luigi = mirrorPathsForAlliance(luigi);
-    Command rainbowRoad = autoBuilder.resetPose(luigi.get(0));
-    Command coconutMall = autoBuilder.followPath(luigi.get(0));
+    List<PathPlannerTrajectory> epicPathGroup = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(2, 3));
+    epicPathGroup = mirrorPathsForAlliance(epicPathGroup);
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     // Command DKJungle = autoBuilder.followPath(luigi.get(1));
     // Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
     // return rainbowRoad.andThen(new InstantCommand(() ->
@@ -184,21 +170,21 @@ public final class Autos {
     // .andThen(DKJungle).andThen(ShroomRidge).andThen(new
     // AutoEngage());
 
-    return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
+    return setPose.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
         .andThen(Setpoints.scoreWallCone()).andThen(new RunIntake(GamePiece.CONE).raceWith(new WaitCommand(1.0)))
-        .andThen((new Homing()).alongWith(coconutMall)).andThen(new AutoEngage());
+        .andThen((new Homing()).alongWith(part1)).andThen(new AutoEngage());
   }
 
   private Command getEngageOnly() {
 
-    List<PathPlannerTrajectory> luigi = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(1, 3));
-    luigi = mirrorPathsForAlliance(luigi);
-    Command rainbowRoad = autoBuilder.resetPose(luigi.get(0));
-    Command coconutMall = autoBuilder.followPath(luigi.get(0));
+    List<PathPlannerTrajectory> epicPathGroup = PathPlanner.loadPathGroup("super mario bros", new PathConstraints(1, 3));
+    epicPathGroup = mirrorPathsForAlliance(epicPathGroup);
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     // Command DKJungle = autoBuilder.followPath(luigi.get(1));
     // Command ShroomRidge = autoBuilder.followPath(luigi.get(2));
-    return rainbowRoad.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
-        .andThen(coconutMall).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge).andThen(new
+    return setPose.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
+        .andThen(part1).andThen(new AutoEngage());// .andThen(DKJungle).andThen(ShroomRidge).andThen(new
                                                         // AutoEngage());
   }
 
@@ -213,12 +199,12 @@ public final class Autos {
     // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
     // Alliance.Red);
     // }
-    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
     // Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
 
-    return (stockMarketCrash
+    return (setPose
         .andThen(new ParallelRaceGroup(
             Setpoints.scoreSubCone(),
             driveTrain.zeroModulesCommand()))
@@ -270,12 +256,12 @@ public final class Autos {
     // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
     // Alliance.Red);
     // }
-    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
     // Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
 
-    return (stockMarketCrash
+    return (setPose
         .andThen(new ParallelRaceGroup(
             Setpoints.scoreWallCone(),
             driveTrain.zeroModulesCommand()))
@@ -317,12 +303,12 @@ public final class Autos {
     // PathPlannerTrajectory.transformTrajectoryForAlliance(epicPathGroup.get(i),
     // Alliance.Red);
     // }
-    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
     Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
 
-    return (stockMarketCrash.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
         .andThen(new ParallelRaceGroup(
             new SetPositions(146.861282, 1.122, 195.2666).raceWith(new WaitCommand(1.02)),
             driveTrain.zeroModulesCommand()))
@@ -373,13 +359,13 @@ public final class Autos {
         : PathPlanner.loadPathGroup("2 piece mgeg blue",
             new PathConstraints(2.3, 3));
 
-    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
     Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
     
 
-    return (stockMarketCrash.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
         .andThen(new ParallelRaceGroup(
             Setpoints.score180SubCone().raceWith(new WaitCommand(1.02)),
             driveTrain.zeroModulesCommand()))
@@ -401,11 +387,11 @@ public final class Autos {
         : PathPlanner.loadPathGroup("1.5 piece mgeg wall blue",
             new PathConstraints(2.3, 3));
 
-    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
 
-    return (stockMarketCrash.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
     .andThen(new ParallelRaceGroup(
         Setpoints.score180WallCone(),
         driveTrain.zeroModulesCommand()))
@@ -425,11 +411,11 @@ public final class Autos {
         : PathPlanner.loadPathGroup("1.5 piece mgeg wall blue",
             new PathConstraints(2.3, 3));
 
-    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
 
-    return (stockMarketCrash.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
     .andThen(new ParallelRaceGroup(
         Setpoints.score180WallCone(),
         driveTrain.zeroModulesCommand()))
@@ -452,13 +438,13 @@ public final class Autos {
         : PathPlanner.loadPathGroup("2 piece mgeg blue",
             new PathConstraints(2.3, 3));
 
-    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
     Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
     
 
-    return (stockMarketCrash.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
         .andThen(new ParallelRaceGroup(
             Setpoints.score180WallCone().raceWith(new WaitCommand(1.02)),
             driveTrain.zeroModulesCommand()))
@@ -480,11 +466,11 @@ public final class Autos {
         : PathPlanner.loadPathGroup("2 piece wall blue",
             new PathConstraints(2.3, 3));
 
-    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
     
-    return (stockMarketCrash.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
     .andThen(new ParallelRaceGroup(
         Setpoints.score180WallCone(),
         driveTrain.zeroModulesCommand()))
@@ -516,12 +502,6 @@ public final class Autos {
 
   public Command getAuto() {
     switch (autoChooser.getSelected()) {
-      case CHOP_SUEY:
-        return getExample();
-      case LETS_GO_BRANDON:
-        return getNotExample();
-      // case TSLA_STOCK_IS_GOOD:
-      // return getMyAuto();
       case ONE_PIECE_MGEG:
         return get1PieceMgeg();
       case ANYWHERE_LEFT:
@@ -555,7 +535,7 @@ public final class Autos {
   }
 
   private enum AutoMode {
-    CHOP_SUEY, LETS_GO_BRANDON, TSLA_STOCK_IS_GOOD, ONE_PIECE_MGEG, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
+    ONE_PIECE_MGEG, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
     ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NEW_180_2_PIECE_LOADING,
     NEW_180_2_PIECE_BALANCE_LOADING, WALL_15_MGEG, WALL_15_MGEG_YOLO, WALL_2, NULL
   }
