@@ -18,7 +18,6 @@ import frc.robot.Constants.RobotType;
 public class Intake extends SubsystemBase {
   private final CANSparkMax motor = new CANSparkMax(CANIds.INTAKE_ID, MotorType.kBrushless);
   private static Intake instance;
-  private final AbsoluteEncoder absoluteEncoder;
 
   private boolean isComp;
   /** Creates a new Intake. */
@@ -29,8 +28,6 @@ public class Intake extends SubsystemBase {
     motor.setInverted(!isComp);
     motor.setIdleMode(IdleMode.kBrake);
     motor.setSmartCurrentLimit(20);
-
-    absoluteEncoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
   }
 
   public static Intake getInstance() {
@@ -39,10 +36,6 @@ public class Intake extends SubsystemBase {
     }
 
     return instance;
-  }
-
-  public AbsoluteEncoder getClawEncoder(){
-    return absoluteEncoder;
   }
 
   public void run(double speed) {
