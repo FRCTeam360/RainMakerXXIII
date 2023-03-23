@@ -166,7 +166,7 @@ public class Setpoints {
 
     public static Command setShootAuto() {
         return new ParallelCommandGroup(
-            new SetPositions(0, 1.0, 0),
+            new SetPositions(30, 1.0, 0),
             new SetClaw(69, true)
         );
     }

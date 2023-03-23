@@ -473,6 +473,36 @@ public final class Autos {
         .andThen(part3.alongWith(new Homing())).andThen(new AutoEngage()));
   }
 
+  private Command getWall2Piece() {
+    List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
+        ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("2 piece wall red",
+            new PathConstraints(2.3, 3)))
+        : PathPlanner.loadPathGroup("2 piece wall blue",
+            new PathConstraints(2.3, 3));
+
+    Command stockMarketCrash = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
+    Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
+    
+    return (stockMarketCrash.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    .andThen(new ParallelRaceGroup(
+        Setpoints.score180WallCone(),
+        driveTrain.zeroModulesCommand()))
+    // .andThen(new OpenClawCubeGround(true))
+    .andThen(new ParallelRaceGroup(
+        new RunIntakeReversed(),
+        new WaitCommand(0.3)))
+    .andThen(new ParallelRaceGroup((Setpoints.groundCubeAuto()), part1))
+    .andThen(new ParallelCommandGroup(part2, new Homing()))
+    .andThen(Setpoints.scoreSubCube())
+    .andThen(new ParallelRaceGroup(
+      new RunIntakeReversed(),
+      new WaitCommand(0.2)
+    ))
+    .andThen(new Homing())
+    );
+  }
+
   private static SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       driveTrain::getPose,
       driveTrain::setPose,
@@ -516,6 +546,8 @@ public final class Autos {
         return get180Start15PieceWall();
       case WALL_15_MGEG_YOLO:
         return get180Start15PieceWallYOLO();
+      case WALL_2:
+        return getWall2Piece();
       case NULL:
       default:
         return null;
@@ -525,6 +557,6 @@ public final class Autos {
   private enum AutoMode {
     CHOP_SUEY, LETS_GO_BRANDON, TSLA_STOCK_IS_GOOD, ONE_PIECE_MGEG, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
     ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NEW_180_2_PIECE_LOADING,
-    NEW_180_2_PIECE_BALANCE_LOADING, WALL_15_MGEG, WALL_15_MGEG_YOLO, NULL
+    NEW_180_2_PIECE_BALANCE_LOADING, WALL_15_MGEG, WALL_15_MGEG_YOLO, WALL_2, NULL
   }
 }
