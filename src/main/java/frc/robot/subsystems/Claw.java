@@ -132,7 +132,6 @@ public class Claw extends SubsystemBase {
     }
   }
 
-  // 140.7
   private void checkGamePieceMode() {
     if (driverCont.getBackButton() || operatorCont.getBackButton()) {
       gamePiece = GamePiece.CONE;
