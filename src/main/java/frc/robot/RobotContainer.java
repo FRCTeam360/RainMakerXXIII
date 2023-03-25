@@ -36,7 +36,6 @@ public class RobotContainer {
   private final ArmTilt tilt = ArmTilt.getInstance();
   private final Turret turret = Turret.getInstance();
   private final DriveTrain driveTrain = DriveTrain.getInstance();
- // private final Limelight ll = Limelight.getInstance();
   private final Claw claw = Claw.getInstance();
   private final Intake intake = Intake.getInstance();
 
@@ -105,12 +104,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // driverController.a().whileTrue(new InstantCommand( () -> tilt.resetAngle()));
-    // operatorController.b().whileTrue(move);
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
 
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     driverController.y().whileTrue(new AutoEngage());
@@ -128,8 +121,8 @@ public class RobotContainer {
     operatorController.y().and(operatorController.leftBumper().negate()).whileTrue(Setpoints.setShoot());
     operatorController.y().and(operatorController.leftBumper()).whileTrue(shoot);
 
-    operatorController.back().and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleTurret());
-    operatorController.start().and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleTurret());
+    // operatorController.back().and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleTurret());
+    // operatorController.start().and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleTurret());
     
     operatorController.pov(0).whileTrue(homing);
 
@@ -167,8 +160,6 @@ public class RobotContainer {
     return Math.sin(Math.toRadians(this.tilt.getAngle()));
   }
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    // return auto.getAuto();
     return auto.getAuto();
   }
 }

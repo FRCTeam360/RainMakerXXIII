@@ -4,24 +4,17 @@
 
 package frc.robot.utils;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.CloseClaw;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.RunIntake;
-import frc.robot.commands.RunIntakeReversed;
 import frc.robot.commands.SetClaw;
 import frc.robot.commands.SetExtend;
 import frc.robot.commands.SetPositions;
 import frc.robot.commands.SetTilt;
-import frc.robot.subsystems.Claw;
-import frc.robot.subsystems.DriveTrain;
 
 /** Add your docs here. */
 public class Setpoints {
-    private DriveTrain driveTrain = DriveTrain.getInstance();
-    private Claw claw = Claw.getInstance();
 
     public static Command scoreLeftCone(){
         return new SetPositions(42, 1.1, 15, false);
@@ -80,6 +73,14 @@ public class Setpoints {
         return new SetPositions(23, 0.4, 42, true);
     }
 
+    public static Command score180SubCone() {
+        return new SetPositions(146.861282, 1.122, -195.2666, true);
+    }
+
+    public static Command score180WallCone() {
+        return new SetPositions(146.861282, 1.122, 195.2666, true);
+    }
+
 
     public static Command coneSingleStation(){
         System.out.println("CONE SUBSTAION");
@@ -115,6 +116,14 @@ public class Setpoints {
         );
     }
 
+    /**
+     * Opens the claw only for picking up cubes
+     * @return
+     */
+    public static Command openClawCubeGround(){
+        return new SetClaw(85, false);
+    }
+
     public static Command groundCubeAuto(){
         return new ParallelCommandGroup(
             new SetPositions(-27, 0.65, 180),
@@ -142,16 +151,22 @@ public class Setpoints {
 
     public static Command groundConeTele(){
         return new ParallelCommandGroup(
-            new SetPositions(-27, 0.6, 0),
-            new SetClaw(86),
-            new RunIntake()
+            new SetPositions(-27, 0.65, 0),
+            new SetClaw(130)
         );
     }
 
     public static Command setShoot() {
         return new ParallelCommandGroup(
-            new SetPositions(40, 0.85, 0),
-            new SetClaw(60)
+            new SetPositions(40, 1.0, 0),
+            new SetClaw(69, true)
+        );
+    }
+
+    public static Command setShootAuto() {
+        return new ParallelCommandGroup(
+            new SetPositions(30, 1.0, 0),
+            new SetClaw(69, true)
         );
     }
 

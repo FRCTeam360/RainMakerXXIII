@@ -85,6 +85,7 @@ public class Turret extends SubsystemBase {
     encoder = motor.getEncoder();
 
     tab.addDouble("Turret Angle", () -> encoder.getPosition());
+    tab.addDouble("Turret output", () -> motor.getAppliedOutput());
   }
 
   public static Turret getInstance() {
@@ -113,10 +114,6 @@ public class Turret extends SubsystemBase {
   public double getAngleRelativeToRobot() {
     double encoderPosition = motor.getEncoder().getPosition();
     return encoderPosition;
-  }
-
-  public double getEncoderTick() {
-    return motor.getEncoder().getPosition();
   }
 
   public void angleTurn(double inputAngle) {

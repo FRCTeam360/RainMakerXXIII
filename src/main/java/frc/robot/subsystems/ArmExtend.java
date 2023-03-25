@@ -118,6 +118,7 @@ public class ArmExtend extends SubsystemBase {
   }
 
   public void setPosition(double meters){
+    System.out.println("extending: " + meters);
     pidController.setReference(meters, ControlType.kPosition, 0, getFeedForward());
     // SmartDashboard.putNumber("error", getExtendDistance() - meters);
   }
@@ -160,6 +161,6 @@ public class ArmExtend extends SubsystemBase {
     // SmartDashboard.putNumber("arm extension", getExtendDistance());
     // SmartDashboard.putNumber("arm effort", leadMotor.getAppliedOutput());
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("extend ff", getFeedForward());
+    // SmartDashboard.putNumber("extend ff", getFeedForward());
     }
 }

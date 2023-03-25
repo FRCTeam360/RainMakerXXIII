@@ -4,12 +4,17 @@
 
 package frc.robot.commands;
 
+import java.util.Objects;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Claw.GamePiece;
 
 public class RunIntake extends CommandBase {
   private final Intake intake = Intake.getInstance();
+  private final Claw claw = Claw.getInstance();
+  private GamePiece autoPieceType = null;
 
   /** Creates a new RunIntake. */
   public RunIntake() {
@@ -17,13 +22,27 @@ public class RunIntake extends CommandBase {
     addRequirements(intake);
   }
 
+  public RunIntake(Claw.GamePiece pieceType) {
+    autoPieceType = pieceType;
+    addRequirements(intake);
+  }
+
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println(this.getClass().getSimpleName() + "started");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(!Objects.isNull(autoPieceType)){
+      if(autoPieceType == GamePiece.CONE) {
+        intake.run(-1.0);
+      } else {
+        intake.run(1.0);
+      }
+    }
     if(Claw.getInstance().isConeMode()){
       intake.run(-1.0);
     } else {
@@ -34,6 +53,7 @@ public class RunIntake extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println(this.getClass().getSimpleName() + "finished");
     intake.stop();
   }
 

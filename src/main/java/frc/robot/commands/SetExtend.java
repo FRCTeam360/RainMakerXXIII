@@ -21,7 +21,9 @@ public class SetExtend extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println(this.getClass().getSimpleName() + "started");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -32,6 +34,7 @@ public class SetExtend extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println(this.getClass().getSimpleName() + "finished");
     extend.adjustExtensionSpeed(0);
   }
 
