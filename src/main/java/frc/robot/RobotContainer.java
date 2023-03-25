@@ -121,8 +121,8 @@ public class RobotContainer {
     operatorController.y().and(operatorController.leftBumper().negate()).whileTrue(Setpoints.setShoot());
     operatorController.y().and(operatorController.leftBumper()).whileTrue(shoot);
 
-    operatorController.back().and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleTurret());
-    operatorController.start().and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleTurret());
+    // operatorController.back().and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleTurret());
+    // operatorController.start().and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleTurret());
     
     operatorController.pov(0).whileTrue(homing);
 

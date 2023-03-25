@@ -57,27 +57,39 @@ public final class Autos {
   public Autos() {
     autoChooser = new SendableChooser<>();
     // add auto options to chooser here
+
+    autoChooser.addOption("180 start loading 2 piece mgeg", AutoMode.NEW_180_2_PIECE_BALANCE_LOADING);
+    autoChooser.addOption("2 piece loading", AutoMode.NEW_2_PIECE);
+    autoChooser.addOption("180 start 2 piece loading", AutoMode.NEW_180_2_PIECE_LOADING);
     autoChooser.addOption("coop mgeg", AutoMode.ONE_PIECE_MGEG);
-    autoChooser.addOption("wall mgeg", AutoMode.ENGAGE_FROM_WALL);
-    autoChooser.addOption("loading mgeg", AutoMode.ENGAGE_FROM_LOADING);
+    autoChooser.addOption("180 start wall 1.5 piece mgeg", AutoMode.WALL_15_MGEG);
+    autoChooser.addOption("180 start wall 1.5 piece", AutoMode.WALL_15);
+    autoChooser.addOption("180 start wall 1.5 piece mgeg YOLO", AutoMode.WALL_15_MGEG_YOLO);
+    
+    autoChooser.addOption("anywhere left", AutoMode.ANYWHERE_LEFT);
+    autoChooser.addOption("anywhere right", AutoMode.ANYWHERE_RIGHT);
 
-    autoChooser.addOption("wall 2 piece", AutoMode.NEW_2_PIECE_WALL);
+    // autoChooser.addOption("coop mgeg", AutoMode.ONE_PIECE_MGEG);
+    // autoChooser.addOption("wall mgeg", AutoMode.ENGAGE_FROM_WALL);
+    // autoChooser.addOption("loading mgeg", AutoMode.ENGAGE_FROM_LOADING);
 
-    autoChooser.addOption("mobility left", AutoMode.ANYWHERE_LEFT);
-    autoChooser.addOption("mobility right", AutoMode.ANYWHERE_RIGHT);
+    // autoChooser.addOption("wall 2 piece", AutoMode.NEW_2_PIECE_WALL);
 
-    autoChooser.addOption("loading 2 piece", AutoMode.NEW_2_PIECE);
+    // autoChooser.addOption("mobility left", AutoMode.ANYWHERE_LEFT);
+    // autoChooser.addOption("mobility right", AutoMode.ANYWHERE_RIGHT);
+
+    // autoChooser.addOption("loading 2 piece", AutoMode.NEW_2_PIECE);
 
     autoChooser.addOption("coop 0 piece mgeg", AutoMode.ENGAGE_ONLY);
 
-    autoChooser.addOption("loading 2 piece 180 start", AutoMode.NEW_180_2_PIECE_LOADING);
+    // autoChooser.addOption("loading 2 piece 180 start", AutoMode.NEW_180_2_PIECE_LOADING);
 
     autoChooser.addOption("null", AutoMode.NULL);
 
-    autoChooser.addOption("loading two piece and balance", AutoMode.NEW_180_2_PIECE_BALANCE_LOADING);
+    // autoChooser.addOption("loading two piece and balance", AutoMode.NEW_180_2_PIECE_BALANCE_LOADING);
 
-    autoChooser.addOption("wall 1.5 piece mgeg 180 start", AutoMode.WALL_15_MGEG);
-    autoChooser.addOption("YOLO wall 1.5 piece mgeg 180 start", AutoMode.WALL_15_MGEG_YOLO);
+    // autoChooser.addOption("wall 1.5 piece mgeg 180 start", AutoMode.WALL_15_MGEG);
+    // autoChooser.addOption("YOLO wall 1.5 piece mgeg 180 start", AutoMode.WALL_15_MGEG_YOLO);
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -306,21 +318,35 @@ public final class Autos {
     Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
-    Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
+    // Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
 
     return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
-        .andThen(new ParallelRaceGroup(
-            new SetPositions(146.861282, 1.122, 195.2666).raceWith(new WaitCommand(1.02)),
-            driveTrain.zeroModulesCommand()))
-        // .andThen(new OpenClawCubeGround(true))
-        .andThen(new ParallelRaceGroup(
-            new RunIntakeReversed(),
-            new WaitCommand(0.3)))
-        .andThen(new ParallelRaceGroup(new SetPositions(0, .1, 180)
-            .andThen(Setpoints.groundCubeAuto()), part1))
-        .andThen(new ParallelCommandGroup(part2, new Homing().andThen(Setpoints.scoreRightCube())))
-        .andThen(Setpoints.scoreRightCube().alongWith(new RunIntakeReversed().raceWith(new WaitCommand(.15))))
-        .andThen(new Homing()));
+    .andThen(new ParallelRaceGroup(
+        Setpoints.score180SubCone().raceWith(new WaitCommand(2.02)),
+        driveTrain.zeroModulesCommand()))
+    // .andThen(new OpenClawCubeGround(true))
+    .andThen(new ParallelRaceGroup(
+        new RunIntakeReversed(),
+        new WaitCommand(0.3)))
+    .andThen(new ParallelRaceGroup((Setpoints.groundCubeAuto()), part1))
+    .andThen(new ParallelCommandGroup(part2, new Homing().andThen(Setpoints.scoreWallCube())))
+    .andThen(Setpoints.scoreWallCube()
+    .alongWith(new RunIntakeReversed().raceWith(new WaitCommand(.5))).alongWith(new InstantCommand(() -> Claw.getInstance().setPosition(85))))
+    .andThen(new Homing()));
+
+    // return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    //     .andThen(new ParallelRaceGroup(
+    //         new SetPositions(146.861282, 1.122, 195.2666).raceWith(new WaitCommand(1.02)),
+    //         driveTrain.zeroModulesCommand()))
+    //     // .andThen(new OpenClawCubeGround(true))
+    //     .andThen(new ParallelRaceGroup(
+    //         new RunIntakeReversed(),
+    //         new WaitCommand(0.3)))
+    //     .andThen(new ParallelRaceGroup(new SetPositions(0, .1, 180)
+    //         .andThen(Setpoints.groundCubeAuto()), part1))
+    //     .andThen(new ParallelCommandGroup(part2, new Homing().andThen(Setpoints.scoreRightCube())))
+    //     .andThen(Setpoints.scoreRightCube().alongWith(new RunIntakeReversed().raceWith(new WaitCommand(.15))))
+    //     .andThen(new Homing()));
     // .andThen(
     // new ParallelCommandGroup(
     // // new SetExtend(0.15, true)
@@ -402,6 +428,28 @@ public final class Autos {
     .andThen(new ParallelRaceGroup((Setpoints.groundCubeAuto()), part1))
     .andThen(new ParallelCommandGroup(part2, new Homing()))
     .andThen(new AutoEngage()));
+  }
+
+  private Command get180Start15PieceWallNoEngage() {
+    List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
+        ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("1.5 piece mgeg wall red",
+            new PathConstraints(2.3, 3)))
+        : PathPlanner.loadPathGroup("1.5 piece mgeg wall blue",
+            new PathConstraints(2.3, 3));
+
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
+
+    return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    .andThen(new ParallelRaceGroup(
+        Setpoints.score180WallCone(),
+        driveTrain.zeroModulesCommand()))
+    // .andThen(new OpenClawCubeGround(true))
+    .andThen(new ParallelRaceGroup(
+        new RunIntakeReversed(),
+        new WaitCommand(0.3)))
+    .andThen(new ParallelRaceGroup((Setpoints.groundCubeAuto()), part1))
+    .andThen(new Homing()));
   }
 
   private Command get180Start15PieceWallYOLO() {
@@ -528,6 +576,8 @@ public final class Autos {
         return get180Start15PieceWallYOLO();
       case WALL_2:
         return getWall2Piece();
+      case WALL_15:
+        return get180Start15PieceWallNoEngage();
       case NULL:
       default:
         return null;
@@ -537,6 +587,6 @@ public final class Autos {
   private enum AutoMode {
     ONE_PIECE_MGEG, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
     ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NEW_180_2_PIECE_LOADING,
-    NEW_180_2_PIECE_BALANCE_LOADING, WALL_15_MGEG, WALL_15_MGEG_YOLO, WALL_2, NULL
+    NEW_180_2_PIECE_BALANCE_LOADING, WALL_15_MGEG, WALL_15_MGEG_YOLO, WALL_15, WALL_2, NULL
   }
 }

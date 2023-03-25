@@ -151,9 +151,8 @@ public class Setpoints {
 
     public static Command groundConeTele(){
         return new ParallelCommandGroup(
-            new SetPositions(0, 0, 0),
-            new SetClaw(85),
-            new RunIntake()
+            new SetPositions(-27, 0.65, 0),
+            new SetClaw(130)
         );
     }
 

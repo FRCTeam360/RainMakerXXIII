@@ -118,6 +118,7 @@ public class ArmExtend extends SubsystemBase {
   }
 
   public void setPosition(double meters){
+    System.out.println("extending: " + meters);
     pidController.setReference(meters, ControlType.kPosition, 0, getFeedForward());
     // SmartDashboard.putNumber("error", getExtendDistance() - meters);
   }
