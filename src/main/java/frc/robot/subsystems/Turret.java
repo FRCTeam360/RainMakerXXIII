@@ -167,9 +167,9 @@ public class Turret extends SubsystemBase {
     // System.out.println("tangle: " + angle);
 
     if(angle > softLimitForward){ 
-      return getNearestActualTurretAngle(angle - 360.0);
+      return angle - 360.0;
     } else if(getNearestTurretAngle(angle) < softLimitReverse){
-      return getNearestActualTurretAngle(angle + 360.0);
+      return angle + 360.0;
     } else {
       return getNearestTurretAngle(angle);
     }

@@ -18,7 +18,7 @@ public final class Constants {
     DRAFT, PRACTICE, COMP
   }
 
-  public static final RobotType robotType = RobotType.PRACTICE;
+  public static final RobotType robotType = RobotType.COMP;
 
   public static RobotType getRobotType() {
     return robotType;
@@ -39,7 +39,7 @@ public final class Constants {
 
     public static final double COMP_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(218.935546875); //308.49609375
     public static final double COMP_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(51.416015625); //140.80078125
-    public static final double COMP_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(110.56640625); //201.62109375
+    public static final double COMP_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(190.107421875); //201.62109375
     public static final double COMP_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(1.845703125); //90.703125
 
     public static double getBackRightModuleSteerOffset() {
