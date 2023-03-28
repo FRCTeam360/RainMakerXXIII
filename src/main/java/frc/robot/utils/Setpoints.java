@@ -86,6 +86,7 @@ public class Setpoints {
         System.out.println("CONE SUBSTAION");
         return new ParallelCommandGroup(
             new SetPositions(130, 0, -90, true, false, true),
+            //new SetPositions(130, 0, 0, true, false, false),
             new SetClaw(115),
             new RunIntake()
         );
@@ -99,18 +100,21 @@ public class Setpoints {
         System.out.println("CUBE SUBATATIONS");
         return new ParallelCommandGroup(
             new SetPositions(17, 0, 90, true, false, true),
+            //new SetPositions(17, 0, 0, true, falsl.u.;;pe, false),
             new SetClaw(80), 
             new RunIntake()
         );
     }
 
     public static Command cubeSingleTurret(){
-        return new SetPositions(90, 0, 90, true, false, true);
+        return new SetPositions(90, 0, 0, true, false, false);
+        // return new SetPositions(90, 0, 90, true, false, true);
     }
 
     public static Command coneDouble(){
         return new ParallelCommandGroup(
             new SetPositions(43, 0.8, 0, false, false, true),
+            //67    new SetPositions(43, 0.8, 0, false, false, false),
             new SetClaw(15), 
             new RunIntake()
         );

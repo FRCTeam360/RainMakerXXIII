@@ -126,7 +126,7 @@ public class RobotContainer {
     
     operatorController.pov(0).whileTrue(homing);
 
-    operatorController.pov(180).whileTrue(new InstantCommand(() -> turret.setPosition(0)));
+    // operatorController.pov(180).whileTrue(new InstantCommand(() -> turret.setPosition(0)));
 
     //HIGH SETPOINTS
     operatorController.pov(90).and(operatorController.leftStick().negate()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreLeftCone());

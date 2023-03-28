@@ -48,13 +48,19 @@ public class Homing extends CommandBase {
       turret.setPosition(0);
     }
 
-    if(claw.getCurrent() > 15){
-      hitLimit= true;
-    }
-    if(hitLimit || timer.get() > 1){
-      claw.adjustsClaw(-0.05);
+    // if(claw.getCurrent() > 15){
+    //   hitLimit= true;
+    // }
+    // if(hitLimit || timer.get() > 1){
+    //   claw.adjustsClaw(-0.05);
+    // } else {
+    //   claw.adjustsClaw(-0.3);
+    // }
+
+    if(claw.isConeMode()){
+      claw.setPosition(10);
     } else {
-      claw.adjustsClaw(-0.3);
+      claw.setPosition(80);
     }
   }
 
