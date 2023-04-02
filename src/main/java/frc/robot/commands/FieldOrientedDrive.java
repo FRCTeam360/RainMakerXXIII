@@ -44,20 +44,20 @@ public class FieldOrientedDrive extends CommandBase {
     public void execute() {
         // You can use `new ChassisSpeeds(...)` for robot-oriented movement instead of field-oriented movement
 
-        if(drivercont.getAButton()){
-            double currentRadians = driveTrain.getGyroscopeRotation().getRadians();
-            double desiredRadians = (Math.PI/2) * (double) Math.round(currentRadians / (Math.PI/2));
+        // if(drivercont.getAButton()){
+        //     double currentRadians = driveTrain.getGyroscopeRotation().getRadians();
+        //     double desiredRadians = (Math.PI/2) * (double) Math.round(currentRadians / (Math.PI/2));
 
-            driveTrain.drive(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                    getYWithDeadzone() * getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getYWithDeadzone()) * -1,
-                    getXWithDeadzone() * getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getXWithDeadzone()) * -1,
-                    turnController.calculate(currentRadians, desiredRadians),
-                        //DriverStation.getAlliance() == Alliance.Red ? driveTrain.getGyroscopeRotation().minus(new Rotation2d(Math.PI)) : driveTrain.getGyroscopeRotation()
-                        driveTrain.getGyroscopeRotation()
-                )
-        );
-        } else {
+        //     driveTrain.drive(
+        //         ChassisSpeeds.fromFieldRelativeSpeeds(
+        //             getYWithDeadzone() * getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getYWithDeadzone()) * -1,
+        //             getXWithDeadzone() * getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getXWithDeadzone()) * -1,
+        //             turnController.calculate(currentRadians, desiredRadians),
+        //                 //DriverStation.getAlliance() == Alliance.Red ? driveTrain.getGyroscopeRotation().minus(new Rotation2d(Math.PI)) : driveTrain.getGyroscopeRotation()
+        //                 driveTrain.getGyroscopeRotation()
+        //         )
+        // );
+        // } else {
             driveTrain.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                     getYWithDeadzone() * getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getYWithDeadzone()) * -1,
@@ -67,7 +67,7 @@ public class FieldOrientedDrive extends CommandBase {
                         driveTrain.getGyroscopeRotation()
                 )
             );
-        }
+       // }
 
         if(drivercont.getPOV() == 0){
             driveTrain.zeroGyroscope();

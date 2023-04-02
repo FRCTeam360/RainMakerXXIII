@@ -200,5 +200,7 @@ public class Turret extends SubsystemBase {
     // tab.addNumber("Turret Angle", () -> motor.getEncoder().getPosition());
     // This method will be called once per scheduler run
     checkLimitSwitch();
+
+    SmartDashboard.putBoolean("turret limit switch", limitSwitch.get());
   }
 }

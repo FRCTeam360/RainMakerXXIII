@@ -105,7 +105,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    driverController.leftStick().whileTrue(driveTrain.moduleForwardCommand());
+    driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     driverController.y().whileTrue(new AutoEngage());
 
 

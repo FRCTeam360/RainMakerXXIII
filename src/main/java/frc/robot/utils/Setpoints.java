@@ -16,6 +16,7 @@ import frc.robot.commands.SetTilt;
 /** Add your docs here. */
 public class Setpoints {
 
+    //TELE OP
     public static Command scoreLeftCone(){
         return new SetPositions(42, 1.1, 15, false);
     }
@@ -25,29 +26,12 @@ public class Setpoints {
     }
 
     public static Command scoreLeftCube(){
-        return new SetPositions(35, 0.7, 15, false);
+        return new SetPositions(30, 0.7, 9, false);
     }
 
     public static Command scoreRightCube(){
-        return new SetPositions(35, 0.7, -15, false);
+        return new SetPositions(33, 0.7, -9, false);
     }
-
-    public static Command scoreSubCone(){
-        return new SetPositions(42, 1.15, -15, true);
-    }
-
-    public static Command scoreWallCone(){
-        return new SetPositions(42, 1.15, 15, true);
-    }
-
-    public static Command scoreSubCube(){
-        return new SetPositions(35, 0.7, -15, true);
-    }
-
-    public static Command scoreWallCube(){
-        return new SetPositions(35, 0.7, 15, true);
-    }
-
 
     public static Command scoreMidConeLeft() {
         return new SetPositions(45, 0.4, -20, false);
@@ -65,12 +49,22 @@ public class Setpoints {
         return new SetPositions(23, 0.1, 14, false);
     }
 
-    public static Command scoreSubCubeMid() {
-        return new SetPositions(23, 0.4, 42, true);
+
+    //AUTOS
+    public static Command scoreSubCone(){
+        return new SetPositions(42, 1.15, -15, true);
     }
 
-    public static Command scoreWallCubeMid() {
-        return new SetPositions(23, 0.4, 42, true);
+    public static Command scoreWallCone(){
+        return new SetPositions(42, 1.15, 15, true);
+    }
+
+    public static Command scoreSubCube(){
+        return new SetPositions(35, 0.7, -15, true);
+    }
+
+    public static Command scoreWallCube(){
+        return new SetPositions(35, 0.7, 15, true);
     }
 
     public static Command score180SubCone() {
@@ -79,6 +73,14 @@ public class Setpoints {
 
     public static Command score180WallCone() {
         return new SetPositions(146.861282, 1.122, 195.2666, true);
+    }
+
+    public static Command scoreSubCubeMid() {
+        return new SetPositions(23, 0.4, 42, true);
+    }
+
+    public static Command scoreWallCubeMid() {
+        return new SetPositions(23, 0.4, 42, true);
     }
 
 
@@ -118,6 +120,7 @@ public class Setpoints {
             new SetClaw(15), 
             new RunIntake()
         );
+
     }
 
     /**
@@ -147,8 +150,8 @@ public class Setpoints {
 
     public static Command groundCubeTele(){
         return new ParallelCommandGroup(
-            new SetPositions(-27, 0.65, 0),
-            new SetClaw(85),
+            new SetPositions(-27.5, 0.65, 0),
+            new SetClaw(80),
             new RunIntake()
         );
     }
@@ -156,7 +159,7 @@ public class Setpoints {
     public static Command groundConeTele(){
         return new ParallelCommandGroup(
             new SetPositions(-27, 0.65, 0),
-            new SetClaw(130)
+            new SetClaw(85)
         );
     }
 
@@ -174,23 +177,4 @@ public class Setpoints {
         );
     }
 
-    // public class SingleStation extends CommandBase{
-    //     public SingleStation(){
-
-    //     }
-
-    //     @Override
-    //     public void execute() {
-    //         if(claw.isConeMode()){
-    //             SmartDashboard.putBoolean("isSetpointingCone", true);
-    //             return coneSingleStation();
-    //         } else {
-    //             SmartDashboard.putBoolean("isSetpointingCube", true);
-    //             return cubeSingleStation();
-    //         }
-    //     }
-    //     // System.out.println("UR SINGLE");
-
-    //     // return Claw.getInstance().isConeMode() ? coneSingleStation() : cubeSingleStation();
-    // }
 }

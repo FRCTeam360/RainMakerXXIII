@@ -42,26 +42,18 @@ public class Homing extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(claw.isConeMode()){
+      claw.setPosition(10);
+    } else {
+      claw.setPosition(55);
+    }
+    
     tilt.setAngle(90);
     extend.setPosition(0.1);
     if(extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 10){
       turret.setPosition(0);
     }
 
-    // if(claw.getCurrent() > 15){
-    //   hitLimit= true;
-    // }
-    // if(hitLimit || timer.get() > 1){
-    //   claw.adjustsClaw(-0.05);
-    // } else {
-    //   claw.adjustsClaw(-0.3);
-    // }
-
-    if(claw.isConeMode()){
-      claw.setPosition(10);
-    } else {
-      claw.setPosition(80);
-    }
   }
 
   // Called once the command ends or is interrupted.
