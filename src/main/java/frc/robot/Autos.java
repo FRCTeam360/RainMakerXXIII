@@ -318,7 +318,7 @@ public final class Autos {
     Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
     Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
     Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
-    // Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
+    Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
 
     return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
     .andThen(new ParallelRaceGroup(

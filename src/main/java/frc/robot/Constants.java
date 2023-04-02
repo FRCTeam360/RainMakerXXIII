@@ -27,6 +27,7 @@ public final class Constants {
   public static class SwerveConstants {
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.62865; 
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.62865;
+    
     public static final double DRAFT_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(92.72); //93.07 
     public static final double DRAFT_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(96.06); //94.48 //96.32 
     public static final double DRAFT_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(189.93); //189.49 
@@ -37,10 +38,10 @@ public final class Constants {
     public static final double PRACTICE_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(277.3828125); //210.41015625 
     public static final double PRACTICE_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(292.763671875); //294.43359375 
 
-    public static final double COMP_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(218.935546875); //308.49609375
-    public static final double COMP_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(51.416015625); //140.80078125
-    public static final double COMP_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(190.107421875); //201.62109375
-    public static final double COMP_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(1.845703125); //90.703125
+    public static final double COMP_FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(164.35546875); //201.62109375
+    public static final double COMP_BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(302.16796875); //308.49609375
+    public static final double COMP_BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(183.603515625); //140.80078125
+    public static final double COMP_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(120.234375); //90.703125
 
     public static double getBackRightModuleSteerOffset() {
       if(robotType == RobotType.DRAFT) {
