@@ -40,19 +40,30 @@ public class FieldOrientedDrive extends CommandBase {
         }
     }
 
+    public double getAlignmentAngularVelocity() {
+        double currentRadians = driveTrain.getGyroscopeRotation().getRadians();
+        double desiredRadians = (Math.PI/2) * (double) Math.round(currentRadians / (Math.PI/2));
+        if(currentRadians < desiredRadians) {
+            return 1.0;
+        } else if(currentRadians > desiredRadians){
+            return -1.0;
+        } else {
+            return 0.0;
+        }
+    }
+
     @Override
     public void execute() {
         // You can use `new ChassisSpeeds(...)` for robot-oriented movement instead of field-oriented movement
 
         if(drivercont.getAButton()){
-            double currentRadians = driveTrain.getGyroscopeRotation().getRadians();
-            double desiredRadians = (Math.PI/2) * (double) Math.round(currentRadians / (Math.PI/2));
+            double desiredAngularVelocity = getAlignmentAngularVelocity();
 
             driveTrain.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                    getYWithDeadzone() * getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getYWithDeadzone()) * -1,
-                    getXWithDeadzone() * getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getXWithDeadzone()) * -1,
-                    turnController.calculate(currentRadians, desiredRadians),
+                    0,//getYWithDeadzone() * getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getYWithDeadzone()) * -1,
+                    0,//getXWithDeadzone() * getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getXWithDeadzone()) * -1,
+                    desiredAngularVelocity,
                         //DriverStation.getAlliance() == Alliance.Red ? driveTrain.getGyroscopeRotation().minus(new Rotation2d(Math.PI)) : driveTrain.getGyroscopeRotation()
                         driveTrain.getGyroscopeRotation()
                 )
