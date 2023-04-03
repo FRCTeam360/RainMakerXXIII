@@ -64,7 +64,7 @@ public class Setpoints {
     }
 
     public static Command scoreWallCube(){
-        return new SetPositions(35, 0.7, 15, true);
+        return new SetPositions(35, 1.0, 0, true); //changed for 2 piece mgeg
     }
 
     public static Command score180SubCone() {

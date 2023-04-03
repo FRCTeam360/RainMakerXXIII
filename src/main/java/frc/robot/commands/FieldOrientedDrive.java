@@ -43,53 +43,45 @@ public class FieldOrientedDrive extends CommandBase {
     public double getAlignmentAngularVelocity() {
         double currentRadians = driveTrain.getGyroscopeRotation().getRadians();
         double desiredRadians = (Math.PI / 2) * (double) Math.round(currentRadians / (Math.PI / 2));
-        if (currentRadians < desiredRadians) {
-            return 1.0;
-        } else if (currentRadians > desiredRadians) {
-            return -1.0;
-        } else {
+        double error = desiredRadians-currentRadians;
+        if (Math.abs(error) < 0.01) {
             return 0.0;
+        } else if (currentRadians > desiredRadians) {
+            return -0.6;
+        } else {
+            return 0.6;
         }
     }
 
     @Override
     public void execute() {
-        // You can use `new ChassisSpeeds(...)` for robot-oriented movement instead of
-        // field-oriented movement
+        // You can use `new ChassisSpeeds(...)` for robot-oriented movement instead of field-oriented movement
 
-        if (drivercont.getAButton()) {
+        if(drivercont.getAButton()){
             double desiredAngularVelocity = getAlignmentAngularVelocity();
 
             driveTrain.drive(
-                    ChassisSpeeds.fromFieldRelativeSpeeds(
-                            0, // getYWithDeadzone() * getYWithDeadzone() *
-                               // DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 *
-                               // Math.signum(getYWithDeadzone()) * -1,
-                            0, // getXWithDeadzone() * getXWithDeadzone() *
-                               // DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 *
-                               // Math.signum(getXWithDeadzone()) * -1,
-                            desiredAngularVelocity,
-                            // DriverStation.getAlliance() == Alliance.Red ?
-                            // driveTrain.getGyroscopeRotation().minus(new Rotation2d(Math.PI)) :
-                            // driveTrain.getGyroscopeRotation()
-                            driveTrain.getGyroscopeRotation()));
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                    getYWithDeadzone() * getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getYWithDeadzone()) * -1,
+                    getXWithDeadzone() * getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getXWithDeadzone()) * -1,
+                    desiredAngularVelocity,
+                        //DriverStation.getAlliance() == Alliance.Red ? driveTrain.getGyroscopeRotation().minus(new Rotation2d(Math.PI)) : driveTrain.getGyroscopeRotation()
+                        driveTrain.getGyroscopeRotation()
+                )
+            );
         } else {
             driveTrain.drive(
-                    ChassisSpeeds.fromFieldRelativeSpeeds(
-                            getYWithDeadzone() * getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0
-                                    * Math.signum(getYWithDeadzone()) * -1,
-                            getXWithDeadzone() * getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0
-                                    * Math.signum(getXWithDeadzone()) * -1,
-                            getWithDeadzone(drivercont.getRightX()) * getWithDeadzone(drivercont.getRightX())
-                                    * DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
-                                    * Math.signum(drivercont.getRightX()) * -1,
-                            // DriverStation.getAlliance() == Alliance.Red ?
-                            // driveTrain.getGyroscopeRotation().minus(new Rotation2d(Math.PI)) :
-                            // driveTrain.getGyroscopeRotation()
-                            driveTrain.getGyroscopeRotation()));
-        }
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                    getYWithDeadzone() * getYWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getYWithDeadzone()) * -1,
+                    getXWithDeadzone() * getXWithDeadzone() * DriveTrain.MAX_VELOCITY_METERS_PER_SECOND * 1.0 * Math.signum(getXWithDeadzone()) * -1,
+                    getWithDeadzone(drivercont.getRightX()) * getWithDeadzone(drivercont.getRightX()) * DriveTrain.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * Math.signum(drivercont.getRightX()) * -1,
+                        //DriverStation.getAlliance() == Alliance.Red ? driveTrain.getGyroscopeRotation().minus(new Rotation2d(Math.PI)) : driveTrain.getGyroscopeRotation()
+                        driveTrain.getGyroscopeRotation()
+                )
+            );
+       }
 
-        if (drivercont.getPOV() == 0) {
+        if(drivercont.getPOV() == 0){
             driveTrain.zeroGyroscope();
         }
     }
