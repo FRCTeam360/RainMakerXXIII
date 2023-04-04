@@ -182,9 +182,17 @@ public final class Autos {
     // .andThen(DKJungle).andThen(ShroomRidge).andThen(new
     // AutoEngage());
 
-    return setPose.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
-        .andThen(Setpoints.scoreWallCone()).andThen(new RunIntake(GamePiece.CONE).raceWith(new WaitCommand(1.0)))
-        .andThen((new Homing()).alongWith(part1)).andThen(new AutoEngage());
+    // return setPose.andThen(new InstantCommand(() -> driveTrain.setGyroOffset(180)))
+    //     .andThen(Setpoints.scoreWallCone()).andThen(new RunIntake(GamePiece.CONE).raceWith(new WaitCommand(1.0)))
+    return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    .andThen(new ParallelRaceGroup(
+        Setpoints.score180WallCone(),
+        driveTrain.zeroModulesCommand()))
+    // .andThen(new OpenClawCubeGround(true))
+    .andThen(new ParallelRaceGroup(
+        new RunIntakeReversed(),
+        new WaitCommand(0.3)))
+        .andThen((new Homing()).alongWith(part1)).andThen(new AutoEngage()));
   }
 
   private Command getEngageOnly() {

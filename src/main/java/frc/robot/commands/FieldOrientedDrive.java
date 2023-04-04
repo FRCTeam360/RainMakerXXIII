@@ -47,9 +47,9 @@ public class FieldOrientedDrive extends CommandBase {
         if (Math.abs(error) < 0.01) {
             return 0.0;
         } else if (currentRadians > desiredRadians) {
-            return -0.6;
+            return -0.5;
         } else {
-            return 0.6;
+            return 0.5;
         }
     }
 

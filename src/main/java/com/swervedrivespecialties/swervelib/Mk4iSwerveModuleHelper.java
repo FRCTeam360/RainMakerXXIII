@@ -19,7 +19,7 @@ public final class Mk4iSwerveModuleHelper {
         return new Falcon500SteerControllerFactoryBuilder()
                 .withVoltageCompensation(configuration.getNominalVoltage())
                 .withPidConstants(0.2, 0.0, 0.1)
-                .withCurrentLimit(configuration.getSteerCurrentLimit())
+                .withCurrentLimit(configuration.getSteerCurrentLimit())  
                 .build(new CanCoderFactoryBuilder()
                         .withReadingUpdatePeriod(100)
                         .build());

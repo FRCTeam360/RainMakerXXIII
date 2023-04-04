@@ -68,11 +68,11 @@ public class Setpoints {
     }
 
     public static Command score180SubCone() {
-        return new SetPositions(146.861282, 1.122, -195.2666, true);
+        return new SetPositions(146.861282, 1.06, -195.2666, true);
     }
 
     public static Command score180WallCone() {
-        return new SetPositions(146.861282, 1.122, 195.2666, true);
+        return new SetPositions(146.861282, 1.06, 195.2666, true);
     }
 
     public static Command scoreSubCubeMid() {
@@ -133,8 +133,8 @@ public class Setpoints {
 
     public static Command groundCubeAuto(){
         return new ParallelCommandGroup(
-            new SetPositions(-27, 0.65, 180),
-            new SetClaw(85),
+            new SetPositions(-27.5, 0.65, 180),
+            new SetClaw(80),
             new RunIntake()
         );
     }
@@ -159,7 +159,8 @@ public class Setpoints {
     public static Command groundConeTele(){
         return new ParallelCommandGroup(
             new SetPositions(-27, 0.65, 0),
-            new SetClaw(85)
+            new SetClaw(85),
+            new RunIntake()
         );
     }
 
