@@ -72,6 +72,7 @@ public final class Autos {
     autoChooser.addOption("anywhere right", AutoMode.ANYWHERE_RIGHT);
 
     autoChooser.addOption("loading run", AutoMode.LOADING_RUN);
+    autoChooser.addOption("coop 1.5 mgeg", AutoMode.COOP_15);
 
     // autoChooser.addOption("coop mgeg", AutoMode.ONE_PIECE_MGEG);
     // autoChooser.addOption("wall mgeg", AutoMode.ENGAGE_FROM_WALL);
@@ -544,6 +545,29 @@ public final class Autos {
         .andThen(part3.alongWith(new Homing())).andThen(new AutoEngage()));
   }
 
+  private Command get15PieceCoopMgeg() {
+    List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
+        ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("coop 1.5 piece mgeg red",
+            new PathConstraints(1.5, 3)))
+        : PathPlanner.loadPathGroup("coop 1.5 piece mgeg blue",
+            new PathConstraints(1.5, 3));
+
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
+    Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
+
+    return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    .andThen(new ParallelRaceGroup(
+        Setpoints.score180WallCone(),
+        driveTrain.zeroModulesCommand()))
+    .andThen(new ParallelRaceGroup(
+        new RunIntakeReversed(),
+        new WaitCommand(0.3)))
+    .andThen(part1.alongWith(new SetPositions(90, .1, -180)))
+    .andThen(part2).andThen(new AutoEngage())
+    );
+  }
+
   private Command getWall2Piece() {
     List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
         ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("2 piece wall red",
@@ -617,6 +641,8 @@ public final class Autos {
         return get180Start15PieceWallNoEngage();
       case LOADING_RUN:
         return get180StartLoadingRun();
+      case COOP_15:
+        return get15PieceCoopMgeg();
       case NULL:
       default:
         return null;
@@ -626,6 +652,6 @@ public final class Autos {
   private enum AutoMode {
     ONE_PIECE_MGEG, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
     ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NEW_180_2_PIECE_LOADING,
-    NEW_180_2_PIECE_BALANCE_LOADING, WALL_15_MGEG, WALL_15_MGEG_YOLO, WALL_15, WALL_2, LOADING_RUN, NULL
+    NEW_180_2_PIECE_BALANCE_LOADING, WALL_15_MGEG, WALL_15_MGEG_YOLO, WALL_15, WALL_2, LOADING_RUN, COOP_15, NULL
   }
 }
