@@ -59,7 +59,7 @@ public class RobotContainer {
 
   private final TeleopArmPose teleopArmPose = new TeleopArmPose();
   private final FieldOrientedTurret fieldOrientedTurret = new FieldOrientedTurret();
-  private final Homing homing = new Homing();
+  private final Homing homing = new Homing(false);
 
   private final Setpoints setpoints = new Setpoints();
 

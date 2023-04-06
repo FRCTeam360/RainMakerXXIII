@@ -23,11 +23,18 @@ public class Homing extends CommandBase {
 
   private boolean hitLimit;
 
+  private boolean shouldEnd;
+
   private final XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);
 
   /** Creates a new Homing. */
   public Homing() {
     // Use addRequirements() here to declare subsystem dependencies.
+    this(true);
+  }
+
+  public Homing(boolean shouldEnd){
+    this.shouldEnd = shouldEnd;
     addRequirements(tilt, extend, turret, claw);
   }
 
@@ -67,6 +74,6 @@ public class Homing extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 2 && Math.abs(turret.getAngleRelativeToRobot() - 0) < 2;
+    return shouldEnd ? extend.getExtendDistance() < 0.15 && Math.abs(tilt.getAngle() - 90) < 2 && Math.abs(turret.getAngleRelativeToRobot() - 0) < 2 : false;
   }
 }

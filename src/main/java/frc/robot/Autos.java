@@ -545,7 +545,7 @@ public final class Autos {
         .andThen(part3.alongWith(new Homing())).andThen(new AutoEngage()));
   }
 
-  private Command get15PieceCoopMgeg() {
+  private Command get15PieceCoopMgeg() { //DOES NOT WORK but will go over charging station, grab cube, balance
     List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
         ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("coop 1.5 piece mgeg red",
             new PathConstraints(1.5, 3)))
@@ -588,7 +588,7 @@ public final class Autos {
         new RunIntakeReversed(),
         new WaitCommand(0.3)))
     .andThen(new ParallelRaceGroup((Setpoints.groundCubeAuto()), part1))
-    .andThen(new ParallelCommandGroup(part2, new Homing()))
+    .andThen(new ParallelRaceGroup(part2, new Homing(false)))
     .andThen(Setpoints.scoreWallCube())
     .andThen(new ParallelRaceGroup(
       new RunIntakeReversed(),

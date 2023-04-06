@@ -115,7 +115,8 @@ public class Setpoints {
 
     public static Command coneDouble(){
         return new ParallelCommandGroup(
-            new SetPositions(43, 0.8, 0, false, false, true),
+            new SetPositions(42, 0.8, 0, false, false, true),
+            //was 43
             //67    new SetPositions(43, 0.8, 0, false, false, false),
             new SetClaw(15), 
             new RunIntake()
