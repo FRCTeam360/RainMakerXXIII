@@ -78,9 +78,11 @@ public class Robot extends TimedRobot {
       if(DriverStation.getMatchType() == MatchType.Elimination){
         lights.fireball();
       }else if(DriverStation.getAlliance() == Alliance.Red){
-        lights.setRedTwinkle();
+        // lights.setRedTwinkle();
+        lights.setRed();
       }else{
-        lights.setBlueTwinkle();
+        // lights.setBlueTwinkle();
+        lights.setBlue();
       }
       wasOnFMS = true;
     }
