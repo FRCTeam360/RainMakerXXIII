@@ -74,17 +74,19 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
 
-    if(DriverStation.isFMSAttached() && !wasOnFMS){
+    if(DriverStation.isFMSAttached()){
       if(DriverStation.getMatchType() == MatchType.Elimination){
         lights.fireball();
       }else if(DriverStation.getAlliance() == Alliance.Red){
         // lights.setRedTwinkle();
-        lights.setRed();
+        lights.setRedFade();
       }else{
         // lights.setBlueTwinkle();
-        lights.setBlue();
+        lights.setBlueFade();
       }
       wasOnFMS = true;
+    }else{
+      lights.setOrangeLarson();
     }
 
   }
@@ -97,6 +99,16 @@ public class Robot extends TimedRobot {
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
+    }
+
+    if(DriverStation.getAlliance() == Alliance.Red){
+      // lights.setRedTwinkle();
+      lights.setRedFade();
+    }else if(DriverStation.getAlliance() == Alliance.Blue) {
+      // lights.setBlueTwinkle();
+      lights.setBlueFade();
+    } else {
+      lights.setOrange();
     }
   }
 
@@ -123,7 +135,8 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    lights.fireball();
+    // lights.fireball();
+    lights.engaged();
   }
 
   /** This function is called periodically during test mode. */

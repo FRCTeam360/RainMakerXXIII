@@ -8,9 +8,12 @@ import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.ColorFlowAnimation;
 import com.ctre.phoenix.led.FireAnimation;
+import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.SingleFadeAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
+import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
+import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANIds;
@@ -57,12 +60,15 @@ public class Lights extends SubsystemBase {
 
   public void setYellow(){
     shouldShowStatus = false;
+    candle.clearAnimation(0);
+    candle.clearAnimation(1);
     candle.setLEDs(255, 200, 0); //239, 223, 13
   }
 
   public void setPurple(){
     shouldShowStatus = false;
     candle.clearAnimation(0);
+    candle.clearAnimation(1);
     candle.setLEDs(163, 23, 172);
   }
 
@@ -71,24 +77,47 @@ public class Lights extends SubsystemBase {
   }
 
   public void setOrange(){
-    candle.setLEDs(254, 106, 0);
+    candle.setLEDs(250, 40, 0);
   }
 
   public void setBlue(){
-    candle.setLEDs(0, 40, 95);
+    candle.setLEDs(0, 0, 255);
   }
 
   public void setBlueTwinkle(){
-    candle.animate(new TwinkleAnimation(0, 40, 95));
+    candle.animate(new TwinkleAnimation(0, 0, 255));
+  }
+
+  public void setBlueFade(){
+    candle.clearAnimation(0);
+    candle.clearAnimation(1);
+    candle.animate(new SingleFadeAnimation(0, 0, 255, 0, 0.1, 100, 9));
   }
 
   public void setOrangeFade(){
-    candle.animate(new SingleFadeAnimation(254, 106, 0));
-    System.out.println("setting orange");
+    candle.animate(new SingleFadeAnimation(250, 40, 0, 0, 0.1, 100, 9));
+    // System.out.println("setting orange");
+  }
+
+  public void setOrangeLarson(){
+    Animation orange = new LarsonAnimation(250, 40, 0, 0, 0.1, 48, BounceMode.Front , 7, 8);
+    Animation blue = new LarsonAnimation(0, 0, 255, 0, 0.1, 48, BounceMode.Front , 7, 56);
+
+    // candle.animate(new LarsonAnimation(250, 40, 0, 0, 0.1, 48, BounceMode.Front , 7, 8));
+    // candle.animate(new LarsonAnimation(0, 40, 95, 0, 0.1, 48, BounceMode.Front , 7, 56));
+
+    candle.animate(orange, 0);
+    candle.animate(blue, 1);
   }
 
   public void setRedTwinkle(){
+    candle.clearAnimation(0);
+    candle.clearAnimation(1);
     candle.animate(new TwinkleAnimation(255, 0, 0));
+  }
+
+  public void setRedFade(){
+    candle.animate(new SingleFadeAnimation(255, 0, 0, 0, 0.1, 100, 9));
   }
 
   public void setRed(){
@@ -97,6 +126,17 @@ public class Lights extends SubsystemBase {
 
   public void fireball(){
     candle.animate(new FireAnimation());
+  }
+
+  public void engaged(){
+    Animation orange = new ColorFlowAnimation(250, 40, 0, 0, 0.1, 48, Direction.Forward, 8);
+    Animation blue = new ColorFlowAnimation(0, 0, 255, 0, 0.1, 48, Direction.Forward, 56);
+
+    // candle.animate(new LarsonAnimation(250, 40, 0, 0, 0.1, 48, BounceMode.Front , 7, 8));
+    // candle.animate(new LarsonAnimation(0, 40, 95, 0, 0.1, 48, BounceMode.Front , 7, 56));
+
+    candle.animate(orange, 0);
+    candle.animate(blue, 1);
   }
 
   @Override
