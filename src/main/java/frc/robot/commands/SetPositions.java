@@ -38,7 +38,6 @@ public class SetPositions extends CommandBase {
   }
 
   public SetPositions(double tiltAngle, double extendDistance, double turretAngle) {
-    System.out.println("setting auto position");
     addRequirements(tilt, extend, turret);
     this.tiltAngle = tiltAngle;
     this.extendDistance = extendDistance;
@@ -67,7 +66,6 @@ public class SetPositions extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //System.out.println("setting positions");
     // if(Math.abs(extend.getExtendDistance() - extendDistance) <= 0.3){
     tilt.setAngle(tiltAngle);
     // }

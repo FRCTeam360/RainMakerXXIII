@@ -135,13 +135,11 @@ public class Claw extends SubsystemBase {
   private void checkGamePieceMode() {
     if (driverCont.getBackButton() || operatorCont.getBackButton()) {
       gamePiece = GamePiece.CONE;
-      System.out.println("coning");
 
       lights.setYellow();
     } else if (driverCont.getStartButton() || operatorCont.getStartButton()) {
       gamePiece = GamePiece.CUBE;
       lights.setPurple();
-      System.out.println("cubuing");
     } else {
       // lights.setShouldShowStatus();
     }

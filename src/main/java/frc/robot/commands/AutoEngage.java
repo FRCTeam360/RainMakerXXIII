@@ -36,7 +36,6 @@ public class AutoEngage extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("flattening the covid curve");
     double currentAngle = calculateAngle(driveTrain.getPitch(), driveTrain.getRoll());
 
     if(currentAngle - pastAngle < -1|| Math.abs(currentAngle) < 2){

@@ -185,7 +185,6 @@ public class Turret extends SubsystemBase {
 
     if (currentLimitState == false && pastLimitSwitchState == true) {
         resetAngle(getNearestLimitSwitchPosition());
-        System.out.println("lil zero");
     }
 
     pastLimitSwitchState = currentLimitState;
