@@ -4,6 +4,8 @@
 
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -15,6 +17,10 @@ import frc.robot.commands.SetTilt;
 
 /** Add your docs here. */
 public class Setpoints {
+
+    public static boolean isRedAlliance() {
+        return DriverStation.getAlliance() == Alliance.Red;
+    }
 
     //TELE OP
     public static Command scoreLeftCone(){
@@ -52,7 +58,7 @@ public class Setpoints {
 
     //AUTOS
     public static Command scoreSubCone(){
-        return new SetPositions(42, 1.15, -15, true);
+        return new SetPositions(42, 1.15, 15);
     }
 
     public static Command scoreWallCone(){
@@ -83,26 +89,60 @@ public class Setpoints {
         return new SetPositions(23, 0.4, 42, true);
     }
 
+    //ORIGINAL CONE AND CUBE SETPOINTS
+    // public static Command coneSingleStation(){
+    //     System.out.println("CONE SUBSTAION");
+    //     return new ParallelCommandGroup(
+    //         new SetPositions(130, 0, -90, true, false, true),
+    //         new SetClaw(115),
+    //         new RunIntake()
+    //     );
+    // }
 
-    public static Command coneSingleStation(){
-        System.out.println("CONE SUBSTAION");
+    // public static Command cubeSingleStation(){
+    //     System.out.println("CUBE SUBATATIONS");
+    //     return new ParallelCommandGroup(
+    //         new SetPositions(130, 0, 90, true, false, true),
+    //         new SetClaw(80), 
+    //         new RunIntake()
+    //     );
+    // }
+
+    public static Command redConeSingleStation(){
+        System.out.println("RED CONE SUBSTAION");
         return new ParallelCommandGroup(
-            new SetPositions(130, 0, -90, true, false, true),
-            //new SetPositions(130, 0, 0, true, false, false),
+            //new SetPositions(130, 0, -90, true, false, true),
+            new SetPositions(130, 0, 90, false, false, true),
             new SetClaw(115),
             new RunIntake()
         );
     }
 
-    public static Command coneSingleTurret(){
-        return new SetPositions(90, 0, -90, true, false, true);
+    public static Command redCubeSingleStation(){
+        System.out.println("RED CUBE SUBATATIONS");
+        return new ParallelCommandGroup(
+            //new SetPositions(130, 0, 90, false, false, true),
+            new SetPositions(17, 0, -90, false, false, true),
+            new SetClaw(80), 
+            new RunIntake()
+        );
     }
 
-    public static Command cubeSingleStation(){
-        System.out.println("CUBE SUBATATIONS");
+    public static Command blueConeSingleStation(){
+        System.out.println("BLUE CONE SUBSTAION");
         return new ParallelCommandGroup(
-            new SetPositions(17, 0, 90, true, false, true),
-            //new SetPositions(17, 0, 0, true, falsl.u.;;pe, false),
+            //new SetPositions(130, 0, 90, false, false, true),
+            new SetPositions(130, 0, -90, false, false, true),
+            new SetClaw(115),
+            new RunIntake()
+        );
+    }
+
+    public static Command blueCubeSingleStation(){
+        System.out.println("BLUE CONE SUBATATIONS");
+        return new ParallelCommandGroup(
+            //new SetPositions(17, 0, -90, false, false, true),
+            new SetPositions(17, 0, 90, false, false, true),
             new SetClaw(80), 
             new RunIntake()
         );
@@ -110,7 +150,6 @@ public class Setpoints {
 
     public static Command cubeSingleTurret(){
         return new SetPositions(90, 0, 0, true, false, false);
-        // return new SetPositions(90, 0, 90, true, false, true);
     }
 
     public static Command coneDouble(){

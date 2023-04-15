@@ -13,6 +13,8 @@ import frc.robot.Autos;
 import com.swervedrivespecialties.swervelib.DriveController;
 
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -108,9 +110,15 @@ public class RobotContainer {
     driverController.leftStick().whileTrue(driveTrain.xOutCommand());
     driverController.y().whileTrue(new AutoEngage());
 
+    // operatorController.a().and(() -> claw.isConeMode()).and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleStation());
+    // operatorController.a().and(() -> !claw.isConeMode()).and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleStation());
 
-    operatorController.a().and(() -> claw.isConeMode()).and(operatorController.start().negate()).whileTrue(Setpoints.coneSingleStation());
-    operatorController.a().and(() -> !claw.isConeMode()).and(operatorController.back().negate()).whileTrue(Setpoints.cubeSingleStation());
+    operatorController.a().and(() -> DriverStation.getAlliance() == Alliance.Red).and(() -> claw.isConeMode()).and(operatorController.start().negate()).whileTrue(Setpoints.redConeSingleStation());
+    operatorController.a().and(() -> DriverStation.getAlliance() == Alliance.Red).and(() -> !claw.isConeMode()).and(operatorController.back().negate()).whileTrue(Setpoints.redCubeSingleStation());
+
+    operatorController.a().and(() -> DriverStation.getAlliance() == Alliance.Blue).and(() -> claw.isConeMode()).and(operatorController.start().negate()).whileTrue(Setpoints.blueConeSingleStation());
+    operatorController.a().and(() -> DriverStation.getAlliance() == Alliance.Blue).and(() -> !claw.isConeMode()).and(operatorController.back().negate()).whileTrue(Setpoints.blueCubeSingleStation());
+   
 
     operatorController.b().and(() -> claw.isConeMode()).whileTrue(Setpoints.groundConeTele());
     operatorController.b().and(() -> !claw.isConeMode()).whileTrue(Setpoints.groundCubeTele());
@@ -162,4 +170,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return auto.getAuto();
   }
+
+
 }
