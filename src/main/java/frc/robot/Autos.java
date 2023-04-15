@@ -74,6 +74,8 @@ public final class Autos {
     autoChooser.addOption("loading run", AutoMode.LOADING_RUN);
     autoChooser.addOption("coop 1.5 mgeg", AutoMode.COOP_15);
 
+    autoChooser.addOption("wall 2 piece run", AutoMode.WALL_RUN);
+
     // autoChooser.addOption("coop mgeg", AutoMode.ONE_PIECE_MGEG);
     // autoChooser.addOption("wall mgeg", AutoMode.ENGAGE_FROM_WALL);
     // autoChooser.addOption("loading mgeg", AutoMode.ENGAGE_FROM_LOADING);
@@ -598,6 +600,37 @@ public final class Autos {
     );
   }
 
+  private Command getWall2PieceRun() {
+    List<PathPlannerTrajectory> epicPathGroup = DriverStation.getAlliance() == Alliance.Red
+        ? mirrorPathsForAlliance(PathPlanner.loadPathGroup("2 piece wall red",
+            new PathConstraints(2.3, 3)))
+        : PathPlanner.loadPathGroup("2 piece wall blue",
+            new PathConstraints(2.3, 3));
+
+    Command setPose = autoBuilder.resetPose(epicPathGroup.get(0));
+    Command part1 = autoBuilder.followPath(epicPathGroup.get(0));
+    Command part2 = autoBuilder.followPath(epicPathGroup.get(1));
+    Command part3 = autoBuilder.followPath(epicPathGroup.get(2));
+    
+    return (setPose.alongWith(new InstantCommand(() -> Turret.getInstance().resetAngle(-180)))
+    .andThen(new ParallelRaceGroup(
+        Setpoints.score180WallCone(),
+        driveTrain.zeroModulesCommand()))
+    // .andThen(new OpenClawCubeGround(true))
+    .andThen(new ParallelRaceGroup(
+        new RunIntakeReversed(),
+        new WaitCommand(0.3)))
+    .andThen(new ParallelRaceGroup((Setpoints.groundCubeAuto()), part1))
+    .andThen(new ParallelRaceGroup(part2, new Homing(false)))
+    .andThen(Setpoints.scoreWallCube())
+    .andThen(new ParallelRaceGroup(
+      new RunIntakeReversed(),
+      new WaitCommand(1)
+    ))
+    .andThen(new Homing()).andThen(part3)
+    );
+  }
+
   private static SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
       driveTrain::getPose,
       driveTrain::setPose,
@@ -643,6 +676,8 @@ public final class Autos {
         return get180StartLoadingRun();
       case COOP_15:
         return get15PieceCoopMgeg();
+      case WALL_RUN:
+        return getWall2PieceRun();
       case NULL:
       default:
         return null;
@@ -652,6 +687,6 @@ public final class Autos {
   private enum AutoMode {
     ONE_PIECE_MGEG, ANYWHERE_LEFT, ANYWHERE_RIGHT, ENGAGE_FROM_WALL,
     ENGAGE_FROM_LOADING, NEW_2_PIECE, NEW_2_PIECE_WALL, ENGAGE_ONLY, NEW_180_2_PIECE_LOADING,
-    NEW_180_2_PIECE_BALANCE_LOADING, WALL_15_MGEG, WALL_15_MGEG_YOLO, WALL_15, WALL_2, LOADING_RUN, COOP_15, NULL
+    NEW_180_2_PIECE_BALANCE_LOADING, WALL_15_MGEG, WALL_15_MGEG_YOLO, WALL_15, WALL_2, LOADING_RUN, COOP_15, WALL_RUN, NULL
   }
 }
