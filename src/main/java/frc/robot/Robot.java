@@ -75,9 +75,9 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
 
     if(DriverStation.isFMSAttached()){
-      if(DriverStation.getMatchType() == MatchType.Elimination){
-        lights.fireball();
-      }else if(DriverStation.getAlliance() == Alliance.Red){
+      // if(DriverStation.getMatchType() == MatchType.Elimination){
+        // lights.fireball();
+      if(DriverStation.getAlliance() == Alliance.Red){
         // lights.setRedTwinkle();
         lights.setRedFade();
       }else{

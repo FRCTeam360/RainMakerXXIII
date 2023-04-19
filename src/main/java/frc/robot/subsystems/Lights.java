@@ -96,6 +96,7 @@ public class Lights extends SubsystemBase {
 
   public void setOrangeFade(){
     candle.animate(new SingleFadeAnimation(250, 40, 0, 0, 0.1, 100, 9));
+    // System.out.println("setting orange");
   }
 
   public void setOrangeLarson(){
@@ -110,12 +111,12 @@ public class Lights extends SubsystemBase {
   }
 
   public void setRedTwinkle(){
-    candle.clearAnimation(0);
-    candle.clearAnimation(1);
     candle.animate(new TwinkleAnimation(255, 0, 0));
   }
 
   public void setRedFade(){
+    candle.clearAnimation(0);
+    candle.clearAnimation(1);
     candle.animate(new SingleFadeAnimation(255, 0, 0, 0, 0.1, 100, 9));
   }
 
@@ -125,7 +126,7 @@ public class Lights extends SubsystemBase {
 
   public void fireball(){
     candle.animate(new FireAnimation());
-  }
+  } 
 
   public void engaged(){
     Animation orange = new ColorFlowAnimation(250, 40, 0, 0, 0.1, 48, Direction.Forward, 8);
