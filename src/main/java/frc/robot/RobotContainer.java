@@ -134,6 +134,8 @@ public class RobotContainer {
     
     operatorController.pov(0).whileTrue(homing);
 
+
+
     // operatorController.pov(180).whileTrue(new InstantCommand(() -> turret.setPosition(0)));
 
     //HIGH SETPOINTS
@@ -143,6 +145,9 @@ public class RobotContainer {
     operatorController.pov(270).and(operatorController.leftStick().negate()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreRightCone()); //dpad left + NO back left paddle
     operatorController.pov(270).and(operatorController.leftStick().negate()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreRightCube()); //dpad left + NO back left paddle
 
+    operatorController.pov(180).and(operatorController.leftStick().negate()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreCenterCone());
+    operatorController.pov(180).and(operatorController.leftStick().negate()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreCenterCube());
+
     //MID SETPOINTS
     operatorController.pov(90).and(operatorController.leftStick()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreMidConeRight());
     operatorController.pov(90).and(operatorController.leftStick()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreMidCubeRight());
@@ -150,9 +155,11 @@ public class RobotContainer {
     operatorController.pov(270).and(operatorController.leftStick()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreMidConeLeft()); //dpad left + NO back left paddle
     operatorController.pov(270).and(operatorController.leftStick()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreMidCubeLeft()); //dpad left + NO back left paddle
 
+    operatorController.pov(180).and(operatorController.leftStick()).and(() -> claw.isConeMode()).whileTrue(Setpoints.scoreMidConeCenter());
+    operatorController.pov(180).and(operatorController.leftStick()).and(() -> !claw.isConeMode()).whileTrue(Setpoints.scoreMidCubeCenter());
 
     operatorController.rightBumper().whileTrue(runIntake);
-    operatorController.leftBumper().and(operatorController.y().negate()).whileTrue(runIntakeReversed);  
+    operatorController.leftBumper().and(operatorController.y().negate()).whileTrue(runIntakeReversed);
   }
 
   /**

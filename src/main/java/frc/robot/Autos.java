@@ -565,8 +565,10 @@ public final class Autos {
     .andThen(new ParallelRaceGroup(
         new RunIntakeReversed(),
         new WaitCommand(0.3)))
-    .andThen(part1.alongWith(new SetPositions(90, .1, -180)))
-    .andThen(part2).andThen(new AutoEngage())
+    .andThen(new Homing())
+    .andThen((part1.andThen(new WaitCommand(1.0))).raceWith(new Homing(false)))
+    .andThen((part2).raceWith(new Homing(false)))
+    .andThen(new AutoEngage())
     );
   }
 

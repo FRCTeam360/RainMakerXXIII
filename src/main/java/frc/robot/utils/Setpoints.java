@@ -56,6 +56,23 @@ public class Setpoints {
     }
 
 
+    public static Command scoreCenterCone() {
+        return new SetPositions(42, 1.5, 0, false);
+    }
+
+    public static Command scoreCenterCube() {
+        return new SetPositions(23, 1.1, 0, false);
+    }
+
+    public static Command scoreMidConeCenter() {
+        return new SetPositions(33, 0.75, 0, false);
+    }
+
+    public static Command scoreMidCubeCenter() {
+        return new SetPositions(17, 0.4, 0, false);
+    }
+
+
     //AUTOS
     public static Command scoreSubCone(){
         return new SetPositions(42, 1.15, 15);
