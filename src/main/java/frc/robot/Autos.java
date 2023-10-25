@@ -466,8 +466,8 @@ public final class Autos {
         new RunIntakeReversed(),
         new WaitCommand(0.3)))
     .andThen(new ParallelRaceGroup((Setpoints.groundCubeAuto()), part1))
-    .andThen(new ParallelCommandGroup(part2, new Homing()))
-    .andThen(new AutoEngage()));
+    .andThen(new ParallelRaceGroup(part2, new Homing(false)))
+    .andThen(new AutoEngage().alongWith(new Homing(false))));
   }
 
   private Command get180Start15PieceWallNoEngage() {
