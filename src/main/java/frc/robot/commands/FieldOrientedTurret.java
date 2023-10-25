@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.XboxConstants;
 import frc.robot.subsystems.Turret;
-
 public class FieldOrientedTurret extends CommandBase {
 private Turret turret = Turret.getInstance();
 private static XboxController operatorCont = new XboxController(XboxConstants.OPERATOR_CONTROLLER_PORT);

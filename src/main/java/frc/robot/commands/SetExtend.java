@@ -4,41 +4,43 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.ArmExtend;
 
-public class OpenClaw extends CommandBase {
-  private final Claw claw = Claw.getInstance();
-  private final Timer timer = new Timer();
-
-  /** Creates a new OpenClaw. */
-  public OpenClaw() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(claw);
+public class SetExtend extends CommandBase {
+  private ArmExtend extend = ArmExtend.getInstance();
+  
+  private double distance;
+  private boolean shouldEnd;
+  /** Creates a new SetExtend. */
+  public SetExtend(double distance, boolean shouldEnd) {
+    this.distance = distance;
+    this.shouldEnd = shouldEnd;
+    addRequirements(extend);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.start();
+    System.out.println(this.getClass().getSimpleName() + "started");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    claw.adjustsClaw(-0.3);
+    extend.setPosition(distance);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-      claw.stopClaw();
+    System.out.println(this.getClass().getSimpleName() + "finished");
+    extend.adjustExtensionSpeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 0.5;
+    return shouldEnd ? Math.abs(extend.getExtendDistance() - distance) < 0.02 : false;
   }
 }

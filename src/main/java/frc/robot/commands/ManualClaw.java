@@ -11,10 +11,12 @@ import frc.robot.subsystems.Claw;
 public class ManualClaw extends CommandBase {
   private Claw claw = Claw.getInstance();
 
+  private boolean hitLimit = false;
+
   private XboxController operatorCont = new XboxController(1);
   /** Creates a new ManualClaw. */
   public ManualClaw() {
-    addRequirements(claw);
+    addRequirements(claw);       
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -26,11 +28,20 @@ public class ManualClaw extends CommandBase {
   @Override
   public void execute() {
     if(Math.abs(operatorCont.getLeftTriggerAxis()) > 0.1){ //close
-      claw.adjustsClaw(operatorCont.getLeftTriggerAxis());
+      if(claw.getCurrent() > 15){
+        hitLimit= true;
+      }
+      // if(hitLimit){
+      //   claw.adjustsClaw(-0.05);
+      // } else {
+        claw.adjustsClaw(operatorCont.getLeftTriggerAxis() * -0.3);
+      // }
     } else if (Math.abs(operatorCont.getRightTriggerAxis()) > 0.1) { //open
-      claw.adjustsClaw(operatorCont.getRightTriggerAxis() * -1.0);
+      claw.adjustsClaw(operatorCont.getRightTriggerAxis() *0.3);
+      hitLimit = false;
     } else {
       claw.stopClaw();
+      hitLimit = false;
     }
   }
 
@@ -38,6 +49,7 @@ public class ManualClaw extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     claw.stopClaw();
+    hitLimit = false;
   }
 
   // Returns true when the command should end.
