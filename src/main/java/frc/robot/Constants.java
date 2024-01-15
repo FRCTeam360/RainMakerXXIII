@@ -44,51 +44,19 @@ public final class Constants {
     public static final double COMP_FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(90.703125); //90.703125
 
     public static double getBackRightModuleSteerOffset() {
-      if(robotType == RobotType.DRAFT) {
-        return SwerveConstants.DRAFT_BACK_RIGHT_MODULE_STEER_OFFSET;
-      } else if(robotType == RobotType.PRACTICE) {
-        return SwerveConstants.PRACTICE_BACK_RIGHT_MODULE_STEER_OFFSET;
-      } else if(robotType == RobotType.COMP){
-        return SwerveConstants.COMP_BACK_RIGHT_MODULE_STEER_OFFSET;
-      } else {
-        return 0.0;
-      }
+      return SwerveConstants.COMP_BACK_RIGHT_MODULE_STEER_OFFSET;
     }
   
     public static double getBackLeftModuleSteerOffset() {
-      if(robotType == RobotType.DRAFT) {
-        return SwerveConstants.DRAFT_BACK_LEFT_MODULE_STEER_OFFSET;
-      } else if(robotType == RobotType.PRACTICE) {
-        return SwerveConstants.PRACTICE_BACK_LEFT_MODULE_STEER_OFFSET;
-      } else if(robotType == RobotType.COMP){
-        return SwerveConstants.COMP_BACK_LEFT_MODULE_STEER_OFFSET;
-      } else {
-        return 0.0;
-      }
+      return SwerveConstants.COMP_BACK_LEFT_MODULE_STEER_OFFSET;
     }
   
     public static double getFrontRightModuleSteerOffset() {
-      if(robotType == RobotType.DRAFT) {
-        return SwerveConstants.DRAFT_FRONT_RIGHT_MODULE_STEER_OFFSET;
-      } else if(robotType == RobotType.PRACTICE) {
-        return SwerveConstants.PRACTICE_FRONT_RIGHT_MODULE_STEER_OFFSET;
-      } else if(robotType == RobotType.COMP) {
         return SwerveConstants.COMP_FRONT_RIGHT_MODULE_STEER_OFFSET;
-      } else {
-        return 0.0;
-      }
     }
   
     public static double getFrontLeftModuleSteerOffset() {
-      if(robotType == RobotType.DRAFT) {
-        return SwerveConstants.DRAFT_FRONT_LEFT_MODULE_STEER_OFFSET;
-      } else if(robotType == RobotType.PRACTICE) {
-        return SwerveConstants.PRACTICE_FRONT_LEFT_MODULE_STEER_OFFSET;
-      } else if(robotType == RobotType.COMP) {
         return SwerveConstants.COMP_FRONT_LEFT_MODULE_STEER_OFFSET;
-      } else {
-        return 0.0;
-      }
     }
   }
 

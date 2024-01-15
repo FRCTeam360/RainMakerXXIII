@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 
 public class RobotOrientedDrive extends CommandBase {
     private final DriveTrain driveTrain = DriveTrain.getInstance();
+    double speedMultiplier = 0.001;
 
     private XboxController drivercont = new XboxController(0);
 
@@ -18,7 +19,7 @@ public class RobotOrientedDrive extends CommandBase {
 
     private double getYWithDeadzone(){
         if(Math.abs(drivercont.getLeftX()) >= 0.125 || Math.abs(drivercont.getLeftY()) >= 0.125){
-            return drivercont.getLeftY();
+            return drivercont.getLeftY() * speedMultiplier;
         } else {
             return 0.0;
         }
@@ -26,7 +27,7 @@ public class RobotOrientedDrive extends CommandBase {
 
     private double getXWithDeadzone(){
         if(Math.abs(drivercont.getLeftX()) >= 0.125 || Math.abs(drivercont.getLeftY()) >= 0.125){
-            return drivercont.getLeftX();
+            return drivercont.getLeftX() * speedMultiplier;
         } else {
             return 0.0;
         }
